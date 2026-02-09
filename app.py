@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import requests
 
 # ----------------------------------------------------
 # SAFE NUMERIC WRAPPER
@@ -212,26 +213,30 @@ st.markdown("""
 # ----------------------------------------------------
 # SAFE HTML TABLE LOADER (YEAR-BASED)
 # ----------------------------------------------------
-def load_stat(url, stat_label):
+@st.cache_data(ttl=21600)  # 6 hours
+def load_stat(url, label):
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/122.0.0.0 Safari/537.36"
+        )
+    }
+
     try:
-        df_list = pd.read_html(url, flavor="lxml")
-        if len(df_list) == 0:
+        response = requests.get(url, headers=headers, timeout=10)
+        response.raise_for_status()
+
+        tables = pd.read_html(response.text)
+        if not tables:
             return None
 
-        df = df_list[0]
-
-        year_cols = [
-            c for c in df.columns
-            if isinstance(c, (int, float, str)) and str(c).isdigit() and len(str(c)) == 4
-        ]
-
-        if not year_cols:
+        df = tables[0]
+        if "Team" not in df.columns:
             return None
 
-        value_col = year_cols[0]
-
-        df = df[["Team", value_col]]
-        df = df.rename(columns={value_col: stat_label})
+        df = df[["Team", df.columns[-1]]]
+        df.columns = ["Team", label]
         df["Team"] = df["Team"].str.strip()
         return df
 

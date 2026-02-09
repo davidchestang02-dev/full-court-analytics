@@ -231,9 +231,11 @@ def load_stat(url, label):
         response = requests.get(csv_url, headers=headers, timeout=10)
         response.raise_for_status()
 
-        df = pd.read_csv(pd.compat.StringIO(response.text))
+        df = pd.read_csv(StringIO(response.text))
 
         if "Team" not in df.columns:
+            st.write(f"{label} → CSV columns: {df.columns.tolist()}")
+            st.write(f"{label} → First 200 chars:\n{response.text[:200]}")
             return None
 
         df = df[["Team", df.columns[-1]]]
@@ -241,7 +243,9 @@ def load_stat(url, label):
         df["Team"] = df["Team"].str.strip()
         return df
 
-    except Exception:
+    except Exception as e:
+        st.write(f"{label} → ERROR: {e}")
+        st.write(f"Raw response:\n{response.text[:200]}")
         return None
 
 # ----------------------------------------------------
@@ -655,6 +659,7 @@ with col_side:
         unsafe_allow_html=True,
 
     )
+
 
 
 

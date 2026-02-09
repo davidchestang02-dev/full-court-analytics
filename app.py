@@ -213,25 +213,12 @@ st.markdown("""
 # ----------------------------------------------------
 # SAFE HTML TABLE LOADER (YEAR-BASED)
 # ----------------------------------------------------
-@st.cache_data(ttl=21600)  # 6 hours
+@st.cache_data(ttl=21600)
 def load_stat(url, label):
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 (KHTML, like Gecko) "
-            "Chrome/122.0.0.0 Safari/537.36"
-        )
-    }
+    csv_url = url + "/download?format=csv"
 
     try:
-        response = requests.get(url, headers=headers, timeout=10)
-        response.raise_for_status()
-
-        tables = pd.read_html(response.text)
-        if not tables:
-            return None
-
-        df = tables[0]
+        df = pd.read_csv(csv_url)
         if "Team" not in df.columns:
             return None
 
@@ -242,35 +229,35 @@ def load_stat(url, label):
 
     except Exception:
         return None
-
 # ----------------------------------------------------
 # STABLE STAT LIST (24 WORKING URLS)
 # ----------------------------------------------------
 STAT_SPECS = [
-    ("https://www.teamrankings.com/ncaa-basketball/stat/offensive-efficiency", "OffEff"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/defensive-efficiency", "DefEff"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/possessions-per-game", "Pace"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/two-point-rate", "TwoPRate"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/two-point-pct", "TwoPPct"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/three-point-rate", "ThreePRate"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/three-point-pct", "ThreePPct"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/fta-per-fga", "FTAperFGA"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/free-throw-rate", "FTRate"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/free-throw-pct", "FTPct"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/turnover-pct", "TOVPct"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/offensive-rebounding-pct", "OffRebPct"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/defensive-rebounding-pct", "DefRebPct"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/average-scoring-margin", "AvgScoreMargin"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-two-point-rate", "OppTwoPRate"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-two-point-pct", "OppTwoPPct"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-three-point-rate", "OppThreePRate"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-three-point-pct", "OppThreePPct"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-free-throw-pct", "OppFTPct"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-free-throw-rate", "OppFTRate"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-fta-per-fga", "OppFTAperFGA"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-effective-field-goal-pct", "OppeFG"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-offensive-rebounding-pct", "OppOffRebPct"),
-    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-defensive-rebounding-pct", "OppDefRebPct"),
+("https://www.teamrankings.com/ncaa-basketball/stat/offensive-efficiency/download?format=csv", "OffEff"),
+("https://www.teamrankings.com/ncaa-basketball/stat/defensive-efficiency/download?format=csv", "DefEff"),
+("https://www.teamrankings.com/ncaa-basketball/stat/possessions-per-game/download?format=csv", "Pace"),
+("https://www.teamrankings.com/ncaa-basketball/stat/two-point-rate/download?format=csv", "TwoPRate"),
+("https://www.teamrankings.com/ncaa-basketball/stat/two-point-pct/download?format=csv", "TwoPPct"),
+("https://www.teamrankings.com/ncaa-basketball/stat/three-point-rate/download?format=csv", "ThreePRate"),
+("https://www.teamrankings.com/ncaa-basketball/stat/three-point-pct/download?format=csv", "ThreePPct"),
+("https://www.teamrankings.com/ncaa-basketball/stat/fta-per-fga/download?format=csv", "FTAperFGA"),
+("https://www.teamrankings.com/ncaa-basketball/stat/free-throw-rate/download?format=csv", "FTRate"),
+("https://www.teamrankings.com/ncaa-basketball/stat/free-throw-pct/download?format=csv", "FTPct"),
+("https://www.teamrankings.com/ncaa-basketball/stat/turnover-pct/download?format=csv", "TOVPct"),
+("https://www.teamrankings.com/ncaa-basketball/stat/offensive-rebounding-pct/download?format=csv", "OffRebPct"),
+("https://www.teamrankings.com/ncaa-basketball/stat/defensive-rebounding-pct/download?format=csv", "DefRebPct"),
+("https://www.teamrankings.com/ncaa-basketball/stat/average-scoring-margin/download?format=csv", "AvgScoreMargin"),
+("https://www.teamrankings.com/ncaa-basketball/stat/opponent-two-point-rate/download?format=csv", "OppTwoPRate"),
+("https://www.teamrankings.com/ncaa-basketball/stat/opponent-two-point-pct/download?format=csv", "OppTwoPPct"),
+("https://www.teamrankings.com/ncaa-basketball/stat/opponent-three-point-rate/download?format=csv", "OppThreePRate"),
+("https://www.teamrankings.com/ncaa-basketball/stat/opponent-three-point-pct/download?format=csv", "OppThreePPct"),
+("https://www.teamrankings.com/ncaa-basketball/stat/opponent-free-throw-pct/download?format=csv", "OppFTPct"),
+("https://www.teamrankings.com/ncaa-basketball/stat/opponent-free-throw-rate/download?format=csv", "OppFTRate"),
+("https://www.teamrankings.com/ncaa-basketball/stat/opponent-fta-per-fga/download?format=csv", "OppFTAperFGA"),
+("https://www.teamrankings.com/ncaa-basketball/stat/opponent-effective-field-goal-pct/download?format=csv", "OppeFG"),
+("https://www.teamrankings.com/ncaa-basketball/stat/opponent-offensive-rebounding-pct/download?format=csv", "OppOffRebPct"),
+("https://www.teamrankings.com/ncaa-basketball/stat/opponent-defensive-rebounding-pct/download?format=csv", "OppDefRebPct"),
+
 ]
 
 # ----------------------------------------------------
@@ -638,4 +625,5 @@ with col_side:
         </div>
         """,
         unsafe_allow_html=True,
+
     )

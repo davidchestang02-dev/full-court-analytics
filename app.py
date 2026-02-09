@@ -217,8 +217,20 @@ st.markdown("""
 def load_stat(url, label):
     csv_url = url + "/download?format=csv"
 
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/122.0.0.0 Safari/537.36"
+        )
+    }
+
     try:
-        df = pd.read_csv(csv_url)
+        response = requests.get(csv_url, headers=headers, timeout=10)
+        response.raise_for_status()
+
+        df = pd.read_csv(pd.compat.StringIO(response.text))
+
         if "Team" not in df.columns:
             return None
 
@@ -229,6 +241,7 @@ def load_stat(url, label):
 
     except Exception:
         return None
+
 # ----------------------------------------------------
 # STABLE STAT LIST (24 WORKING URLS)
 # ----------------------------------------------------
@@ -277,6 +290,15 @@ for url, label in STAT_SPECS:
         team_stats = df
     else:
         team_stats = team_stats.merge(df, on="Team", how="inner")
+
+if team_stats is None or team_stats.empty:
+    st.error("No valid TeamRankings tables were loaded.")
+    st.stop()
+
+st.success("TeamRankings data loaded successfully!")   # ← add this
+
+team_stats_dict = team_stats.set_index("Team").to_dict(orient="index")
+
 
 if team_stats is None or team_stats.empty:
     st.error("No valid TeamRankings tables were loaded.")
@@ -631,4 +653,5 @@ with col_side:
         unsafe_allow_html=True,
 
     )
+
 

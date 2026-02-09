@@ -265,7 +265,11 @@ STAT_SPECS = [
 # ----------------------------------------------------
 team_stats = None
 
+st.write("Loading stats…")
+
 for url, label in STAT_SPECS:
+    st.write(f"Fetching {label}")
+    
     df = load_stat(url, label)
     if df is None:
         continue
@@ -627,3 +631,4 @@ with col_side:
         unsafe_allow_html=True,
 
     )
+

@@ -252,31 +252,30 @@ def load_stat(url, label):
 # STABLE STAT LIST (24 WORKING URLS)
 # ----------------------------------------------------
 STAT_SPECS = [
-("https://www.teamrankings.com/ncaa-basketball/stat/offensive-efficiency/download?format=csv", "OffEff"),
-("https://www.teamrankings.com/ncaa-basketball/stat/defensive-efficiency/download?format=csv", "DefEff"),
-("https://www.teamrankings.com/ncaa-basketball/stat/possessions-per-game/download?format=csv", "Pace"),
-("https://www.teamrankings.com/ncaa-basketball/stat/two-point-rate/download?format=csv", "TwoPRate"),
-("https://www.teamrankings.com/ncaa-basketball/stat/two-point-pct/download?format=csv", "TwoPPct"),
-("https://www.teamrankings.com/ncaa-basketball/stat/three-point-rate/download?format=csv", "ThreePRate"),
-("https://www.teamrankings.com/ncaa-basketball/stat/three-point-pct/download?format=csv", "ThreePPct"),
-("https://www.teamrankings.com/ncaa-basketball/stat/fta-per-fga/download?format=csv", "FTAperFGA"),
-("https://www.teamrankings.com/ncaa-basketball/stat/free-throw-rate/download?format=csv", "FTRate"),
-("https://www.teamrankings.com/ncaa-basketball/stat/free-throw-pct/download?format=csv", "FTPct"),
-("https://www.teamrankings.com/ncaa-basketball/stat/turnover-pct/download?format=csv", "TOVPct"),
-("https://www.teamrankings.com/ncaa-basketball/stat/offensive-rebounding-pct/download?format=csv", "OffRebPct"),
-("https://www.teamrankings.com/ncaa-basketball/stat/defensive-rebounding-pct/download?format=csv", "DefRebPct"),
-("https://www.teamrankings.com/ncaa-basketball/stat/average-scoring-margin/download?format=csv", "AvgScoreMargin"),
-("https://www.teamrankings.com/ncaa-basketball/stat/opponent-two-point-rate/download?format=csv", "OppTwoPRate"),
-("https://www.teamrankings.com/ncaa-basketball/stat/opponent-two-point-pct/download?format=csv", "OppTwoPPct"),
-("https://www.teamrankings.com/ncaa-basketball/stat/opponent-three-point-rate/download?format=csv", "OppThreePRate"),
-("https://www.teamrankings.com/ncaa-basketball/stat/opponent-three-point-pct/download?format=csv", "OppThreePPct"),
-("https://www.teamrankings.com/ncaa-basketball/stat/opponent-free-throw-pct/download?format=csv", "OppFTPct"),
-("https://www.teamrankings.com/ncaa-basketball/stat/opponent-free-throw-rate/download?format=csv", "OppFTRate"),
-("https://www.teamrankings.com/ncaa-basketball/stat/opponent-fta-per-fga/download?format=csv", "OppFTAperFGA"),
-("https://www.teamrankings.com/ncaa-basketball/stat/opponent-effective-field-goal-pct/download?format=csv", "OppeFG"),
-("https://www.teamrankings.com/ncaa-basketball/stat/opponent-offensive-rebounding-pct/download?format=csv", "OppOffRebPct"),
-("https://www.teamrankings.com/ncaa-basketball/stat/opponent-defensive-rebounding-pct/download?format=csv", "OppDefRebPct"),
-
+    ("https://www.teamrankings.com/ncaa-basketball/stat/offensive-efficiency", "OffEff"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/defensive-efficiency", "DefEff"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/possessions-per-game", "Pace"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/two-point-rate", "TwoPRate"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/two-point-pct", "TwoPPct"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/three-point-rate", "ThreePRate"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/three-point-pct", "ThreePPct"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/fta-per-fga", "FTAperFGA"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/free-throw-rate", "FTRate"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/free-throw-pct", "FTPct"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/turnover-pct", "TOVPct"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/offensive-rebounding-pct", "OffRebPct"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/defensive-rebounding-pct", "DefRebPct"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/average-scoring-margin", "AvgScoreMargin"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-two-point-rate", "OppTwoPRate"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-two-point-pct", "OppTwoPPct"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-three-point-rate", "OppThreePRate"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-three-point-pct", "OppThreePPct"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-free-throw-pct", "OppFTPct"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-free-throw-rate", "OppFTRate"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-fta-per-fga", "OppFTAperFGA"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-effective-field-goal-pct", "OppeFG"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-offensive-rebounding-pct", "OppOffRebPct"),
+    ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-defensive-rebounding-pct", "OppDefRebPct"),
 ]
 
 # ----------------------------------------------------
@@ -659,6 +658,7 @@ with col_side:
         unsafe_allow_html=True,
 
     )
+
 
 
 

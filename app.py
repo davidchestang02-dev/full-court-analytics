@@ -299,18 +299,9 @@ for url, label in STAT_SPECS:
 if team_stats is None or team_stats.empty:
     st.error("No valid TeamRankings tables were loaded.")
     st.stop()
-
-st.success("TeamRankings data loaded successfully!")   # ← add this
-
+    st.success("TeamRankings data loaded successfully!")
+    
 team_stats_dict = team_stats.set_index("Team").to_dict(orient="index")
-
-
-if team_stats is None or team_stats.empty:
-    st.error("No valid TeamRankings tables were loaded.")
-    st.stop()
-
-team_stats_dict = team_stats.set_index("Team").to_dict(orient="index")
-
 # ----------------------------------------------------
 # TOP LAYOUT: TEAMS + MARKET + SIM SETTINGS
 # ----------------------------------------------------
@@ -658,6 +649,7 @@ with col_side:
         unsafe_allow_html=True,
 
     )
+
 
 
 

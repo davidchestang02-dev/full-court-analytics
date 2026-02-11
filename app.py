@@ -180,6 +180,16 @@ st.markdown(
         color: #a5b4fc;
         text-shadow: 0 0 12px rgba(80,120,255,0.35);
     }
+ 
+    .edge-green {
+        color: #00ff88;
+    text-shadow: 0 0 10px rgba(0,255,136,0.6);
+    }
+
+    .edge-red {
+        color: #ff4d4d;
+        text-shadow: 0 0 10px rgba(255,77,77,0.6);
+    }
 
     </style>
     """,
@@ -212,6 +222,9 @@ st.markdown("""
     </h1>
 </div>
 """, unsafe_allow_html=True)
+# ----------------------------------------------------
+# SAFE HTML TABLE LOADER (YEAR-BASED)
+# ----------------------------------------------------
 # ----------------------------------------------------
 # SAFE HTML TABLE LOADER (TEAMRANKINGS HTML)
 # ----------------------------------------------------
@@ -288,17 +301,16 @@ STAT_SPECS = [
 # ----------------------------------------------------
 # BUILD TEAMSTATS
 # ----------------------------------------------------
-with st.spinner("Loading TeamRankings stats…"):
-    team_stats = None
+team_stats = None
 
-    for url, label in STAT_SPECS:
-        df = load_stat(url, label)
-        if df is None:
-            continue
-        if team_stats is None:
-            team_stats = df
-        else:
-            team_stats = team_stats.merge(df, on="Team", how="inner")
+for url, label in STAT_SPECS:
+    df = load_stat(url, label)
+    if df is None:
+        continue
+    if team_stats is None:
+        team_stats = df
+    else:
+        team_stats = team_stats.merge(df, on="Team", how="inner")
 
 # After spinner finishes
 if team_stats is None or team_stats.empty:
@@ -354,28 +366,8 @@ with col_right:
     market_spread = st.number_input("Spread", value=0.0, step=0.5)
     market_total = st.number_input("Total", value=145.0, step=0.5)
 
-    st.markdown(
-    """
-    <h3 style="
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        letter-spacing: 0.05em;
-        color: #a5b4fc;
-        text-shadow: 0 0 12px rgba(80,120,255,0.35);
-    ">
-        Simulation
-    </h3>
-    """,
-    unsafe_allow_html=True,
-)
-
-    num_sims = st.slider("Simulations", min_value=2000, max_value=20000, value=8000, step=1000)
-    sigma = st.slider("Volatility (Std Dev)", min_value=4.0, max_value=14.0, value=8.0, step=0.5)
-
 a = team_stats_dict[team_a]
 b = team_stats_dict[team_b]
-
 # ----------------------------------------------------
 # DETERMINISTIC ENGINE (OPTION B)
 # ----------------------------------------------------
@@ -450,7 +442,11 @@ proj_spread = proj_a - proj_b
 true_market_spread = -market_spread
 spread_edge = proj_spread - true_market_spread
 total_edge = proj_total - market_total
-
+# ----------------------------------------------------
+# SIM DEFAULTS (before sliders overwrite them)
+# ----------------------------------------------------
+sigma = 12.0
+num_sims = 14000
 # ----------------------------------------------------
 # MONTE CARLO ENGINE
 # ----------------------------------------------------
@@ -472,11 +468,14 @@ prob_push_total = float(np.mean(np.isclose(sim_total, market_total, atol=0.5)))
 # ----------------------------------------------------
 # DASHBOARD LAYOUT
 # ----------------------------------------------------
-col_main, col_side = st.columns([2.2, 1.3])
+col_main, col_side = st.columns([2.2, 1.3]) 
 
 with col_main:
-    st.markdown(
-        """
+
+    # -------------------------
+    # PROJECTION PANEL
+    # -------------------------
+    st.markdown("""
         <h3 style="
             font-size: 2.5rem;
             font-weight: 700;
@@ -487,49 +486,87 @@ with col_main:
         ">
             Projection Panel
         </h3>
-        """,
-        unsafe_allow_html=True,
-    )
+    """, unsafe_allow_html=True)
 
     c1, c2, c3 = st.columns(3)
 
     with c1:
-        st.markdown(
-            f"""
+        st.markdown(f"""
             <div class="metric-card">
               <div class="metric-label">Projected Score</div>
               <div class="metric-value">{proj_a:.1f}</div>
               <div class="metric-sub">{team_a}</div>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        """, unsafe_allow_html=True)
 
     with c2:
-        st.markdown(
-            f"""
+        st.markdown(f"""
             <div class="metric-card">
               <div class="metric-label">Projected Score</div>
               <div class="metric-value">{proj_b:.1f}</div>
               <div class="metric-sub">{team_b}</div>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        """, unsafe_allow_html=True)
 
     with c3:
-        st.markdown(
-            f"""
+        st.markdown(f"""
             <div class="metric-card">
               <div class="metric-label">Projected Total</div>
               <div class="metric-value">{proj_total:.1f}</div>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        """, unsafe_allow_html=True)
 
-    st.markdown(
-        """
+    # -------------------------
+    # SIMULATION SLIDERS
+    # -------------------------
+    st.markdown("<div style='height: 0.5rem'></div>", unsafe_allow_html=True)
+
+    s1, s2 = st.columns(2)
+    with s1:
+        volatility = st.slider("Volatility (Std Dev)", 5.0, 25.0, 12.0)
+    with s2:
+        num_sims = st.slider("Simulations", 2000, 30000, 14000, step=1000)
+    # -------------------------
+    # SIMULATION SUMMARY (HORIZONTAL)
+    # -------------------------
+    st.markdown("<div style='height: 0.5rem'></div>", unsafe_allow_html=True)
+
+    ss1, ss2, ss3 = st.columns(3)
+
+    with ss1:
+        st.markdown(f"""
+            <div class="metric-card">
+              <div class="metric-label">Cover Probability</div>
+              <div class="metric-value">{prob_a_covers:.1%}</div>
+              <div class="metric-sub">{team_a} covers {market_spread:+.1f}</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with ss2:
+        st.markdown(f"""
+            <div class="metric-card">
+              <div class="metric-label">Cover Probability</div>
+              <div class="metric-value">{prob_b_covers:.1%}</div>
+              <div class="metric-sub">{team_b} covers {abs(market_spread):+.1f}</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    with ss3:
+        st.markdown(f"""
+            <div class="metric-card">
+              <div class="metric-label">Push Probability</div>
+              <div class="metric-value">{prob_push_spread:.1%}</div>
+              <div class="metric-sub">Spread push</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+    # -------------------------
+    # MODEL VS MARKET
+    # -------------------------
+    spread_edge_class = "edge-green" if spread_edge > 0 else "edge-red"
+    total_edge_class  = "edge-green" if total_edge  > 0 else "edge-red"
+
+    st.markdown("""
         <h3 style="
             font-size: 2.5rem;
             font-weight: 700;
@@ -540,125 +577,33 @@ with col_main:
         ">
             Model vs Market
         </h3>
-        """,
-        unsafe_allow_html=True,
-    )
+    """, unsafe_allow_html=True)
 
     c4, c5 = st.columns(2)
 
     with c4:
-        st.markdown(
-            f"""
+        st.markdown(f"""
             <div class="metric-card">
               <div class="metric-label">Spread Edge</div>
-              <div class="metric-value">{spread_edge:+.1f}</div>
+              <div class="metric-value {spread_edge_class}">{spread_edge:+.1f}</div>
               <div class="metric-sub">Market: {market_spread:+.1f}</div>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        """, unsafe_allow_html=True)
 
     with c5:
-        st.markdown(
-            f"""
+        st.markdown(f"""
             <div class="metric-card">
               <div class="metric-label">Total Edge</div>
-              <div class="metric-value">{total_edge:+.1f}</div>
+              <div class="metric-value {total_edge_class}">{total_edge:+.1f}</div>
               <div class="metric-sub">Market: {market_total:.1f}</div>
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
+        """, unsafe_allow_html=True)
 
+
+# ----------------------------------------------------
+# RIGHT COLUMN (optional)
+# ----------------------------------------------------
 with col_side:
-    st.markdown(
-        """
-        <h3 style="
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.05em;
-            color: #a5b4fc;
-            text-shadow: 0 0 12px rgba(80,120,255,0.35);
-        ">
-            Simulation Summary
-        </h3>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        f"""
-        <div class="metric-card">
-          <div class="metric-label">Cover Probability</div>
-          <div class="metric-value">{prob_a_covers:.1%}</div>
-          <div class="metric-sub">{team_a} covers {market_spread:+.1f}</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        f"""
-        <div class="metric-card">
-          <div class="metric-label">Cover Probability</div>
-          <div class="metric-value">{prob_b_covers:.1%}</div>
-          <div class="metric-sub">{team_b} covers {market_spread:+.1f}</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        f"""
-        <div class="metric-card">
-          <div class="metric-label">Push Probability</div>
-          <div class="metric-value">{prob_push_spread:.1%}</div>
-          <div class="metric-sub">Spread push window</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown("---")
-
-    st.markdown(
-        f"""
-        <div class="metric-card">
-          <div class="metric-label">Total – Over</div>
-          <div class="metric-value">{prob_over:.1%}</div>
-          <div class="metric-sub">Over {market_total:.1f}</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        f"""
-        <div class="metric-card">
-          <div class="metric-label">Total – Under</div>
-          <div class="metric-value">{prob_under:.1%}</div>
-          <div class="metric-sub">Under {market_total:.1f}</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    st.markdown(
-        f"""
-        <div class="metric-card">
-          <div class="metric-label">Total – Push</div>
-          <div class="metric-value">{prob_push_total:.1%}</div>
-          <div class="metric-sub">Total push window</div>
-        </div>
-        """,
-        unsafe_allow_html=True,
-
-    )
-
-
-
-
-
-
+    # You can put matchup info, market info, team logos, etc.
+    pass
 

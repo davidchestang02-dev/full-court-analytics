@@ -213,12 +213,10 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 # ----------------------------------------------------
-# SAFE HTML TABLE LOADER (YEAR-BASED)
+# SAFE HTML TABLE LOADER (TEAMRANKINGS HTML)
 # ----------------------------------------------------
 @st.cache_data(ttl=21600)
 def load_stat(url, label):
-    csv_url = url + "/download?format=csv"
-
     headers = {
         "User-Agent": (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
@@ -228,24 +226,34 @@ def load_stat(url, label):
     }
 
     try:
-        response = requests.get(csv_url, headers=headers, timeout=10)
+        response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
 
-        df = pd.read_csv(StringIO(response.text))
+        # Parse all tables on the page
+        tables = pd.read_html(response.text)
 
-        if "Team" not in df.columns:
-            st.write(f"{label} → CSV columns: {df.columns.tolist()}")
-            st.write(f"{label} → First 200 chars:\n{response.text[:200]}")
+        if not tables:
+            st.write(f"{label} → No tables found.")
             return None
 
-        df = df[["Team", df.columns[-1]]]
+        df = tables[0]
+
+        # Expect columns: Rank | Team | 2024 | Last 3 | Last 1
+        if "Team" not in df.columns:
+            st.write(f"{label} → Unexpected columns: {df.columns.tolist()}")
+            return None
+
+        # Use the last numeric column (current season)
+        stat_col = df.columns[-1]
+
+        df = df[["Team", stat_col]]
         df.columns = ["Team", label]
         df["Team"] = df["Team"].str.strip()
+
         return df
 
     except Exception as e:
         st.write(f"{label} → ERROR: {e}")
-        st.write(f"Raw response:\n{response.text[:200]}")
         return None
 
 # ----------------------------------------------------
@@ -277,30 +285,28 @@ STAT_SPECS = [
     ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-offensive-rebounding-pct", "OppOffRebPct"),
     ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-defensive-rebounding-pct", "OppDefRebPct"),
 ]
-
 # ----------------------------------------------------
 # BUILD TEAMSTATS
 # ----------------------------------------------------
-team_stats = None
+with st.spinner("Loading TeamRankings stats…"):
+    team_stats = None
 
-st.write("Loading stats…")
+    for url, label in STAT_SPECS:
+        df = load_stat(url, label)
+        if df is None:
+            continue
+        if team_stats is None:
+            team_stats = df
+        else:
+            team_stats = team_stats.merge(df, on="Team", how="inner")
 
-for url, label in STAT_SPECS:
-    st.write(f"Fetching {label}")
-    
-    df = load_stat(url, label)
-    if df is None:
-        continue
-    if team_stats is None:
-        team_stats = df
-    else:
-        team_stats = team_stats.merge(df, on="Team", how="inner")
-
+# After spinner finishes
 if team_stats is None or team_stats.empty:
     st.error("No valid TeamRankings tables were loaded.")
     st.stop()
-    st.success("TeamRankings data loaded successfully!")
-    
+
+#st.success("TeamRankings data loaded successfully!")
+
 team_stats_dict = team_stats.set_index("Team").to_dict(orient="index")
 # ----------------------------------------------------
 # TOP LAYOUT: TEAMS + MARKET + SIM SETTINGS
@@ -649,6 +655,7 @@ with col_side:
         unsafe_allow_html=True,
 
     )
+
 
 
 

@@ -478,6 +478,31 @@ if team_stats is None or team_stats.empty:
 #st.success("TeamRankings data loaded successfully!")
 
 team_stats_dict = team_stats.set_index("Team").to_dict(orient="index")
+
+# ----------------------------------------------------
+# RAW SCORING BASELINE (for reliability)
+# ----------------------------------------------------
+raw_total = num(a.get("PointsPerGame")) + num(b.get("PointsPerGame"))
+
+# ----------------------------------------------------
+# RELIABILITY CALCULATIONS
+# ----------------------------------------------------
+diff_total = abs(proj_total - raw_total)
+reliability_total = 1 / (1 + (diff_total / 4)**2)
+
+diff_spread = abs(proj_spread - true_market_spread)
+reliability_spread = 1 / (1 + (diff_spread / 5)**2)
+
+# ----------------------------------------------------
+# BLENDED DETERMINISTIC PROJECTIONS
+# ----------------------------------------------------
+blended_total = reliability_total * proj_total + (1 - reliability_total) * market_total
+blended_spread = reliability_spread * proj_spread + (1 - reliability_spread) * true_market_spread
+
+# Reconstruct blended team scores
+blended_a = (blended_total + blended_spread) / 2
+blended_b = (blended_total - blended_spread) / 2
+
 # ----------------------------------------------------
 # MATCHUP + MARKET
 # ----------------------------------------------------
@@ -611,8 +636,8 @@ with st.expander("Simulation Controls", expanded=False):
 # MONTE CARLO ENGINE
 # ----------------------------------------------------
 np.random.seed(42)
-sim_a = np.random.normal(proj_a, sigma, num_sims)
-sim_b = np.random.normal(proj_b, sigma, num_sims)
+sim_a = np.random.normal(blended_a, sigma, num_sims)
+sim_b = np.random.normal(blended_b, sigma, num_sims)
 
 sim_spread = sim_a - sim_b
 sim_total = sim_a + sim_b
@@ -705,10 +730,9 @@ with col_main:
     # ----------------------------------------------------
     st.markdown('<div class="tournament-header">MODEL vs MARKET</div>', unsafe_allow_html=True)
 
-
-    spread_edge_class = "edge-green" if spread_edge > 0 else "edge-red"
-    total_edge_class  = "edge-green" if total_edge > 0 else "edge-red"
-
+    spread_edge = blended_spread - true_market_spread
+    total_edge = blended_total - market_total
+    
     mv1, mv2 = st.columns(2)
 
     with mv1:
@@ -730,11 +754,33 @@ with col_main:
         """, unsafe_allow_html=True)
 
 # ----------------------------------------------------
+# RELIABILITY METER UI
+# ----------------------------------------------------
+st.markdown("""
+    <h4 style="
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin-top: 1rem;
+        letter-spacing: 0.08em;
+        color: #c7d2fe;
+        text-shadow: 0 0 10px rgba(80,120,255,0.75);
+    ">
+        Model Reliability
+    </h4>
+""", unsafe_allow_html=True)
+
+rel_score = (reliability_total * reliability_spread) * 100
+
+st.progress(float(rel_score / 100))
+st.write(f"**Reliability Score:** {rel_score:.1f}/100")
+
+# ----------------------------------------------------
 # RIGHT COLUMN (optional)
 # ----------------------------------------------------
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

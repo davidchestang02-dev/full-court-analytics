@@ -47,7 +47,7 @@ st.markdown("""
 }
 
 .block-container {
-    padding-top: 0.5rem !important;
+    padding-top: 3.5rem !important;
 }
 
 /* HEADERS ----------------------------------------------------------- */
@@ -634,6 +634,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

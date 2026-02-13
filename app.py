@@ -65,12 +65,12 @@ h1, h2, h3, h4 {
     letter-spacing: 0.32em !important;
     text-transform: uppercase !important;
     color: #ffffff !important;
-    -webkit-text-stroke: 1px rgba(0,25,90,0.65);
+    -webkit-text-stroke: 1px rgba(0,25,90,0.75);
     text-shadow:
-        0 0 10px rgba(0,25,90,1.0),
-        0 0 22px rgba(60,110,220,0.95),
-        0 0 42px rgba(140,170,255,0.85),
-        0 0 70px rgba(160,190,255,0.75);
+        0 0 12px rgba(0,40,120,1),
+        0 0 26px rgba(60,110,255,1),
+        0 0 48px rgba(140,170,255,0.95),
+        0 0 90px rgba(160,190,255,0.85);
     margin-top: 1.2rem !important;
     margin-bottom: 0.8rem !important;
 }
@@ -671,6 +671,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

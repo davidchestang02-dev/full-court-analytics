@@ -220,7 +220,7 @@ div[data-baseweb="slider"] div[role="slider"]:hover {
     padding: 0.5rem !important;
 }
 
-.streamlit-expanderHeader {
+div[data-testid="stExpander"] > details > summary {
     font-size: 1.4rem !important;
     font-weight: 800 !important;
     letter-spacing: 0.08em !important;
@@ -644,6 +644,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

@@ -272,14 +272,15 @@ st.markdown(
         margin-bottom: 1.6rem;
         letter-spacing: 0.32em;
         text-transform: uppercase;
-        background: linear-gradient(100deg, #e8ecff 0%, #ffffff 35%, #b8c4ff 70%, #dfe4ff 100%);
+        color: #ffffff;
+        background: linear-gradient(100deg, #ffffff 0%, #f2f4ff 40%, #dce2ff 70%, #ffffff 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        -webkit-text-stroke: 1px rgba(180,200,255,0.55);
+        -webkit-text-stroke: 1px rgba(40,70,160,0.55);
         text-shadow:
-            0 0 6px rgba(120,150,255,0.55),
-            0 0 14px rgba(80,120,255,0.75),
-            0 0 28px rgba(80,120,255,0.55);
+            0 0 6px rgba(20,40,120,0.85),   /* dark blue inner halo */
+            0 0 14px rgba(80,120,255,0.75), /* mid blue glow */
+            0 0 28px rgba(120,150,255,0.55);/* light blue outer fade */
             ">
         Model‑Driven Betting Intelligence
         </div>
@@ -641,6 +642,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

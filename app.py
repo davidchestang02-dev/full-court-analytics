@@ -25,7 +25,7 @@ st.markdown("""
 <style>
 /* GLOBAL ------------------------------------------------------------ */
 .stApp {
-    background-image:url("https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_background.png")
+    background-image:"https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_background.png"
 
 st.markdown(
 ;
@@ -646,6 +646,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

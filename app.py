@@ -17,7 +17,7 @@ def num(x):
 # ----------------------------------------------------
 st.set_page_config(
     page_title="Full Court Analytics",
-    page_icon="images/fca_logo.png",
+    page_icon="https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_logo.png"),
     layout="wide"
 )
 
@@ -25,9 +25,12 @@ st.markdown("""
 <style>
 /* GLOBAL ------------------------------------------------------------ */
 .stApp {
-    background-image:"images/fca_background.png";
+    background-image:url("https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_background.png")
+
+st.markdown(
+;
     background-size: cover;
-    background-position: center 5%;
+    background-position: center 25%;
     background-repeat: no-repeat;
     background-attachment: fixed;
     image-rendering: high-quality;
@@ -643,6 +646,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

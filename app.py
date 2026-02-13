@@ -212,34 +212,37 @@ div[data-baseweb="slider"] div[role="slider"]:hover {
 }
 
 /* EXPANDER ---------------------------------------------------------- */
+
 .st-expander {
-    background: rgba(10,15,30,0.9) !important;
-    border: 2px solid rgba(80,120,255,0.45) !important;
-    border-radius: 0.9rem !important;
-    box-shadow: 0 0 18px rgba(0,120,255,0.2) !important;
-    padding: 0.5rem !important;
+    background: rgba(8,12,25,0.92) !important; /* darker fill */
+    border: 3px solid rgba(80,120,255,0.65) !important; /* heavier border */
+    border-radius: 1.0rem !important;
+    box-shadow:
+        0 0 12px rgba(60,110,220,0.55),
+        0 0 28px rgba(120,160,255,0.35); /* blue glow behind container */
+    padding: 0.6rem !important;
 }
 
 div[data-testid="stExpander"] > details > summary {
-    font-size: 1.4rem !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.08em !important;
+    font-size: 1.45rem !important;
+    font-weight: 900 !important; /* bold text */
+    letter-spacing: 0.10em !important;
     text-transform: uppercase !important;
+
+    /* Standard blue gradient header style */
     background: linear-gradient(90deg, #a5b4fc, #c7d2fe);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+
     text-shadow: 0 0 18px rgba(80,120,255,0.55);
 }
 
-.st-expander summary > div:first-child {
-    display: none !important;
-}
-
+/* EXPANDER CONTENT -------------------------------------------------- */
 .st-expander .st-expander-content {
-    background: rgba(10,15,30,0.9) !important;
+    background: rgba(8,12,25,0.92) !important; /* darker fill */
     padding: 1rem 1.2rem !important;
     border-radius: 0.6rem !important;
-    border: 1px solid rgba(80,120,255,0.3) !important;
+    border: 2px solid rgba(80,120,255,0.35) !important;
 }
 
 /* EDGE COLORS ------------------------------------------------------- */
@@ -644,6 +647,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

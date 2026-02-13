@@ -227,10 +227,10 @@ div[data-testid="stExpander"] summary,
 .st-expanderHeader,
 .st-expander > details > summary {
     font-size: 1.55rem !important;
-    font-weight: 900 !important; /* bolder text */
+    font-weight: 900 !important;
     letter-spacing: 0.12em !important;
     text-transform: uppercase !important;
-    background-color: rgba(4,8,18,0.85) !important;
+    background-color: rgba(12,18,35,0.55) !important;
     padding: 0.45rem 0.75rem !important;
     border-radius: 0.45rem !important;
     color: #c7d2fe !important;
@@ -239,12 +239,25 @@ div[data-testid="stExpander"] summary,
         0 0 22px rgba(120,160,255,0.55);
 }
 
-/* EXPANDER CONTENT -------------------------------------------------- */
 .st-expander .st-expander-content {
     background: rgba(6,10,20,0.92) !important;
     border: 2px solid rgba(80,120,255,0.35) !important;
     border-radius: 0.6rem !important;
     padding: 1rem 1.2rem !important;
+}
+
+.st-expander .stSlider > label {
+    font-size: 1.25rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.10em !important;
+    text-transform: uppercase !important;
+    background-color: rgba(12,18,35,0.55) !important;
+    padding: 0.35rem 0.55rem !important;
+    border-radius: 0.35rem !important;
+    color: #c7d2fe !important;
+    text-shadow:
+        0 0 10px rgba(80,120,255,0.75),
+        0 0 22px rgba(120,160,255,0.55);
 }
 
 /* EDGE COLORS ------------------------------------------------------- */
@@ -649,6 +662,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

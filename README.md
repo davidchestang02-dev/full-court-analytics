@@ -1,2 +1,2 @@
 # full-court-analytics
-ollege basketball predictive engine built with Streamlit
+College basketball predictive engine built with Streamlit

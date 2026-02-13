@@ -231,13 +231,6 @@ div[data-baseweb="slider"] div[role="slider"]:hover {
     text-shadow: 0 0 18px rgba(80,120,255,0.55);
 }
 
-.st-expander summary {
-    font-size: 1.2rem !important;
-    font-weight: 700 !important;
-    color: #a5b4fc !important;
-    letter-spacing: 0.06em !important;
-}
-
 .st-expander summary > div:first-child {
     display: none !important;
 }
@@ -651,6 +644,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

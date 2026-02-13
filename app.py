@@ -97,24 +97,24 @@ h1, h2, h3, h4 {
         0 0 28px rgba(120,160,255,0.35) !important; /* same glow as expander */
 }
 
-.stSelectbox div[data-baseweb="select"] span {
-    color: #c7d2fe !important; /* same blue as headers */
-    font-weight: 800 !important;
-    letter-spacing: 0.08em !important;
 
-    text-shadow:
-        0 0 10px rgba(80,120,255,0.75),
-        0 0 22px rgba(120,160,255,0.55) !important;
-}
-
-.stSelectbox div[data-baseweb="popover"] {
-    background: rgba(8,12,25,0.95) !important;
-    border: 2px solid rgba(80,120,255,0.45) !important;
-    border-radius: 0.8rem !important;
-
+.stSelectbox div[data-baseweb="select"] {
+    background: rgba(8,12,25,0.92) !important; /* same as expanders */
+    border: 3px solid rgba(80,120,255,0.65) !important;
+    border-radius: 0.9rem !important;
+    padding: 0.35rem 0.6rem !important;
     box-shadow:
         0 0 14px rgba(60,110,220,0.55),
         0 0 28px rgba(120,160,255,0.35) !important;
+}
+
+.stSelectbox div[data-baseweb="select"] span {
+    color: #c7d2fe !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.08em !important;
+    text-shadow:
+        0 0 10px rgba(80,120,255,0.75),
+        0 0 22px rgba(120,160,255,0.55) !important;
 }
 
 .stSelectbox div[data-baseweb="option"] {
@@ -128,6 +128,24 @@ h1, h2, h3, h4 {
 .stSelectbox div[data-baseweb="option"]:hover {
     background: rgba(60,110,220,0.35) !important;
     color: #ffffff !important;
+
+    text-shadow:
+        0 0 10px rgba(80,120,255,0.75),
+        0 0 22px rgba(120,160,255,0.55) !important;
+}
+
+div[data-testid="stExpander"], .stSelectbox label[data-testid="stWidgetLabel"] div[data-testid="stMarkdownContainer"] p,
+label[data-testid="stWidgetLabel"] div[data-testid="stMarkdownContainer"] p {
+    font-size: 1.25rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.10em !important;
+    text-transform: uppercase !important;
+
+    background-color: rgba(12,18,35,0.55) !important;
+    padding: 0.35rem 0.55rem !important;
+    border-radius: 0.35rem !important;
+
+    color: #c7d2fe !important;
 
     text-shadow:
         0 0 10px rgba(80,120,255,0.75),
@@ -718,6 +736,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

@@ -353,26 +353,26 @@ div[data-testid="stExpander"] label[data-testid="stWidgetLabel"] div[data-testid
 # ----------------------------------------------------
 st.markdown(
     """
-    <div style="text-align:center; margin-top: 0.8rem; margin-bottom: -0.2rem;">
+    <div style="text-align:center; margin-top: 0.4rem; margin-bottom: -0.6rem;">
         <img src="https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_logo.png"
-             style="width:760px; filter: drop-shadow(0 0 26px rgba(80,120,255,0.75));">
+             style="width:660px; filter: drop-shadow(0 0 26px rgba(80,120,255,0.75));">
     </div>
 
     <div style="
         text-align: center;
         font-size: 1.95rem;
         font-weight: 900;
-        margin-top: -0.05rem;
-        margin-bottom: 1.6rem;
+        margin-top: -0.25rem;      /* tighter gap under logo */
+        margin-bottom: 2.0rem;     /* more space before MATCHUP */
         letter-spacing: 0.34em;
         text-transform: uppercase; 
         color: #ffffff;
         -webkit-text-stroke: 1px rgba(0,25,90,0.65);
         text-shadow:
-            0 0 10px rgba(0,25,90,1.0),      /* deep navy inner halo (strong) */
-            0 0 22px rgba(60,110,220,0.95),  /* mid blue glow (brighter) */
-            0 0 42px rgba(140,170,255,0.85), /* light blue outer glow (bigger) */
-            0 0 70px rgba(160,190,255,0.75); /* extended soft fade (arena effect) */
+            0 0 10px rgba(0,25,90,1.0),
+            0 0 22px rgba(60,110,220,0.95),
+            0 0 42px rgba(140,170,255,0.85),
+            0 0 70px rgba(160,190,255,0.75);
     ">
         Model‑Driven Betting Intelligence
     </div>
@@ -735,6 +735,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

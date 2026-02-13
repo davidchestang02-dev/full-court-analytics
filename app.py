@@ -220,6 +220,17 @@ div[data-baseweb="slider"] div[role="slider"]:hover {
     padding: 0.5rem !important;
 }
 
+.streamlit-expanderHeader {
+    font-size: 1.4rem !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.08em !important;
+    text-transform: uppercase !important;
+    background: linear-gradient(90deg, #a5b4fc, #c7d2fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 18px rgba(80,120,255,0.55);
+}
+
 .st-expander summary {
     font-size: 1.2rem !important;
     font-weight: 700 !important;
@@ -640,6 +651,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

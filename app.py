@@ -725,39 +725,55 @@ with col_main:
                 <div class="metric-sub">Spread push</div>
             </div>
         """, unsafe_allow_html=True)
+    # ----------------------------------------------------
+    # TEAM-AWARE SPREAD EDGE INTERPRETATION
+    # ----------------------------------------------------
 
+    # Identify favorite and underdog based on market spread
+    favorite = team_a if market_spread < 0 else team_b
+    underdog = team_b if market_spread < 0 else team_a 
+
+    # Compute edges
+    spread_edge = blended_spread - true_market_spread
+    total_edge = blended_total - market_total
+
+    # Determine which team the spread edge favors
+    spread_edge_team = favorite if spread_edge > 0 else underdog
+
+    # Display spread edge as positive number
+    spread_edge_display = abs(spread_edge)
+
+    # Color classes
+    spread_edge_class = "edge-green" if spread_edge_display > 0 else "edge-red"
+    total_edge_class  = "edge-green" if total_edge > 0 else "edge-red"
+
+    # Total edge label
+    total_edge_side = "Over" if total_edge > 0 else "Under"
 
     # ----------------------------------------------------
     # MODEL VS MARKET
     # ----------------------------------------------------
     st.markdown('<div class="tournament-header">MODEL vs MARKET</div>', unsafe_allow_html=True)
-    
-    spread_edge = blended_spread - true_market_spread
-    total_edge = blended_total - market_total
 
-    spread_edge_class = "edge-green" if spread_edge > 0 else "edge-red"
-    total_edge_class  = "edge-green" if total_edge > 0 else "edge-red"
-
-    
     mv1, mv2 = st.columns(2)
-
+ 
     with mv1:
-        st.markdown(f"""
-            <div class="metric-card">
-                <div class="metric-label">Spread Edge</div>
-                <div class="metric-value {spread_edge_class}">{spread_edge:+.1f}</div>
-                <div class="metric-sub">Market: {market_spread:+.1f}</div>
-            </div>
-        """, unsafe_allow_html=True)
+      st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-label">Spread Edge</div>
+            <div class="metric-value {spread_edge_class}">+{spread_edge_display:.1f}</div>
+            <div class="metric-sub">Value on {spread_edge_team}</div>
+        </div>
+    """, unsafe_allow_html=True)
 
-    with mv2:
-        st.markdown(f"""
-            <div class="metric-card">
-                <div class="metric-label">Total Edge</div>
-                <div class="metric-value {total_edge_class}">{total_edge:+.1f}</div>
-                <div class="metric-sub">Market: {market_total:.1f}</div>
-            </div>
-        """, unsafe_allow_html=True)
+  with mv2:
+      st.markdown(f"""
+        <div class="metric-card">
+            <div class="metric-label">Total Edge</div>
+            <div class="metric-value {total_edge_class}">{total_edge:+.1f}</div>
+            <div class="metric-sub">{total_edge_side} value</div>
+        </div>
+    """, unsafe_allow_html=True)
 
 # ----------------------------------------------------
 # RELIABILITY METER UI
@@ -786,6 +802,7 @@ st.write(f"**Reliability Score:** {rel_score:.1f}/100")
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

@@ -758,22 +758,22 @@ with col_main:
     mv1, mv2 = st.columns(2)
  
     with mv1:
-      st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">Spread Edge</div>
-            <div class="metric-value {spread_edge_class}">+{spread_edge_display:.1f}</div>
-            <div class="metric-sub">Value on {spread_edge_team}</div>
-        </div>
+        st.markdown(f"""
+           <div class="metric-card">
+               <div class="metric-label">Spread Edge</div>
+               <div class="metric-value {spread_edge_class}">+{spread_edge_display:.1f}</div>
+               <div class="metric-sub">Value on {spread_edge_team}</div>
+           </div>
     """, unsafe_allow_html=True)
 
   with mv2:
       st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">Total Edge</div>
-            <div class="metric-value {total_edge_class}">{total_edge:+.1f}</div>
-            <div class="metric-sub">{total_edge_side} value</div>
-        </div>
-    """, unsafe_allow_html=True)
+         <div class="metric-card">
+             <div class="metric-label">Total Edge</div>
+             <div class="metric-value {total_edge_class}">{total_edge:+.1f}</div>
+             <div class="metric-sub">{total_edge_side} value</div>
+         </div>
+       """, unsafe_allow_html=True)
 
 # ----------------------------------------------------
 # RELIABILITY METER UI
@@ -802,6 +802,7 @@ st.write(f"**Reliability Score:** {rel_score:.1f}/100")
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

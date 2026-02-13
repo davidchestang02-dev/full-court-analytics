@@ -731,9 +731,13 @@ with col_main:
     # MODEL VS MARKET
     # ----------------------------------------------------
     st.markdown('<div class="tournament-header">MODEL vs MARKET</div>', unsafe_allow_html=True)
+    
+spread_edge = blended_spread - true_market_spread
+total_edge = blended_total - market_total
 
-    spread_edge = blended_spread - true_market_spread
-    total_edge = blended_total - market_total
+spread_edge_class = "edge-green" if spread_edge > 0 else "edge-red"
+total_edge_class  = "edge-green" if total_edge > 0 else "edge-red"
+
     
     mv1, mv2 = st.columns(2)
 
@@ -782,6 +786,7 @@ st.write(f"**Reliability Score:** {rel_score:.1f}/100")
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

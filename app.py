@@ -57,6 +57,16 @@ h1, h2, h3, h4 {
     letter-spacing: 0.04em;
 }
 
+.header-logo {
+    width: 480px !important;   /* bump from 420–460 to a strong 480 */
+    max-width: 90% !important;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0.5rem;
+    margin-bottom: -0.5rem;
+}
+
 /* SECTION HEADERS --------------------------------------------------- */
 .tournament-header {
     text-align: center;
@@ -671,6 +681,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

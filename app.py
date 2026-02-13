@@ -21,210 +21,273 @@ st.set_page_config(
     layout="wide",
 )
 
-st.markdown(
-    """
-    <style>
+st.markdown("""
+<style>
+/* GLOBAL ------------------------------------------------------------ */
+.stApp {
+    background-image: url("https://i.imgur.com/n9N84yG.png");
+    background-size: cover;
+    background-position: center 5%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    image-rendering: high-quality;
+    transform: scale(0.99);
+    transform-origin: center center;   
+    color: #e8ecff;
+    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.stApp::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(5, 10, 20, 0.35);
+    z-index: -1;
+}
 
-    /* GLOBAL ------------------------------------------------------------ */
-    .stApp {
-        background-image: url("https://i.imgur.com/rdqEqhv.jpeg");
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        color: #e8ecff;
-        font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    }
+.block-container {
+    padding-top: 0.5rem !important;
+}
 
+/* HEADERS ----------------------------------------------------------- */
+h1, h2, h3, h4 {
+    color: #e8ecff;
+    text-shadow: 0 0 18px rgba(80,120,255,0.75) !important;
+    letter-spacing: 0.04em;
+}
 
-    .css-1y4p8pa, .css-1v0mbdj, .css-1dp5vir {
-        margin-top: -0.5rem !important;
-        padding-top: 0rem !important;
-    }
+/* SECTION HEADERS --------------------------------------------------- */
+.section-header {
+    text-align: center;
+    font-size: 2.2rem;
+    font-weight: 800;
+    margin-top: 0.2rem;
+    margin-bottom: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, #a5b4fc, #c7d2fe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 20px rgba(120,150,255,0.55);
+}
 
-    .block-container {
-        padding-top: 0.5rem !important;
-    }
-    
-    /* Fully fix team name cutoff in selectboxes */
-    .stSelectbox > div {
-        width: 100% !important;
-    }
+/* SELECTBOXES ------------------------------------------------------- */
+.stSelectbox div[data-baseweb="select"] {
+    background: rgba(20,25,45,0.9) !important;
+    border: 1px solid rgba(90,120,255,0.45) !important;
+    border-radius: 0.6rem !important;
+    color: #e8ecff !important;
+}
 
-    .stSelectbox div[data-baseweb="select"] {
-        width: 100% !important;
-        max-width: 100% !important;
-    }
+.stSelectbox div[data-baseweb="select"] span {
+    color: #a5b4fc !important;
+    text-shadow: 0 0 14px rgba(80,120,255,0.55) !important;
+}
 
-    .stSelectbox div[data-baseweb="select"] > div {
-        width: 100% !important;
-        max-width: 100% !important;
-    }
+/* NUMBER INPUTS (GLOBAL) ------------------------------------------- */
+input[type="number"] {
+    background: rgba(20,25,45,0.9) !important;
+    border: 1px solid rgba(90,120,255,0.45) !important;
+    border-radius: 0.6rem !important;
+    color: #e8ecff !important;
+    padding: 6px 10px !important;
+    font-size: 1.1rem !important;
+}
 
-    .stSelectbox div[data-baseweb="select"] span {
-        width: 100% !important;
-        max-width: 100% !important;
-        white-space: nowrap !important;
-        overflow: visible !important;
-    }
+/* HIDE LABEL + TIGHTEN GAP FOR NUMBER INPUTS ----------------------- */
+.stNumberInput > label {
+    display: none !important;
+}
 
-    /* HEADERS ----------------------------------------------------------- */
-    h1, h2, h3, h4 {
-        color: #e8ecff;
-        text-shadow: 0 0 18px rgba(80,120,255,0.75) !important;
-        letter-spacing: 0.04em;
-    }
+.stNumberInput {
+    margin-top: -0.4rem !important;
+}
 
-    /* INPUTS ------------------------------------------------------------ */
-    .stSelectbox > div > div {
-        background: rgba(20,25,45,0.85) !important;
-        border: 1px solid rgba(90,120,255,0.35) !important;
-        border-radius: 0.6rem !important;
-        color: #e8ecff !important;
-    }
+/* METRIC CARDS ------------------------------------------------------ */
+.metric-card {
+    padding: 1rem 1.25rem;
+    border-radius: 0.9rem;
+    background: rgba(15,20,35,0.9);
+    border: 1px solid rgba(80,120,255,0.45);
+    box-shadow: 0 0 18px rgba(0,120,255,0.2);
+    transition: 0.25s ease;
+}
 
-    .stSelectbox > div > div {
-        min-height: 2.2rem !important;
-        padding-top: 0.15rem !important;
-        padding-bottom: 0.15rem !important;
-    }
+.metric-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 26px rgba(0,150,255,0.4);
+}
 
-    .stNumberInput > div > div > input {
-        background: rgba(20,25,45,0.85) !important;
-        border: 1px solid rgba(90,120,255,0.35) !important;
-        border-radius: 0.6rem !important;
-        color: #e8ecff !important;
-    }
+.metric-label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #a5b4fc;
+    letter-spacing: 0.14em;
+    text-shadow: 0 0 14px rgba(80,120,255,0.55);
+}
 
-    .stSlider > div > div > div {
-        background: rgba(80,120,255,0.45) !important;
-    }
+.metric-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #7dd3fc;
+    text-shadow: 0 0 10px rgba(0,200,255,0.45);
+}
 
-    /* BUTTONS ----------------------------------------------------------- */
-    .stButton > button {
-        background: linear-gradient(90deg, #3b82f6, #06b6d4);
-        color: white;
-        border-radius: 0.6rem;
-        padding: 0.6rem 1.2rem;
-        border: none;
-        font-weight: 600;
-        letter-spacing: 0.05em;
-        transition: 0.25s ease;
-        box-shadow: 0 0 12px rgba(0, 200, 255, 0.35);
-    }
+/* MARKET INPUTS (SPREAD / TOTAL) ----------------------------------- */
+div[data-baseweb="input"] input {
+    color: #7dd3fc !important;
+    font-size: 1.6rem !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 10px rgba(0,200,255,0.45) !important;
+    text-align: center !important;
+    background: rgba(10,15,30,0.9) !important;
+    border: 1px solid rgba(80,120,255,0.45) !important;
+    border-radius: 0.6rem !important;
+    box-shadow: 0 0 12px rgba(80,120,255,0.3) !important;
+}
 
-    .stButton > button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 0 18px rgba(0, 200, 255, 0.55);
-    }
+/* +/- BUTTONS ------------------------------------------------------- */
+div[data-baseweb="input"] button {
+    background: rgba(20,30,60,0.9) !important;
+    border: 1px solid rgba(80,120,255,0.55) !important;
+    color: #a5b4fc !important;
+    border-radius: 0.4rem !important;
+    font-size: 1.2rem !important;
+    padding: 0.2rem 0.6rem !important;
+    box-shadow: 0 0 14px rgba(80,120,255,0.45) !important;
+    transition: 0.2s ease;
+}
 
-    /* METRIC CARDS ------------------------------------------------------ */
-    .metric-card {
-        padding: 1rem 1.25rem;
-        border-radius: 0.9rem;
-        background: rgba(15,20,35,0.85);
-        border: 1px solid rgba(80,120,255,0.35);
-        box-shadow: 0 0 18px rgba(0, 120, 255, 0.15);
-        transition: 0.25s ease;
-    }
+div[data-baseweb="input"] button:hover {
+    background: rgba(50,70,120,0.95) !important;
+    border-color: rgba(140,170,255,0.85) !important;
+    box-shadow: 0 0 22px rgba(120,160,255,0.75) !important;
+    color: #dbe4ff !important;
+}
 
-    .metric-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 0 28px rgba(0, 150, 255, 0.35);
-    }
+/* OVERRIDE BASEWEB NEGATIVE/ERROR STATES --------------------------- */
+div[data-baseweb="input"] button,
+div[data-baseweb="input"] button:hover,
+div[data-baseweb="slider"] div[role="slider"],
+div[data-baseweb="slider"] div[role="slider"]:hover {
+    outline: none !important;
+    border-color: rgba(120,160,255,0.75) !important;
+    box-shadow: 0 0 18px rgba(120,160,255,0.75) !important;
+}
 
-    .metric-label {
-        font-size: 0.75rem;
-        text-transform: uppercase;
-        color: #a5b4fc;
-        letter-spacing: 0.12em;
-    }
+/* SLIDERS ----------------------------------------------------------- */
+.stSlider > div[data-baseweb="slider"] > div {
+    height: 12px !important;
+    background: rgba(80,120,255,0.35) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 0 14px rgba(80,120,255,0.45) !important;
+}
 
-    .metric-value {
-        font-size: 1.6rem;
-        font-weight: 700;
-        color: #7dd3fc;
-        text-shadow: 0 0 10px rgba(0,200,255,0.45);
-    }
+.stSlider > div[data-baseweb="slider"] div[role="slider"] {
+    height: 22px !important;
+    width: 22px !important;
+    background: #7dd3fc !important;
+    border: 2px solid #a5b4fc !important;
+    box-shadow: 0 0 22px rgba(120,160,255,0.75) !important;
+}
 
-    .metric-sub {
-        font-size: 0.8rem;
-        color: #9ca3af;
-    }
+/* TABLE ------------------------------------------------------------- */
+.dataframe {
+    background: rgba(10,15,30,0.8);
+    border-radius: 0.6rem;
+    border: 1px solid rgba(80,120,255,0.3);
+    color: #e8ecff;
+}
 
-    /* TABLE -------------------------------------------------------------- */
-    .dataframe {
-        background: rgba(10,15,30,0.75);
-        border-radius: 0.6rem;
-        border: 1px solid rgba(80,120,255,0.25);
-        color: #e8ecff;
-    }
+.dataframe th {
+    background: rgba(20,30,60,0.9);
+    color: #a5b4fc;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
 
-    .dataframe th {
-        background: rgba(20,30,60,0.85);
-        color: #a5b4fc;
-        text-transform: uppercase;
-        letter-spacing: 0.08em;
-    }
+.dataframe td {
+    background: rgba(10,15,30,0.6);
+}
 
-    .dataframe td {
-        background: rgba(10,15,30,0.55);
-    }
+/* EXPANDER ---------------------------------------------------------- */
+.st-expander {
+    background: rgba(10,15,30,0.9) !important;
+    border: 2px solid rgba(80,120,255,0.45) !important;
+    border-radius: 0.9rem !important;
+    box-shadow: 0 0 18px rgba(0,120,255,0.2) !important;
+    padding: 0.5rem !important;
+}
 
-    /* SECTION HEADERS ---------------------------------------------------- */
-    .section-header {
-        font-size: 1.25rem;
-        font-weight: 600;
-        margin-bottom: 0.5rem;
-        letter-spacing: 0.05em;
-        color: #a5b4fc;
-        text-shadow: 0 0 12px rgba(80,120,255,0.35);
-    }
- 
-    .edge-green {
-        color: #00ff88;
+.st-expander summary {
+    font-size: 1.2rem !important;
+    font-weight: 700 !important;
+    color: #a5b4fc !important;
+    letter-spacing: 0.06em !important;
+}
+
+.st-expander summary > div:first-child {
+    display: none !important;
+}
+
+.st-expander .st-expander-content {
+    background: rgba(10,15,30,0.9) !important;
+    padding: 1rem 1.2rem !important;
+    border-radius: 0.6rem !important;
+    border: 1px solid rgba(80,120,255,0.3) !important;
+}
+
+/* EDGE COLORS ------------------------------------------------------- */
+.edge-green {
+    color: #00ff88;
     text-shadow: 0 0 10px rgba(0,255,136,0.6);
-    }
+}
 
-    .edge-red {
-        color: #ff4d4d;
-        text-shadow: 0 0 10px rgba(255,77,77,0.6);
-    }
+.edge-red {
+    color: #ff4d4d;
+    text-shadow: 0 0 10px rgba(255,77,77,0.6);
+}
 
-    </style>
-    """,
-unsafe_allow_html=True,
-)
+.metric-card + div[data-baseweb="input"] { margin-top: 0.9rem !important; }
+
+</style>
+""", unsafe_allow_html=True)
+
 # ----------------------------------------------------
 # HEADER
 # ----------------------------------------------------
 st.markdown("""
 <div style="
     width: 100%;
-    display: flex;
-    justify-content: center;
+    text-align: center;
     margin-top: 0.5rem;
     margin-bottom: 1.25rem;
 ">
     <h1 style="
-        font-size: 3.6rem;
-        font-weight: 800;
+        font-size: 3.8rem;
+        font-weight: 900;
         margin: 0;
-        letter-spacing: 0.12em;
+        letter-spacing: 0.16em;
         text-transform: uppercase;
         background: linear-gradient(90deg, #60a5fa, #7dd3fc, #a5b4fc);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 22px rgba(80,120,255,0.45);
-        text-align: center;
+        text-shadow: 0 0 28px rgba(80,120,255,0.65);
     ">
         Full Court Analytics
-    </h1>
+    </h1><div style="
+        font-size: 1.25rem;
+        margin-top: 0.4rem;
+        letter-spacing: 0.08em;
+        color: #a5b4fc;
+        text-shadow: 0 0 14px rgba(80,120,255,0.55);
+    ">Model‑Driven Betting Intelligence</div>
 </div>
 """, unsafe_allow_html=True)
-# ----------------------------------------------------
-# SAFE HTML TABLE LOADER (YEAR-BASED)
-# ----------------------------------------------------
+
+
 # ----------------------------------------------------
 # SAFE HTML TABLE LOADER (TEAMRANKINGS HTML)
 # ----------------------------------------------------
@@ -321,51 +384,36 @@ if team_stats is None or team_stats.empty:
 
 team_stats_dict = team_stats.set_index("Team").to_dict(orient="index")
 # ----------------------------------------------------
-# TOP LAYOUT: TEAMS + MARKET + SIM SETTINGS
+# MATCHUP + MARKET
 # ----------------------------------------------------
 col_left, col_right = st.columns([2, 1])
 
 with col_left:
-    st.markdown(
-    """
-    <h3 style="
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        letter-spacing: 0.05em;
-        color: #a5b4fc;
-        text-shadow: 0 0 12px rgba(80,120,255,0.35);
-    ">
-        Matchup
-    </h3>
-    """,
-    unsafe_allow_html=True,
-)
+    st.markdown("<div class='section-header'>Matchup</div>", unsafe_allow_html=True)
 
-    team_a = st.selectbox("Team A", list(team_stats_dict.keys()), key="team_a")
-    team_b = st.selectbox("Team B", list(team_stats_dict.keys()), key="team_b")
-
+    team_a = st.selectbox("Home Team", list(team_stats_dict.keys()), key="team_a")
+    team_b = st.selectbox("Away Team", list(team_stats_dict.keys()), key="team_b")
 
 with col_right:
-    st.markdown(
-    """
-    <h3 style="
-        font-size: 2.5rem;
-        font-weight: 700;
-        margin-bottom: 0.5rem;
-        letter-spacing: 0.05em;
-        color: #a5b4fc;
-        text-shadow: 0 0 12px rgba(80,120,255,0.35);
-    ">
-        Market
-    </h3>
-    """,
-    unsafe_allow_html=True,
-)
+    
+    st.markdown("<div class='section-header'>Market Odds</div>", unsafe_allow_html=True)
 
-    market_spread = st.number_input("Spread", value=0.0, step=0.5)
-    market_total = st.number_input("Total", value=145.0, step=0.5)
+    st.markdown("""
+        <div class="metric-card">
+            <div class="metric-label">Point Spread</div>
+        </div>
+    """, unsafe_allow_html=True)
+    market_spread = st.number_input(" ", value=0.0, step=0.5, key="market_spread")
 
+    st.markdown("""
+        <div class="metric-card" style="margin-top: 1rem;">
+            <div class="metric-label">Game Total</div>
+
+        </div>
+    """, unsafe_allow_html=True)
+    market_total = st.number_input("  ", value=145.5, step=0.5, key="market_total")
+
+    st.markdown("</div>", unsafe_allow_html=True)
 a = team_stats_dict[team_a]
 b = team_stats_dict[team_b]
 # ----------------------------------------------------
@@ -447,6 +495,23 @@ total_edge = proj_total - market_total
 # ----------------------------------------------------
 sigma = 12.0
 num_sims = 14000
+
+# ----------------------------------------------------
+# SIMULATION SETTINGS (COLLAPSIBLE)
+# ----------------------------------------------------
+with st.expander("Simulation Controls", expanded=False):
+
+    s1, s2 = st.columns(2)
+
+    with s1:
+        volatility = st.slider("Volatility", 5.0, 25.0, 12.0, step=1.0)
+
+    with s2:
+        num_sims = st.slider("Simulations", 2000, 30000, 14000, step=1000)
+
+    sigma = float(volatility)
+    num_sims = int(num_sims)
+
 # ----------------------------------------------------
 # MONTE CARLO ENGINE
 # ----------------------------------------------------
@@ -472,133 +537,101 @@ col_main, col_side = st.columns([2.2, 1.3])
 
 with col_main:
 
-    # -------------------------
+    # ----------------------------------------------------
     # PROJECTION PANEL
-    # -------------------------
-    st.markdown("""
-        <h3 style="
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.05em;
-            color: #a5b4fc;
-            text-shadow: 0 0 12px rgba(80,120,255,0.35);
-        ">
-            Projection Panel
-        </h3>
-    """, unsafe_allow_html=True)
+    # ----------------------------------------------------
+    st.markdown("<div class='section-header'>Scoreboard Projections</div>", unsafe_allow_html=True)
 
     c1, c2, c3 = st.columns(3)
 
     with c1:
         st.markdown(f"""
             <div class="metric-card">
-              <div class="metric-label">Projected Score</div>
-              <div class="metric-value">{proj_a:.1f}</div>
-              <div class="metric-sub">{team_a}</div>
+                <div class="metric-label">Projected Score</div>
+                <div class="metric-value">{proj_a:.1f}</div>
+                <div class="metric-sub">{team_a}</div>
             </div>
         """, unsafe_allow_html=True)
 
     with c2:
         st.markdown(f"""
             <div class="metric-card">
-              <div class="metric-label">Projected Score</div>
-              <div class="metric-value">{proj_b:.1f}</div>
-              <div class="metric-sub">{team_b}</div>
+                <div class="metric-label">Projected Score</div>
+                <div class="metric-value">{proj_b:.1f}</div>
+                <div class="metric-sub">{team_b}</div>
             </div>
         """, unsafe_allow_html=True)
 
     with c3:
         st.markdown(f"""
             <div class="metric-card">
-              <div class="metric-label">Projected Total</div>
-              <div class="metric-value">{proj_total:.1f}</div>
+                <div class="metric-label">Projected Total</div>
+                <div class="metric-value">{proj_total:.1f}</div>
             </div>
         """, unsafe_allow_html=True)
 
-    # -------------------------
-    # SIMULATION SLIDERS
-    # -------------------------
-    st.markdown("<div style='height: 0.5rem'></div>", unsafe_allow_html=True)
-
-    s1, s2 = st.columns(2)
-    with s1:
-        volatility = st.slider("Volatility (Std Dev)", 5.0, 25.0, 12.0)
-    with s2:
-        num_sims = st.slider("Simulations", 2000, 30000, 14000, step=1000)
-    # -------------------------
+    # ----------------------------------------------------
     # SIMULATION SUMMARY (HORIZONTAL)
-    # -------------------------
-    st.markdown("<div style='height: 0.5rem'></div>", unsafe_allow_html=True)
+    # ----------------------------------------------------
+    st.markdown("<div class='section-header'>SIMULATION SUMMARY</div>", unsafe_allow_html=True)
 
     ss1, ss2, ss3 = st.columns(3)
 
     with ss1:
         st.markdown(f"""
             <div class="metric-card">
-              <div class="metric-label">Cover Probability</div>
-              <div class="metric-value">{prob_a_covers:.1%}</div>
-              <div class="metric-sub">{team_a} covers {market_spread:+.1f}</div>
+                <div class="metric-label">Cover Probability</div>
+                <div class="metric-value">{prob_a_covers:.1%}</div>
+                <div class="metric-sub">{team_a} covers {market_spread:+.1f}</div>
             </div>
         """, unsafe_allow_html=True)
 
     with ss2:
         st.markdown(f"""
             <div class="metric-card">
-              <div class="metric-label">Cover Probability</div>
-              <div class="metric-value">{prob_b_covers:.1%}</div>
-              <div class="metric-sub">{team_b} covers {abs(market_spread):+.1f}</div>
+                <div class="metric-label">Cover Probability</div>
+                <div class="metric-value">{prob_b_covers:.1%}</div>
+                <div class="metric-sub">{team_b} covers {abs(market_spread):+.1f}</div>
             </div>
         """, unsafe_allow_html=True)
 
     with ss3:
         st.markdown(f"""
             <div class="metric-card">
-              <div class="metric-label">Push Probability</div>
-              <div class="metric-value">{prob_push_spread:.1%}</div>
-              <div class="metric-sub">Spread push</div>
+                <div class="metric-label">Push Probability</div>
+                <div class="metric-value">{prob_push_spread:.1%}</div>
+                <div class="metric-sub">Spread push</div>
             </div>
         """, unsafe_allow_html=True)
 
-    # -------------------------
+
+    # ----------------------------------------------------
     # MODEL VS MARKET
-    # -------------------------
+    # ----------------------------------------------------
+    st.markdown("<div class='section-header'>Model vs Market</div>", unsafe_allow_html=True)
+
     spread_edge_class = "edge-green" if spread_edge > 0 else "edge-red"
-    total_edge_class  = "edge-green" if total_edge  > 0 else "edge-red"
+    total_edge_class  = "edge-green" if total_edge > 0 else "edge-red"
 
-    st.markdown("""
-        <h3 style="
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            letter-spacing: 0.05em;
-            color: #a5b4fc;
-            text-shadow: 0 0 12px rgba(80,120,255,0.35);
-        ">
-            Model vs Market
-        </h3>
-    """, unsafe_allow_html=True)
+    mv1, mv2 = st.columns(2)
 
-    c4, c5 = st.columns(2)
-
-    with c4:
+    with mv1:
         st.markdown(f"""
             <div class="metric-card">
-              <div class="metric-label">Spread Edge</div>
-              <div class="metric-value {spread_edge_class}">{spread_edge:+.1f}</div>
-              <div class="metric-sub">Market: {market_spread:+.1f}</div>
+                <div class="metric-label">Spread Edge</div>
+                <div class="metric-value {spread_edge_class}">{spread_edge:+.1f}</div>
+                <div class="metric-sub">Market: {market_spread:+.1f}</div>
             </div>
         """, unsafe_allow_html=True)
 
-    with c5:
+    with mv2:
         st.markdown(f"""
             <div class="metric-card">
-              <div class="metric-label">Total Edge</div>
-              <div class="metric-value {total_edge_class}">{total_edge:+.1f}</div>
-              <div class="metric-sub">Market: {market_total:.1f}</div>
+                <div class="metric-label">Total Edge</div>
+                <div class="metric-value {total_edge_class}">{total_edge:+.1f}</div>
+                <div class="metric-sub">Market: {market_total:.1f}</div>
             </div>
         """, unsafe_allow_html=True)
-
 
 # ----------------------------------------------------
 # RIGHT COLUMN (optional)
@@ -606,4 +639,5 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 

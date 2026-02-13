@@ -581,6 +581,11 @@ proj_total = proj_a + proj_b
 proj_spread = proj_a - proj_b
 
 # ----------------------------------------------------
+# CORRECT MARKET SPREAD INTERPRETATION (MUST COME FIRST)
+# ----------------------------------------------------
+true_market_spread = -market_spread
+
+# ----------------------------------------------------
 # RAW SCORING BASELINE (derived from OffEff × Pace)
 # ----------------------------------------------------
 raw_total = (off_a * pace_a) + (off_b * pace_b)
@@ -600,15 +605,12 @@ reliability_spread = 1 / (1 + (diff_spread / 5)**2)
 blended_total = reliability_total * proj_total + (1 - reliability_total) * market_total
 blended_spread = reliability_spread * proj_spread + (1 - reliability_spread) * true_market_spread
 
-# Reconstruct blended team scores
+# ----------------------------------------------------
+# RECONSTRUCT BLENDED TEAM SCORES
+# ----------------------------------------------------
 blended_a = (blended_total + blended_spread) / 2
 blended_b = (blended_total - blended_spread) / 2
-# ----------------------------------------------------
-# CORRECT MARKET SPREAD INTERPRETATION
-# ----------------------------------------------------
-true_market_spread = -market_spread
-spread_edge = proj_spread - true_market_spread
-total_edge = proj_total - market_total
+
 # ----------------------------------------------------
 # SIM DEFAULTS (before sliders overwrite them)
 # ----------------------------------------------------
@@ -780,6 +782,7 @@ st.write(f"**Reliability Score:** {rel_score:.1f}/100")
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

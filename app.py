@@ -30,7 +30,7 @@ st.markdown("""
     background-repeat: no-repeat;
     background-attachment: fixed;
     image-rendering: high-quality;
-    transform: scale(1.0);
+    transform: scale(.98);
     transform-origin: center center;   
     color: #e8ecff;
     font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -642,6 +642,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

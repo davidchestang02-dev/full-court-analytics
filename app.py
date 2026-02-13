@@ -301,7 +301,7 @@ st.markdown(
     """
     <div style="text-align:center; margin-top: 0.8rem; margin-bottom: -0.2rem;">
         <img src="https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_logo.png"
-             style="width:480px; filter: drop-shadow(0 0 26px rgba(80,120,255,0.75));">
+             style="width:760px; filter: drop-shadow(0 0 26px rgba(80,120,255,0.75));">
     </div>
 
     <div style="
@@ -681,6 +681,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

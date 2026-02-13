@@ -257,34 +257,26 @@ div[data-baseweb="slider"] div[role="slider"]:hover {
 # ----------------------------------------------------
 # HEADER
 # ----------------------------------------------------
-st.markdown("""
-<div style="
-    width: 100%;
-    text-align: center;
-    margin-top: 0.5rem;
-    margin-bottom: 1.25rem;
-">
-    <h1 style="
-        font-size: 3.8rem;
-        font-weight: 900;
-        margin: 0;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        background: linear-gradient(90deg, #60a5fa, #7dd3fc, #a5b4fc);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 28px rgba(80,120,255,0.65);
-    ">
-        Full Court Analytics
-    </h1><div style="
+st.markdown(
+    """
+    <div style="text-align:center; margin-top: -20px; margin-bottom: 10px;">
+        <img src="https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_logo.png"
+             style="width:260px; filter: drop-shadow(0 0 12px rgba(80,120,255,0.55));">
+    </div>
+
+    <div style="
+        text-align: center;
         font-size: 1.25rem;
         margin-top: 0.4rem;
         letter-spacing: 0.08em;
         color: #a5b4fc;
         text-shadow: 0 0 14px rgba(80,120,255,0.55);
-    ">Model‑Driven Betting Intelligence</div>
-</div>
-""", unsafe_allow_html=True)
+    ">
+        Model‑Driven Betting Intelligence
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 
 # ----------------------------------------------------
@@ -642,6 +634,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

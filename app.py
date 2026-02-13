@@ -86,19 +86,18 @@ h1, h2, h3, h4 {
 }
 
 /* SELECTBOXES — FINAL PREMIUM THEME ---------------------------------- */
-.stSelectbox div[data-baseweb="select"] {
+div[data-baseweb="select"] {
     background: rgba(8,12,25,0.92) !important; /* same dark fill as expanders */
     border: 3px solid rgba(80,120,255,0.65) !important; /* heavy glowing border */
     border-radius: 0.9rem !important;
     padding: 0.35rem 0.6rem !important;
-
     box-shadow:
         0 0 14px rgba(60,110,220,0.55),
         0 0 28px rgba(120,160,255,0.35) !important; /* same glow as expander */
 }
 
 
-.stSelectbox div[data-baseweb="select"] {
+div[data-baseweb="select"] {
     background: rgba(8,12,25,0.92) !important; /* same as expanders */
     border: 3px solid rgba(80,120,255,0.65) !important;
     border-radius: 0.9rem !important;
@@ -134,7 +133,7 @@ h1, h2, h3, h4 {
         0 0 22px rgba(120,160,255,0.55) !important;
 }
 
-div[data-testid="stExpander"], .stSelectbox label[data-testid="stWidgetLabel"] div[data-testid="stMarkdownContainer"] p,
+label[data-testid="stWidgetLabel"] div[data-testid="stMarkdownContainer"] p,
 label[data-testid="stWidgetLabel"] div[data-testid="stMarkdownContainer"] p {
     font-size: 1.25rem !important;
     font-weight: 900 !important;
@@ -736,6 +735,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

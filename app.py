@@ -213,7 +213,7 @@ div[data-baseweb="slider"] div[role="slider"]:hover {
 
 /* EXPANDER CONTAINER ------------------------------------------------ */
 .st-expander {
-    background: rgba(6,10,20,0.92) !important; /* darker fill */
+    background: rgba(6,10,20,0.92) 
     border: 3px solid rgba(80,120,255,0.75) !important;
     border-radius: 1rem !important;
     box-shadow:
@@ -226,12 +226,12 @@ details > summary,
 div[data-testid="stExpander"] summary,
 .st-expanderHeader,
 .st-expander > details > summary {
-    font-size: 1.55rem !important;
-    font-weight: 900 !important;
+    font-size: 1.70rem !important;
+    font-weight: 920 !important;
     letter-spacing: 0.12em !important;
     text-transform: uppercase !important;
     background-color: rgba(12,18,35,0.55) !important;
-    padding: 0.45rem 0.75rem !important;
+    padding: 0.45rem !important;
     border-radius: 0.45rem !important;
     color: #c7d2fe !important;
     text-shadow:
@@ -667,6 +667,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

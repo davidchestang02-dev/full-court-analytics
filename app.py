@@ -353,9 +353,9 @@ div[data-testid="stExpander"] label[data-testid="stWidgetLabel"] div[data-testid
 # ----------------------------------------------------
 st.markdown(
     """
-    <div style="text-align:center; margin-top: 0.4rem; margin-bottom: -0.6rem;">
+    <div style="text-align:center; margin-top: 0.4rem; margin-bottom: -0.4rem;">
         <img src="https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_logo.png"
-             style="width:660px; filter: drop-shadow(0 0 26px rgba(80,120,255,0.75));">
+             style="width:760px; filter: drop-shadow(0 0 26px rgba(80,120,255,0.75));">
     </div>
 
     <div style="
@@ -735,6 +735,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

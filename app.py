@@ -305,16 +305,16 @@ def load_stat(url, label):
         response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
 
-        # Parse all tables on the page
-        tables = pd.read_html(response.text)
+        # FIX: wrap HTML in StringIO to avoid FutureWarning
+        from io import StringIO
+        tables = pd.read_html(StringIO(response.text))
 
         if not tables:
             st.write(f"{label} → No tables found.")
             return None
 
-        df = tables[0]
+        df = tables[0].copy()   # FIX: ensure df is a real copy, not a slice
 
-        # Expect columns: Rank | Team | 2024 | Last 3 | Last 1
         if "Team" not in df.columns:
             st.write(f"{label} → Unexpected columns: {df.columns.tolist()}")
             return None
@@ -322,9 +322,13 @@ def load_stat(url, label):
         # Use the last numeric column (current season)
         stat_col = df.columns[-1]
 
-        df = df[["Team", stat_col]]
+        # FIX: safe column selection
+        df = df.loc[:, ["Team", stat_col]].copy()
+
         df.columns = ["Team", label]
-        df["Team"] = df["Team"].str.strip()
+
+        # FIX: eliminate SettingWithCopyWarning
+        df.loc[:, "Team"] = df["Team"].str.strip()
 
         return df
 
@@ -639,5 +643,6 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 

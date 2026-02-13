@@ -227,15 +227,13 @@ div[data-testid="stExpander"] summary,
 .st-expanderHeader,
 .st-expander > details > summary {
     font-size: 1.55rem !important;
-    font-weight: 900 !important; 
+    font-weight: 900 !important; /* bolder text */
     letter-spacing: 0.12em !important;
     text-transform: uppercase !important;
-    background: rgba(4,8,18,0.85) !important;
-    padding: 0.4rem 0.6rem !important;
-    border-radius: 0.4rem !important;
-    background-image: linear-gradient(90deg, #a5b4fc, #c7d2fe);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    background-color: rgba(4,8,18,0.85) !important;
+    padding: 0.45rem 0.75rem !important;
+    border-radius: 0.45rem !important;
+    color: #c7d2fe !important;
     text-shadow:
         0 0 10px rgba(80,120,255,0.75),
         0 0 22px rgba(120,160,255,0.55);
@@ -651,6 +649,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

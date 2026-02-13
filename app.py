@@ -246,7 +246,9 @@ div[data-testid="stExpander"] summary,
     padding: 1rem 1.2rem !important;
 }
 
-.st-expander .stSlider > label {
+.st-expander [data-testid="stSlider"] > label,
+.st-expander [data-testid="stSlider"] > div > label,
+.st-expander [data-testid="stSlider"] label {
     font-size: 1.25rem !important;
     font-weight: 900 !important;
     letter-spacing: 0.10em !important;
@@ -662,6 +664,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

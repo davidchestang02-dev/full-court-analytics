@@ -246,7 +246,8 @@ div[data-testid="stExpander"] summary,
     padding: 1rem 1.2rem !important;
 }
 
-.st-expander div[data-testid="stMarkdownContainer"] p {
+
+.st-expander label[data-testid="stWidgetLabel"] span div[data-testid="stMarkdownContainer"] p {
     font-size: 1.25rem !important;
     font-weight: 900 !important;
     letter-spacing: 0.10em !important;
@@ -259,7 +260,6 @@ div[data-testid="stExpander"] summary,
         0 0 10px rgba(80,120,255,0.75),
         0 0 22px rgba(120,160,255,0.55);
 }
-
 
 /* EDGE COLORS ------------------------------------------------------- */
 .edge-green {
@@ -663,6 +663,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

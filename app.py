@@ -85,18 +85,55 @@ h1, h2, h3, h4 {
     margin-bottom: 0.8rem !important;
 }
 
-/* SELECTBOXES ------------------------------------------------------- */
+/* SELECTBOXES — FINAL PREMIUM THEME ---------------------------------- */
 .stSelectbox div[data-baseweb="select"] {
-    background: rgba(20,25,45,0.9) !important;
-    border: 1px solid rgba(90,120,255,0.45) !important;
-    border-radius: 0.6rem !important;
-    color: #e8ecff !important;
+    background: rgba(8,12,25,0.92) !important; /* same dark fill as expanders */
+    border: 3px solid rgba(80,120,255,0.65) !important; /* heavy glowing border */
+    border-radius: 0.9rem !important;
+    padding: 0.35rem 0.6rem !important;
+
+    box-shadow:
+        0 0 14px rgba(60,110,220,0.55),
+        0 0 28px rgba(120,160,255,0.35) !important; /* same glow as expander */
 }
 
 .stSelectbox div[data-baseweb="select"] span {
-    color: #a5b4fc !important;
-    text-shadow: 0 0 14px rgba(80,120,255,0.55) !important;
+    color: #c7d2fe !important; /* same blue as headers */
+    font-weight: 800 !important;
+    letter-spacing: 0.08em !important;
+
+    text-shadow:
+        0 0 10px rgba(80,120,255,0.75),
+        0 0 22px rgba(120,160,255,0.55) !important;
 }
+
+.stSelectbox div[data-baseweb="popover"] {
+    background: rgba(8,12,25,0.95) !important;
+    border: 2px solid rgba(80,120,255,0.45) !important;
+    border-radius: 0.8rem !important;
+
+    box-shadow:
+        0 0 14px rgba(60,110,220,0.55),
+        0 0 28px rgba(120,160,255,0.35) !important;
+}
+
+.stSelectbox div[data-baseweb="option"] {
+    background: rgba(12,18,35,0.65) !important;
+    color: #e8ecff !important;
+    font-weight: 600 !important;
+    border-radius: 0.4rem !important;
+    margin: 0.15rem 0.25rem !important;
+}
+
+.stSelectbox div[data-baseweb="option"]:hover {
+    background: rgba(60,110,220,0.35) !important;
+    color: #ffffff !important;
+
+    text-shadow:
+        0 0 10px rgba(80,120,255,0.75),
+        0 0 22px rgba(120,160,255,0.55) !important;
+}
+
 
 /* NUMBER INPUTS (GLOBAL) ------------------------------------------- */
 input[type="number"] {
@@ -681,6 +718,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

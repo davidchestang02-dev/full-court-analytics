@@ -58,18 +58,21 @@ h1, h2, h3, h4 {
 }
 
 /* SECTION HEADERS --------------------------------------------------- */
-.section-header {
+.tournament-header {
     text-align: center;
-    font-size: 2.2rem;
-    font-weight: 800;
-    margin-top: 0.2rem;
-    margin-bottom: 0.8rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    background: linear-gradient(90deg, #a5b4fc, #c7d2fe);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 20px rgba(120,150,255,0.55);
+    font-size: 1.85rem !important;
+    font-weight: 900 !important;
+    letter-spacing: 0.32em !important;
+    text-transform: uppercase !important;
+    color: #ffffff !important;
+    -webkit-text-stroke: 1px rgba(0,25,90,0.65);
+    text-shadow:
+        0 0 10px rgba(0,25,90,1.0),
+        0 0 22px rgba(60,110,220,0.95),
+        0 0 42px rgba(140,170,255,0.85),
+        0 0 70px rgba(160,190,255,0.75);
+    margin-top: 1.2rem !important;
+    margin-bottom: 0.8rem !important;
 }
 
 /* SELECTBOXES ------------------------------------------------------- */
@@ -417,14 +420,14 @@ team_stats_dict = team_stats.set_index("Team").to_dict(orient="index")
 col_left, col_right = st.columns([2, 1])
 
 with col_left:
-    st.markdown("<div class='section-header'>Matchup</div>", unsafe_allow_html=True)
+    st.markdown('<div class="tournament-header">MATCHUP</div>', unsafe_allow_html=True)
 
     team_a = st.selectbox("Home Team", list(team_stats_dict.keys()), key="team_a")
     team_b = st.selectbox("Away Team", list(team_stats_dict.keys()), key="team_b")
 
 with col_right:
     
-    st.markdown("<div class='section-header'>Market Odds</div>", unsafe_allow_html=True)
+    st.markdown('<div class="tournament-header">MARKET ODDS</div>', unsafe_allow_html=True)
 
     st.markdown("""
         <div class="metric-card">
@@ -568,7 +571,7 @@ with col_main:
     # ----------------------------------------------------
     # PROJECTION PANEL
     # ----------------------------------------------------
-    st.markdown("<div class='section-header'>Scoreboard Projections</div>", unsafe_allow_html=True)
+    st.markdown('<div class="tournament-header">SCOREBOARD PROJECTIONS</div>', unsafe_allow_html=True)
 
     c1, c2, c3 = st.columns(3)
 
@@ -601,7 +604,7 @@ with col_main:
     # ----------------------------------------------------
     # SIMULATION SUMMARY (HORIZONTAL)
     # ----------------------------------------------------
-    st.markdown("<div class='section-header'>SIMULATION SUMMARY</div>", unsafe_allow_html=True)
+    st.markdown('<div class="tournament-header">SIMULATION SUMMARY</div>', unsafe_allow_html=True)
 
     ss1, ss2, ss3 = st.columns(3)
 
@@ -636,7 +639,8 @@ with col_main:
     # ----------------------------------------------------
     # MODEL VS MARKET
     # ----------------------------------------------------
-    st.markdown("<div class='section-header'>Model vs Market</div>", unsafe_allow_html=True)
+    st.markdown('<div class="tournament-header">MODEL vs MARKET</div>', unsafe_allow_html=True)
+
 
     spread_edge_class = "edge-green" if spread_edge > 0 else "edge-red"
     total_edge_class  = "edge-green" if total_edge > 0 else "edge-red"
@@ -667,6 +671,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

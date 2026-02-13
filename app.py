@@ -26,11 +26,11 @@ st.markdown("""
 .stApp {
     background-image: url("https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_background_1.png");
     background-size: cover;
-    background-position: center 5%;
+    background-position: center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     image-rendering: high-quality;
-    transform: scale(0.99);
+    transform: scale(1.0);
     transform-origin: center center;   
     color: #e8ecff;
     font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
@@ -642,6 +642,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

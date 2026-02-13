@@ -16,16 +16,16 @@ def num(x):
 
 # ----------------------------------------------------
 st.set_page_config(
-    page_title="CBB Algorithmic Projection Engine",
-    page_icon="🏀",
-    layout="wide",
+    page_title="Full Court Analytics",
+    page_icon="images/fca_logo.png",
+    layout="wide"
 )
 
 st.markdown("""
 <style>
 /* GLOBAL ------------------------------------------------------------ */
 .stApp {
-    background-image: url("https://i.imgur.com/n9N84yG.png");
+    background-image: url("images/background.png");
     background-size: cover;
     background-position: center 5%;
     background-repeat: no-repeat;
@@ -643,6 +643,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

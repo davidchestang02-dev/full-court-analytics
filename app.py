@@ -228,12 +228,9 @@ div[data-testid="stExpander"] > details > summary {
     font-weight: 900 !important; /* bold text */
     letter-spacing: 0.10em !important;
     text-transform: uppercase !important;
-
-    /* Standard blue gradient header style */
     background: linear-gradient(90deg, #a5b4fc, #c7d2fe);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-
     text-shadow: 0 0 18px rgba(80,120,255,0.55);
 }
 
@@ -647,6 +644,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

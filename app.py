@@ -480,30 +480,6 @@ if team_stats is None or team_stats.empty:
 team_stats_dict = team_stats.set_index("Team").to_dict(orient="index")
 
 # ----------------------------------------------------
-# RAW SCORING BASELINE (for reliability)
-# ----------------------------------------------------
-raw_total = num(a.get("PointsPerGame")) + num(b.get("PointsPerGame"))
-
-# ----------------------------------------------------
-# RELIABILITY CALCULATIONS
-# ----------------------------------------------------
-diff_total = abs(proj_total - raw_total)
-reliability_total = 1 / (1 + (diff_total / 4)**2)
-
-diff_spread = abs(proj_spread - true_market_spread)
-reliability_spread = 1 / (1 + (diff_spread / 5)**2)
-
-# ----------------------------------------------------
-# BLENDED DETERMINISTIC PROJECTIONS
-# ----------------------------------------------------
-blended_total = reliability_total * proj_total + (1 - reliability_total) * market_total
-blended_spread = reliability_spread * proj_spread + (1 - reliability_spread) * true_market_spread
-
-# Reconstruct blended team scores
-blended_a = (blended_total + blended_spread) / 2
-blended_b = (blended_total - blended_spread) / 2
-
-# ----------------------------------------------------
 # MATCHUP + MARKET
 # ----------------------------------------------------
 col_left, col_right = st.columns([2, 1])
@@ -605,6 +581,29 @@ proj_total = proj_a + proj_b
 proj_spread = proj_a - proj_b
 
 # ----------------------------------------------------
+# RAW SCORING BASELINE (derived from OffEff × Pace)
+# ----------------------------------------------------
+raw_total = (off_a * pace_a) + (off_b * pace_b)
+
+# ----------------------------------------------------
+# RELIABILITY CALCULATIONS
+# ----------------------------------------------------
+diff_total = abs(proj_total - raw_total)
+reliability_total = 1 / (1 + (diff_total / 4)**2)
+
+diff_spread = abs(proj_spread - true_market_spread)
+reliability_spread = 1 / (1 + (diff_spread / 5)**2)
+
+# ----------------------------------------------------
+# BLENDED DETERMINISTIC PROJECTIONS
+# ----------------------------------------------------
+blended_total = reliability_total * proj_total + (1 - reliability_total) * market_total
+blended_spread = reliability_spread * proj_spread + (1 - reliability_spread) * true_market_spread
+
+# Reconstruct blended team scores
+blended_a = (blended_total + blended_spread) / 2
+blended_b = (blended_total - blended_spread) / 2
+# ----------------------------------------------------
 # CORRECT MARKET SPREAD INTERPRETATION
 # ----------------------------------------------------
 true_market_spread = -market_spread
@@ -638,6 +637,7 @@ with st.expander("Simulation Controls", expanded=False):
 np.random.seed(42)
 sim_a = np.random.normal(blended_a, sigma, num_sims)
 sim_b = np.random.normal(blended_b, sigma, num_sims)
+
 
 sim_spread = sim_a - sim_b
 sim_total = sim_a + sim_b
@@ -769,9 +769,9 @@ st.markdown("""
     </h4>
 """, unsafe_allow_html=True)
 
-rel_score = (reliability_total * reliability_spread) * 100
+rel_score = float((reliability_total * reliability_spread) * 100)
 
-st.progress(float(rel_score / 100))
+st.progress(rel_score / 100)
 st.write(f"**Reliability Score:** {rel_score:.1f}/100")
 
 # ----------------------------------------------------
@@ -780,6 +780,7 @@ st.write(f"**Reliability Score:** {rel_score:.1f}/100")
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

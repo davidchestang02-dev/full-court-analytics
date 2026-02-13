@@ -20,25 +20,22 @@ st.set_page_config(
     page_icon="https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_logo.png",
     layout="wide"
 )
-st.markdown(
-    """
-    <style>
-    .stApp {
-        background-image: url("https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_background.png");
-        background-size: cover;
-        background-position: center 25%;
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        image-rendering: high-quality;
-        transform: scale(0.99);
-        transform-origin: center center;
-        color: #e8ecff;
-        font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+st.markdown("""
+<style>
+/* GLOBAL ------------------------------------------------------------ */
+.stApp {
+    background-image: url("https://github.com/davidchestang02-dev/full-court-analytics/blob/main/images/fca_background.png
+");
+    background-size: cover;
+    background-position: center 25%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    image-rendering: high-quality;
+    transform: scale(0.99);
+    transform-origin: center center;   
+    color: #e8ecff;
+    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
 .stApp::before {
     content: "";
     position: fixed;
@@ -646,6 +643,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

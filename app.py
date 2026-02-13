@@ -259,23 +259,34 @@ div[data-baseweb="slider"] div[role="slider"]:hover {
 # ----------------------------------------------------
 st.markdown(
     """
-    <div style="text-align:center; margin-top: 0.8rem; margin-bottom: -0.1rem;">
+    <div style="text-align:center; margin-top: 0.8rem; margin-bottom: -0.2rem;">
         <img src="https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_logo.png"
-             style="width:460px; filter: drop-shadow(0 0 18px rgba(80,120,255,0.55));">
+             style="width:480px; filter: drop-shadow(0 0 22px rgba(80,120,255,0.65));">
     </div>
 
     <div style="
         text-align: center;
-        font-size: 1.45rem;
-        font-weight: 700;
-        margin-top: -0.35rem;
-        margin-bottom: 1.0rem;
-        letter-spacing: 0.22em;
+        font-size: 1.85rem;
+        font-weight: 900;
+        margin-top: -0.25rem;
+        margin-bottom: 1.6rem;
+        letter-spacing: 0.32em;
         text-transform: uppercase;
-        background: linear-gradient(90deg, #b8c4ff, #e2e7ff);
+
+        /* Metallic gradient */
+        background: linear-gradient(100deg, #e8ecff 0%, #ffffff 35%, #b8c4ff 70%, #dfe4ff 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
-        text-shadow: 0 0 22px rgba(120,150,255,0.55);
+
+        /* Thin outline (stroke) */
+        -webkit-text-stroke: 1px rgba(180,200,255,0.55);
+
+        /* Double glow */
+        text-shadow:
+            0 0 6px rgba(120,150,255,0.55),
+            0 0 14px rgba(80,120,255,0.75),
+            0 0 28px rgba(80,120,255,0.55);
+
     ">
         Model‑Driven Betting Intelligence
     </div>
@@ -637,6 +648,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

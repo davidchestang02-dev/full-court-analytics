@@ -259,15 +259,15 @@ div[data-baseweb="slider"] div[role="slider"]:hover {
 # ----------------------------------------------------
 st.markdown(
     """
-    <div style="text-align:center; margin-top: -20px; margin-bottom: 10px;">
+    <div style="text-align:center; margin-top: 0.5rem; margin-bottom: 0.5rem;">
         <img src="https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_logo.png"
-             style="width:260px; filter: drop-shadow(0 0 12px rgba(80,120,255,0.55));">
+             style="width:300px; filter: drop-shadow(0 0 12px rgba(80,120,255,0.55));">
     </div>
 
     <div style="
         text-align: center;
-        font-size: 1.25rem;
-        margin-top: 0.4rem;
+        font-size: 1.35rem;
+        margin-top: 0.2rem;
         letter-spacing: 0.08em;
         color: #a5b4fc;
         text-shadow: 0 0 14px rgba(80,120,255,0.55);
@@ -634,6 +634,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

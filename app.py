@@ -362,8 +362,8 @@ st.markdown(
         text-align: center;
         font-size: 1.95rem;
         font-weight: 900;
-        margin-top: -0.25rem;      /* tighter gap under logo */
-        margin-bottom: 2.0rem;     /* more space before MATCHUP */
+        margin-top: -0.15rem;      /* tighter gap under logo */
+        margin-bottom: 2.5rem;     /* more space before MATCHUP */
         letter-spacing: 0.34em;
         text-transform: uppercase; 
         color: #ffffff;
@@ -735,6 +735,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

@@ -77,8 +77,8 @@ h1, h2, h3, h4 {
     color: #ffffff !important;
     -webkit-text-stroke: 1px rgba(0,25,90,0.75);
     text-shadow:
-        0 0 12px rgba(0,40,120,1),
-        0 0 26px rgba(60,110,255,1),
+        0 0 12px rgba(80,120,255,0.9),
+        0 0 26px rgba(60,110,255,0.7),
         0 0 48px rgba(140,170,255,0.95),
         0 0 90px rgba(160,190,255,0.85);
     margin-top: 1.2rem !important;
@@ -172,6 +172,19 @@ input[type="number"] {
 }
 
 /* METRIC CARDS ------------------------------------------------------ */
+.section-divider {
+    margin-top: 2.2rem;
+    margin-bottom: 1.2rem;
+    height: 2px;
+    background: linear-gradient(
+        to right,
+        rgba(0,40,120,0),
+        rgba(60,110,255,0.8),
+        rgba(0,40,120,0)
+    );
+    border-radius: 4px;
+}
+
 .metric-card {
     padding: 1rem 1.25rem;
     border-radius: 0.9rem;
@@ -673,13 +686,14 @@ prob_push_total = float(np.mean(np.isclose(sim_total, market_total, atol=0.5)))
 # ----------------------------------------------------
 # DASHBOARD LAYOUT
 # ----------------------------------------------------
-col_main, col_side = st.columns([2.2, 1.3]) 
+c1, c2, c3 = st.columns([1,1,1], gap="large")
 
 with col_main:
 
      # ----------------------------------------------------
     # SCOREBOARD PROJECTIONS
     # ----------------------------------------------------
+    st.markdown("<div class='section-divider'></div>", unsafe_allow_html=True)
     st.markdown('<div class="tournament-header">SCOREBOARD PROJECTIONS</div>', unsafe_allow_html=True)
 
     c1, c2, c3 = st.columns([1,1,1], gap="large")
@@ -710,11 +724,14 @@ with col_main:
                 <div class="metric-sub">Projected Total</div>
             </div>
         """, unsafe_allow_html=True)
+        
+        st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
 
 
     # ----------------------------------------------------
     # SIMULATION SUMMARY
     # ----------------------------------------------------
+    st.markdown("<div class='section-divider'></div>", unsafe_allow_html=True)
     st.markdown('<div class="tournament-header">SIMULATION SUMMARY</div>', unsafe_allow_html=True)
 
     ss1, ss2, ss3 = st.columns([1,1,1], gap="large")
@@ -745,6 +762,8 @@ with col_main:
                 <div class="metric-sub">Spread push</div>
             </div>
         """, unsafe_allow_html=True)
+        
+        st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
 
 # ----------------------------------------------------
 # TEAM-AWARE SPREAD EDGE INTERPRETATION
@@ -774,6 +793,7 @@ total_edge_side = "Over" if total_edge > 0 else "Under"
 # ----------------------------------------------------
 # MODEL VS MARKET
 # ----------------------------------------------------
+st.markdown("<div class='section-divider'></div>", unsafe_allow_html=True)
 st.markdown('<div class="tournament-header">MODEL vs MARKET</div>', unsafe_allow_html=True)
 
 mv1, mv2 = st.columns(2)
@@ -795,7 +815,8 @@ with mv2:
             <div class="metric-sub">{total_edge_side} value</div>
         </div>
     """, unsafe_allow_html=True)
-
+    
+st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
 
 # ----------------------------------------------------
 # RELIABILITY METER UI
@@ -824,6 +845,7 @@ st.write(f"**Reliability Score:** {rel_score:.1f}/100")
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

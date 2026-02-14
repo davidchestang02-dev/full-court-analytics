@@ -554,21 +554,22 @@ with col_right:
     
     st.markdown('<div class="tournament-header">MARKET ODDS</div>', unsafe_allow_html=True)
 
+    st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown("""
         <div class="metric-card">
             <div class="metric-label">Point Spread</div>
         </div>
     """, unsafe_allow_html=True)
     market_spread = st.number_input(" ", value=0.0, step=0.5, key="market_spread")
+    st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("""
         <div class="metric-card" style="margin-top: 1rem;">
             <div class="metric-label">Game Total</div>
-
         </div>
     """, unsafe_allow_html=True)
     market_total = st.number_input("  ", value=145.5, step=0.5, key="market_total")
-
     st.markdown("</div>", unsafe_allow_html=True)
     
 a = team_stats_dict[team_a]
@@ -865,6 +866,7 @@ st.progress(rel_score / 100)
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

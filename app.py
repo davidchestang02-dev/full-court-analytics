@@ -863,13 +863,24 @@ rel_score = float((reliability_total * reliability_spread) * 70)
 # Progress bar
 st.progress(rel_score / 100)
 
-# Percentage below the bar
+# Color logic
+if rel_score < 25:
+    rel_class = "rel-dark-red"
+elif rel_score < 51:
+    rel_class = "rel-light-red"
+elif rel_score < 66:
+    rel_class = "rel-light-green"
+else:
+    rel_class = "rel-bright-green"
+
+# Percentage display
 st.markdown(
-    f"<div style='text-align:center; font-size:1.2rem; font-weight:700; "
-    f"color:#ffffff; margin-top:0.4rem; text-shadow:0 0 10px rgba(80,120,255,0.75);'>"
+    f"<div class='{rel_class}' style='text-align:center; font-size:1.8rem; "
+    f"font-weight:800; margin-top:0.4rem;'>"
     f"{rel_score:.1f}%</div>",
     unsafe_allow_html=True
 )
+
 
 # ----------------------------------------------------
 # RIGHT COLUMN (optional)
@@ -877,6 +888,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

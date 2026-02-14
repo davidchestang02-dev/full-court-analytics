@@ -425,6 +425,33 @@ div[data-testid="stExpander"] label[data-testid="stWidgetLabel"] div[data-testid
         0 0 30px rgba(0, 255, 120, 0.45);
 }
 
+.reliability-circle {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.reliability-inner {
+    position: absolute;
+    width: 110px;
+    height: 110px;
+    background: rgba(10,15,30,0.9);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: white;
+    text-shadow:
+        0 0 10px rgba(80,120,255,0.75),
+        0 0 20px rgba(60,110,255,0.55);
+}
 
 
 
@@ -891,27 +918,31 @@ st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
 st.markdown('<div class="tournament-header">MODEL RELIABILITY RATING</div>', unsafe_allow_html=True)
 
 rel_score = float((reliability_total * reliability_spread) * 70)
+percent = rel_score
 
-# Progress bar
-st.progress(rel_score / 100)
-
-# Color logic
-if rel_score < 25:
-    rel_class = "rel-dark-red"
-elif rel_score < 51:
-    rel_class = "rel-light-red"
-elif rel_score < 66:
-    rel_class = "rel-light-green"
+# Color logic for ring + text
+if percent < 25:
+    rel_color = "#b30000"   # dark red
+elif percent < 51:
+    rel_color = "#ff4d4d"   # lighter red
+elif percent < 66:
+    rel_color = "#7dffb0"   # light green
 else:
-    rel_class = "rel-bright-green"
+    rel_color = "#4dff88"   # bright green
 
-# Percentage display
+# Circular gauge
 st.markdown(
-    f"<div class='{rel_class}' style='text-align:center; font-size:1.8rem; "
-    f"font-weight:800; margin-top:0.4rem;'>"
-    f"{rel_score:.1f}%</div>",
+    f"""
+    <div class="reliability-circle" 
+         style="background: conic-gradient({rel_color} {percent}%, rgba(40,40,60,0.35) {percent}%);">
+        <div class="reliability-inner">
+            {percent:.1f}%
+        </div>
+    </div>
+    """,
     unsafe_allow_html=True
 )
+
 
 
 # ----------------------------------------------------
@@ -920,6 +951,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

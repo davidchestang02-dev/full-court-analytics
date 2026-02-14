@@ -95,7 +95,7 @@ h1, h2, h3, h4 {
     text-shadow:
         0 0 10px rgba(80,120,255,0.75),
         0 0 20px rgba(60,110,255,0.55);
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.1rem;
 }
 
 
@@ -535,10 +535,10 @@ with col_left:
 
     
     st.markdown('<div class="tournament-subheader">HOME TEAM</div>', unsafe_allow_html=True)
-    team_a = st.selectbox("Home Team", list(team_stats_dict.keys()), key="team_a")
+    team_a = st.selectbox("", list(team_stats_dict.keys()), key="team_a")
 
     st.markdown('<div class="tournament-subheader">AWAY TEAM</div>', unsafe_allow_html=True)
-    team_b = st.selectbox("Away Team", list(team_stats_dict.keys()), key="team_b")
+    team_b = st.selectbox("", list(team_stats_dict.keys()), key="team_b")
 
 with col_right:
     
@@ -854,6 +854,7 @@ st.progress(rel_score / 100)
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

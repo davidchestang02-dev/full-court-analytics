@@ -426,27 +426,27 @@ div[data-testid="stExpander"] label[data-testid="stWidgetLabel"] div[data-testid
 }
 
 .reliability-circle {
-    width: 200px;
-    height: 200px;
+    width: 300px;
+    height: 300px;
     border-radius: 50%;
     margin: 0 auto;
     position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 2.5px solid rgba(255,255,255,0.25);
+    border: 2px solid rgba(255,255,255,0.25);
     box-shadow: 0 0 12px rgba(255,255,255,0.30), 
     inset 0 0 12px rgba(255,255,255,0.20);
 }
 
 .reliability-inner {
     position: absolute;
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
     background: rgba(25,35,55,0.70);
     backdrop-filter: blur(6px);
     border-radius: 50%;
-    border: 2.5px solid rgba(255,255,255,0.15);
+    border: 2px solid rgba(255,255,255,0.15);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -969,6 +969,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

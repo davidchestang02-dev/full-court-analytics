@@ -557,7 +557,7 @@ with col_right:
     st.markdown("</div>", unsafe_allow_html=True)
     st.markdown("""
         <div class="metric-card">
-            <div class="metric-label">Point Spread</div>
+            <div class="tournament-subheader">Point Spread</div>
         </div>
     """, unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
@@ -566,7 +566,7 @@ with col_right:
 
     st.markdown("""
         <div class="metric-card" style="margin-top: 1rem;">
-            <div class="metric-label">Game Total</div>
+            <div class="tournament-subheader">Game Total</div>
         </div>
     """, unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
@@ -867,6 +867,7 @@ st.progress(rel_score / 100)
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

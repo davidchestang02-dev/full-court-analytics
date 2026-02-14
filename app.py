@@ -686,11 +686,14 @@ prob_push_total = float(np.mean(np.isclose(sim_total, market_total, atol=0.5)))
 # ----------------------------------------------------
 # DASHBOARD LAYOUT
 # ----------------------------------------------------
-c1, c2, c3 = st.columns([1,1,1], gap="large")
+# ----------------------------------------------------
+# DASHBOARD LAYOUT
+# ----------------------------------------------------
+col_main, col_side = st.columns([2.2, 1.3])
 
 with col_main:
-
-     # ----------------------------------------------------
+    
+    # ----------------------------------------------------
     # SCOREBOARD PROJECTIONS
     # ----------------------------------------------------
     st.markdown("<div class='section-divider'></div>", unsafe_allow_html=True)
@@ -845,6 +848,7 @@ st.write(f"**Reliability Score:** {rel_score:.1f}/100")
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

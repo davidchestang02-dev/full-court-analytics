@@ -921,7 +921,7 @@ st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
 # ----------------------------------------------------
 st.markdown('<div class="tournament-header">MODEL RELIABILITY RATING</div>', unsafe_allow_html=True)
 
-rel_score = float((reliability_total * reliability_spread) * 70)
+rel_score = (reliability_total * reliability_spread)**0.5 * 100
 percent = max(0, min(rel_score, 100))  # clamp 0–100
 
 # Color logic for ring + text
@@ -970,6 +970,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

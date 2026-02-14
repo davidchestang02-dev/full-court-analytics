@@ -741,7 +741,7 @@ blended_b = (blended_total - blended_spread) / 2
 # SIM DEFAULTS (before sliders overwrite them)
 # ----------------------------------------------------
 sigma = 12.0
-num_sims = 14000
+num_sims = 10000
 
 # ----------------------------------------------------
 # SIMULATION SETTINGS (COLLAPSIBLE)
@@ -970,6 +970,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

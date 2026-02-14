@@ -85,6 +85,20 @@ h1, h2, h3, h4 {
     margin-bottom: 0.8rem !important;
 }
 
+.tournament-subheader {
+    text-align: center !important;
+    width: 100%;
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    color: #c7d2fe;
+    text-shadow:
+        0 0 10px rgba(80,120,255,0.75),
+        0 0 20px rgba(60,110,255,0.55);
+    margin-bottom: 0.5rem;
+}
+
+
 /* SELECTBOXES — FINAL PREMIUM THEME ---------------------------------- */
 div[data-baseweb="select"] {
     background: rgba(8,12,25,0.92) !important; /* same dark fill as expanders */
@@ -517,8 +531,13 @@ col_left, col_right = st.columns([2, 1])
 
 with col_left:
     st.markdown('<div class="tournament-header">MATCHUP</div>', unsafe_allow_html=True)
+    
 
+    
+    st.markdown('<div class="tournament-subheader">HOME TEAM</div>', unsafe_allow_html=True)
     team_a = st.selectbox("Home Team", list(team_stats_dict.keys()), key="team_a")
+
+    st.markdown('<div class="tournament-subheader">AWAY TEAM</div>', unsafe_allow_html=True
     team_b = st.selectbox("Away Team", list(team_stats_dict.keys()), key="team_b")
 
 with col_right:
@@ -824,30 +843,19 @@ st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
 # ----------------------------------------------------
 # RELIABILITY METER UI
 # ----------------------------------------------------
-st.markdown("""
-    <h4 style="
-        font-size: 1.4rem;
-        font-weight: 800;
-        margin-top: 1rem;
-        letter-spacing: 0.08em;
-        color: #c7d2fe;
-        text-shadow: 0 0 10px rgba(80,120,255,0.75);
-    ">
-        Model Reliability
-    </h4>
-""", unsafe_allow_html=True)
+st.markdown('<div class="tournament-header">RELIABILITY RATING</div>', unsafe_allow_html=True)
 
-rel_score = float((reliability_total * reliability_spread) * 100)
+
+rel_score = float((reliability_total * reliability_spread) * 70)
 
 st.progress(rel_score / 100)
-st.write(f"**Reliability Score:** {rel_score:.1f}/100")
-
 # ----------------------------------------------------
 # RIGHT COLUMN (optional)
 # ----------------------------------------------------
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

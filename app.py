@@ -856,17 +856,28 @@ st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
 # ----------------------------------------------------
 # RELIABILITY METER UI
 # ----------------------------------------------------
-st.markdown('<div class="tournament-header">RELIABILITY RATING</div>', unsafe_allow_html=True)
+sst.markdown('<div class="tournament-header">MODEL RELIABILITY RATING</div>', unsafe_allow_html=True)
 
 rel_score = float((reliability_total * reliability_spread) * 70)
 
+# Progress bar
 st.progress(rel_score / 100)
+
+# Percentage below the bar
+st.markdown(
+    f"<div style='text-align:center; font-size:1.2rem; font-weight:700; "
+    f"color:#ffffff; margin-top:0.4rem; text-shadow:0 0 10px rgba(80,120,255,0.75);'>"
+    f"{rel_score:.1f}%</div>",
+    unsafe_allow_html=True
+)
+
 # ----------------------------------------------------
 # RIGHT COLUMN (optional)
 # ----------------------------------------------------
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

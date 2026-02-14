@@ -13,6 +13,7 @@ def num(x):
         return float(x)
     except:
         return 0.0
+        
 
 # ----------------------------------------------------
 st.set_page_config(
@@ -395,6 +396,10 @@ div[data-testid="stExpander"] label[data-testid="stWidgetLabel"] div[data-testid
     color: #ff4d4d;
     text-shadow: 0 0 10px rgba(255,77,77,0.6);
 }
+
+.edge-yellow { 
+    color: #ffe066;
+    text-shadow: 0 0 10px rgba(255,224,102,0.6); }
 
 .rel-dark-red {
     color: #ff4d4d !important;
@@ -875,15 +880,32 @@ underdog = team_b if market_spread < 0 else team_a
 spread_edge = blended_spread - true_market_spread
 total_edge = blended_total - market_total
 
+def edge_color(edge, strong_threshold, weak_threshold=0):
+    abs_edge = abs(edge)
+
+    # Strong value play
+    if abs_edge >= strong_threshold:
+        return "edge-green"
+
+    # Weak / neutral zone (optional)
+    if abs_edge >= weak_threshold:
+        return "edge-yellow"
+
+    # No value
+    return "edge-red"
+
+# Apply to totals
+total_edge_class = edge_color(total_edge, strong_threshold=5.0, weak_threshold=2.5)
+
+# Apply to spreads
+spread_edge_class = edge_color(spread_edge, strong_threshold=1.25)
+
+
 # Determine which team the spread edge favors
 spread_edge_team = favorite if spread_edge > 0 else underdog
 
 # Display spread edge as positive number
 spread_edge_display = abs(spread_edge)
-
-# Color classes
-spread_edge_class = "edge-green" if spread_edge_display > 0 else "edge-red"
-total_edge_class  = "edge-green" if total_edge > 0 else "edge-red"
 
 # Total edge label
 total_edge_side = "Over" if total_edge > 0 else "Under"
@@ -970,6 +992,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

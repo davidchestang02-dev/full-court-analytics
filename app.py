@@ -181,6 +181,24 @@ input[type="number"] {
     transition: 0.25s ease;
 }
 
+.metric-card {
+    text-align: center !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.metric-label, .metric-value, .metric-sub {
+    text-align: center !important;
+    width: 100%;
+}
+
+.tournament-header {
+    text-align: center !important;
+    width: 100%;
+}
+
 .metric-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 0 26px rgba(0,150,255,0.4);
@@ -659,74 +677,74 @@ col_main, col_side = st.columns([2.2, 1.3])
 
 with col_main:
 
+     # ----------------------------------------------------
+    # SCOREBOARD PROJECTIONS
     # ----------------------------------------------------
-# SCOREBOARD PROJECTIONS
-# ----------------------------------------------------
-st.markdown('<div class="tournament-header">SCOREBOARD PROJECTIONS</div>', unsafe_allow_html=True)
+    st.markdown('<div class="tournament-header">SCOREBOARD PROJECTIONS</div>', unsafe_allow_html=True)
 
-c1, c2, c3 = st.columns([1,1,1], gap="large")
+    c1, c2, c3 = st.columns([1,1,1], gap="large")
 
-with c1:
-    st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">{team_a}</div>
-            <div class="metric-value">{proj_a:.1f}</div>
-            <div class="metric-sub">Projected Score</div>
-        </div>
-    """, unsafe_allow_html=True)
+    with c1:
+        st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-label">{team_a}</div>
+                <div class="metric-value">{proj_a:.1f}</div>
+                <div class="metric-sub">Projected Score</div>
+            </div>
+        """, unsafe_allow_html=True)
 
-with c2:
-    st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">{team_b}</div>
-            <div class="metric-value">{proj_b:.1f}</div>
-            <div class="metric-sub">Projected Score</div>
-        </div>
-    """, unsafe_allow_html=True)
+    with c2:
+        st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-label">{team_b}</div>
+                <div class="metric-value">{proj_b:.1f}</div>
+                <div class="metric-sub">Projected Score</div>
+            </div>
+        """, unsafe_allow_html=True)
 
-with c3:
-    st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">Total</div>
-            <div class="metric-value">{proj_total:.1f}</div>
-            <div class="metric-sub">Projected Total</div>
-        </div>
-    """, unsafe_allow_html=True)
+    with c3:
+        st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-label">Total</div>
+                <div class="metric-value">{proj_total:.1f}</div>
+                <div class="metric-sub">Projected Total</div>
+            </div>
+        """, unsafe_allow_html=True)
 
 
-  # ----------------------------------------------------
-# SIMULATION SUMMARY
-# ----------------------------------------------------
-st.markdown('<div class="tournament-header">SIMULATION SUMMARY</div>', unsafe_allow_html=True)
+    # ----------------------------------------------------
+    # SIMULATION SUMMARY
+    # ----------------------------------------------------
+    st.markdown('<div class="tournament-header">SIMULATION SUMMARY</div>', unsafe_allow_html=True)
 
-ss1, ss2, ss3 = st.columns([1,1,1], gap="large")
+    ss1, ss2, ss3 = st.columns([1,1,1], gap="large")
 
-with ss1:
-    st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">Cover Probability</div>
-            <div class="metric-value">{prob_a_covers:.1%}</div>
-            <div class="metric-sub">{team_a} covers {market_spread:+.1f}</div>
-        </div>
-    """, unsafe_allow_html=True)
+    with ss1:
+        st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-label">Cover Probability</div>
+                <div class="metric-value">{prob_a_covers:.1%}</div>
+                <div class="metric-sub">{team_a} covers {market_spread:+.1f}</div>
+            </div>
+        """, unsafe_allow_html=True)
 
-with ss2:
-    st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">Cover Probability</div>
-            <div class="metric-value">{prob_b_covers:.1%}</div>
-            <div class="metric-sub">{team_b} covers {abs(market_spread):+.1f}</div>
-        </div>
-    """, unsafe_allow_html=True)
+    with ss2:
+        st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-label">Cover Probability</div>
+                <div class="metric-value">{prob_b_covers:.1%}</div>
+                <div class="metric-sub">{team_b} covers {abs(market_spread):+.1f}</div>
+            </div>
+        """, unsafe_allow_html=True)
 
-with ss3:
-    st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">Push Probability</div>
-            <div class="metric-value">{prob_push_spread:.1%}</div>
-            <div class="metric-sub">Spread push</div>
-        </div>
-    """, unsafe_allow_html=True)
+    with ss3:
+        st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-label">Push Probability</div>
+                <div class="metric-value">{prob_push_spread:.1%}</div>
+                <div class="metric-sub">Spread push</div>
+            </div>
+        """, unsafe_allow_html=True)
 
 # ----------------------------------------------------
 # TEAM-AWARE SPREAD EDGE INTERPRETATION
@@ -806,6 +824,7 @@ st.write(f"**Reliability Score:** {rel_score:.1f}/100")
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

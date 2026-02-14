@@ -435,31 +435,29 @@ div[data-testid="stExpander"] label[data-testid="stWidgetLabel"] div[data-testid
     justify-content: center;
     align-items: center;
     border: 2px solid rgba(255,255,255,0.25);
-    box-shadow: 0 0 12px rgba(255,255,255,0.30), 
-    inset 0 0 12px rgba(255,255,255,0.20);
+    box-shadow:
+        0 0 12px rgba(255,255,255,0.30),
+        inset 0 0 12px rgba(255,255,255,0.20);
 }
 
 .reliability-inner {
     position: absolute;
-    width: 120px;
-    height: 120px;
+    width: 145px;
+    height: 145px;
     background: rgba(25,35,55,0.55);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     border-radius: 50%;
-    border: 2px solid rgba(80,120,255,0.35);
-    box-shadow: 0 0 10px rgba(80,120,255,0.45), 
-    inset 0 0 12px rgba(80,120,255,0.25);
+    border: 3px solid rgba(40,40,60,0.35);
+    box-shadow:
+        0 0 10px rgba(80,120,255,0.25),
+        inset 0 0 12px rgba(80,120,255,0.15);
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 1.9rem;
     font-weight: 900;
 }
-
-
-
-
 
 .metric-card + div[data-baseweb="input"] { margin-top: 0.9rem !important; }
 
@@ -972,6 +970,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

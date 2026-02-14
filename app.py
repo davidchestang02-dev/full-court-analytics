@@ -737,6 +737,36 @@ blended_total = reliability_total * proj_total + (1 - reliability_total) * marke
 blended_spread = reliability_spread * proj_spread + (1 - reliability_spread) * true_market_spread
 
 # ----------------------------------------------------
+# SPREAD‑ANCHORED, TOTAL‑CONSISTENT, MARKET‑AWARE ENGINE
+# ----------------------------------------------------
+
+# 1. Raw model margin + total
+model_margin_raw = proj_spread
+model_total_raw  = proj_total
+
+# 2. Market comparison
+spread_error = model_margin_raw - true_market_spread
+total_error  = model_total_raw  - market_total
+
+# 3. Anchoring weights (tune these)
+SPREAD_ANCHOR = 0.50   # 0 = ignore market, 1 = fully match market
+TOTAL_ANCHOR  = 0.40
+
+# 4. Anchored margin + total
+anchored_margin = model_margin_raw - spread_error * SPREAD_ANCHOR
+anchored_total  = model_total_raw  - total_error  * TOTAL_ANCHOR
+
+# 5. Convert anchored margin + total into team scores
+anchored_a = (anchored_total + anchored_margin) / 2
+anchored_b = (anchored_total - anchored_margin) / 2
+
+# ----------------------------------------------------
+# FINAL CONSISTENT TEAM SCORES
+# ----------------------------------------------------
+final_a = (blended_total + blended_spread) / 2
+final_b = (blended_total - blended_spread) / 2
+
+# ----------------------------------------------------
 # RECONSTRUCT BLENDED TEAM SCORES
 # ----------------------------------------------------
 blended_a = (blended_total + blended_spread) / 2
@@ -992,6 +1022,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

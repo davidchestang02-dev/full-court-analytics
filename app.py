@@ -86,7 +86,7 @@ h1, h2, h3, h4 {
 }
 
 .tournament-subheader {
-    text-align: center !important;
+    text-align: left !important;
     width: 100%;
     font-size: 1.1rem;
     font-weight: 800;
@@ -854,6 +854,7 @@ st.progress(rel_score / 100)
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

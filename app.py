@@ -441,12 +441,12 @@ div[data-testid="stExpander"] label[data-testid="stWidgetLabel"] div[data-testid
 
 .reliability-inner {
     position: absolute;
-    width: 145px;
-    height: 145px;
+    width: 120px;
+    height: 120px;
     background: rgba(25,35,55,0.55);
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
-    border-radius: 40%;
+    border-radius: 50%;
     border: 2px solid rgba(80,120,255,0.35);
     box-shadow: 0 0 10px rgba(80,120,255,0.45), 
     inset 0 0 12px rgba(80,120,255,0.25);
@@ -972,6 +972,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

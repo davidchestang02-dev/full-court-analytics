@@ -91,13 +91,13 @@ h1, h2, h3, h4 {
     font-size: 1.1rem;
     font-weight: 800;
     letter-spacing: 0.18em;
-    color: #c7d2fe;
+    color: #ffffff !important;
     text-shadow:
         0 0 10px rgba(80,120,255,0.75),
         0 0 20px rgba(60,110,255,0.55);
     margin-bottom: 0.1rem;
 }
-
+.metric-card .tournament-subheader { text-align: center !important; }
 
 /* SELECTBOXES — FINAL PREMIUM THEME ---------------------------------- */
 div[data-baseweb="select"] {
@@ -867,6 +867,7 @@ st.progress(rel_score / 100)
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

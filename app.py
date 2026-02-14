@@ -440,17 +440,15 @@ div[data-testid="stExpander"] label[data-testid="stWidgetLabel"] div[data-testid
     position: absolute;
     width: 120px;
     height: 120px;
-    background: rgba(15,20,35,1); 
+    background: rgba(25,35,55,0.75); /* lighter + semi-transparent */
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 1.7rem;
     font-weight: 900;
-    text-shadow:
-        0 0 12px rgba(80,120,255,0.75),
-        0 0 22px rgba(60,110,255,0.55);
 }
+
 
 
 
@@ -930,19 +928,26 @@ elif percent < 66:
 else:
     rel_color = "#4dff88"   # bright green
 
-# Circular gauge (left-to-right fill, glowing ring, matching text color)
+# Circular gauge (left-to-right fill, glowing ring, matching text glow)
 st.markdown(
     f"""
     <div class="reliability-circle"
          style="
             background:
-                radial-gradient(circle, rgba(15,20,35,1) 60%, transparent 61%),
-                conic-gradient({rel_color} {percent}%, rgba(40,40,60,0.25) {percent}%);
+                radial-gradient(circle, rgba(25,35,55,0.75) 60%, transparent 61%),
+                conic-gradient({rel_color} {percent}%, rgba(60,60,80,0.25) {percent}%);
             box-shadow:
-                0 0 18px {rel_color},
-                0 0 36px {rel_color}88;
+                0 0 22px {rel_color},
+                0 0 44px {rel_color}88;
          ">
-        <div class="reliability-inner" style="color:{rel_color};">
+        <div class="reliability-inner" 
+             style="
+                color:{rel_color};
+                text-shadow:
+                    0 0 12px {rel_color},
+                    0 0 24px {rel_color}aa,
+                    0 0 36px {rel_color}88;
+             ">
             {percent:.1f}%
         </div>
     </div>
@@ -952,12 +957,14 @@ st.markdown(
 
 
 
+
 # ----------------------------------------------------
 # RIGHT COLUMN (optional)
 # ----------------------------------------------------
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

@@ -246,6 +246,14 @@ input[type="number"] {
     text-shadow: 0 0 10px rgba(0,200,255,0.45);
 }
 
+.equal-height-col {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+
 /* MARKET INPUTS (SPREAD / TOTAL) ----------------------------------- */
 div[data-baseweb="input"] input {
     color: #7dd3fc !important;
@@ -530,17 +538,19 @@ team_stats_dict = team_stats.set_index("Team").to_dict(orient="index")
 col_left, col_right = st.columns([2, 1])
 
 with col_left:
+    st.markdown('<div class="equal-height-col">', unsafe_allow_html=True)
     st.markdown('<div class="tournament-header">MATCHUP</div>', unsafe_allow_html=True)
-    
-
     
     st.markdown('<div class="tournament-subheader">HOME TEAM</div>', unsafe_allow_html=True)
     team_a = st.selectbox("", list(team_stats_dict.keys()), key="team_a")
 
     st.markdown('<div class="tournament-subheader">AWAY TEAM</div>', unsafe_allow_html=True)
     team_b = st.selectbox("", list(team_stats_dict.keys()), key="team_b")
+    
+    st.markdown('</div>', unsafe_allow_html=True)
 
 with col_right:
+    st.markdown('<div class="equal-height-col">', unsafe_allow_html=True)
     
     st.markdown('<div class="tournament-header">MARKET ODDS</div>', unsafe_allow_html=True)
 
@@ -560,6 +570,7 @@ with col_right:
     market_total = st.number_input("  ", value=145.5, step=0.5, key="market_total")
 
     st.markdown("</div>", unsafe_allow_html=True)
+    
 a = team_stats_dict[team_a]
 b = team_stats_dict[team_b]
 # ----------------------------------------------------
@@ -854,6 +865,7 @@ st.progress(rel_score / 100)
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

@@ -426,8 +426,8 @@ div[data-testid="stExpander"] label[data-testid="stWidgetLabel"] div[data-testid
 }
 
 .reliability-circle {
-    width: 150px;
-    height: 150px;
+    width: 170px;
+    height: 170px;
     border-radius: 50%;
     margin: 0 auto;
     position: relative;
@@ -438,20 +438,20 @@ div[data-testid="stExpander"] label[data-testid="stWidgetLabel"] div[data-testid
 
 .reliability-inner {
     position: absolute;
-    width: 110px;
-    height: 110px;
-    background: rgba(10,15,30,0.9);
+    width: 120px;
+    height: 120px;
+    background: rgba(15,20,35,1); 
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.6rem;
+    font-size: 1.7rem;
     font-weight: 900;
-    color: white;
     text-shadow:
-        0 0 10px rgba(80,120,255,0.75),
-        0 0 20px rgba(60,110,255,0.55);
+        0 0 12px rgba(80,120,255,0.75),
+        0 0 22px rgba(60,110,255,0.55);
 }
+
 
 
 
@@ -918,7 +918,7 @@ st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
 st.markdown('<div class="tournament-header">MODEL RELIABILITY RATING</div>', unsafe_allow_html=True)
 
 rel_score = float((reliability_total * reliability_spread) * 70)
-percent = rel_score
+percent = max(0, min(rel_score, 100))  # clamp 0–100
 
 # Color logic for ring + text
 if percent < 25:
@@ -930,12 +930,19 @@ elif percent < 66:
 else:
     rel_color = "#4dff88"   # bright green
 
-# Circular gauge
+# Circular gauge (left-to-right fill, glowing ring, matching text color)
 st.markdown(
     f"""
-    <div class="reliability-circle" 
-         style="background: conic-gradient({rel_color} {percent}%, rgba(40,40,60,0.35) {percent}%);">
-        <div class="reliability-inner">
+    <div class="reliability-circle"
+         style="
+            background:
+                radial-gradient(circle, rgba(15,20,35,1) 60%, transparent 61%),
+                conic-gradient({rel_color} {percent}%, rgba(40,40,60,0.25) {percent}%);
+            box-shadow:
+                0 0 18px {rel_color},
+                0 0 36px {rel_color}88;
+         ">
+        <div class="reliability-inner" style="color:{rel_color};">
             {percent:.1f}%
         </div>
     </div>
@@ -951,6 +958,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

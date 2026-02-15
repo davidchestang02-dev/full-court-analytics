@@ -815,38 +815,6 @@ spread_edge = model_spread - true_market_spread
 total_edge = model_total - market_total
 
 # ----------------------------------------------------
-# PICKS (DIRECTION ONLY, YOU CAN STYLE THESE IN UI)
-# ----------------------------------------------------
-spread_pick_side = team_a if spread_edge > 0 else team_b
-total_pick_side = "Over" if total_edge > 0 else "Under"
-
-# If you want display-friendly values:
-spread_edge_display = abs(spread_edge)
-total_edge_display = abs(total_edge)
-
-# (Optional) edge color logic you already liked:
-def edge_color(edge, strong_threshold, weak_threshold=0):
-    abs_edge = abs(edge)
-    if abs_edge >= strong_threshold:
-        return "edge-green"
-    if abs_edge >= weak_threshold:
-        return "edge-yellow"
-    return "edge-red"
-
-spread_edge_class = edge_color(spread_edge, strong_threshold=1.25)
-total_edge_class = edge_color(total_edge, strong_threshold=5.0, weak_threshold=2.5)
-
-# You can now feed:
-# - model_team_a, model_team_b
-# - model_spread, model_total
-# - spread_edge, total_edge
-# - spread_pick_side, total_pick_side
-# - engine_mode, blend_factor
-# - spread_edge_class, total_edge_class
-# into your Streamlit UI.
-
-
-# ----------------------------------------------------
 # SIM DEFAULTS (before sliders overwrite them)
 # ----------------------------------------------------
 sigma = 12.0
@@ -872,9 +840,8 @@ with st.expander("Simulation Controls", expanded=False):
 # MONTE CARLO ENGINE
 # ----------------------------------------------------
 np.random.seed(42)
-sim_a = np.random.normal(blended_a, sigma, num_sims)
-sim_b = np.random.normal(blended_b, sigma, num_sims)
-
+sim_a = np.random.normal(model_team_a, sigma, num_sims)
+sim_b = np.random.normal(model_team_b, sigma, num_sims)
 
 sim_spread = sim_a - sim_b
 sim_total = sim_a + sim_b
@@ -976,13 +943,11 @@ with col_main:
 # TEAM-AWARE SPREAD EDGE INTERPRETATION
 # ----------------------------------------------------
 
-# Identify favorite and underdog based on market spread
-favorite = team_a if market_spread < 0 else team_b
-underdog = team_b if market_spread < 0 else team_a
+spread_pick_side = team_a if spread_edge > 0 else team_b
+total_pick_side = "Over" if total_edge > 0 else "Under"
 
-# Compute edges
-spread_edge = blended_spread - true_market_spread
-total_edge = blended_total - market_total
+spread_edge_display = abs(spread_edge)
+total_edge_display = abs(total_edge)
 
 def edge_color(edge, strong_threshold, weak_threshold=0):
     abs_edge = abs(edge)
@@ -993,7 +958,7 @@ def edge_color(edge, strong_threshold, weak_threshold=0):
     return "edge-red"
 
 spread_edge_class = edge_color(spread_edge, strong_threshold=1.25)
-total_edge_class  = edge_color(total_edge, strong_threshold=5.0, weak_threshold=2.5)
+total_edge_class = edge_color(total_edge, strong_threshold=5.0, weak_threshold=2.5)
 
 # Determine which team the spread edge favors
 spread_edge_team = favorite if spread_edge > 0 else underdog
@@ -1086,6 +1051,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

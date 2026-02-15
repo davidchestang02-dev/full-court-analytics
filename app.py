@@ -863,6 +863,7 @@ prob_push_total = float(np.mean(np.isclose(sim_total, market_total, atol=0.5)))
 col_main, col_side = st.columns([2.2, 1.3])
 
 with col_main:
+
     # ----------------------------------------------------
     # SCOREBOARD PROJECTIONS
     # ----------------------------------------------------
@@ -881,7 +882,7 @@ with col_main:
         """, unsafe_allow_html=True)
 
     with c2:
-        st.markmarkdown(f"""
+        st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-label">{team_b}</div>
                 <div class="metric-value">{model_team_b:.1f}</div>
@@ -899,6 +900,8 @@ with col_main:
         """, unsafe_allow_html=True)
 
     st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
+
+
     # ----------------------------------------------------
     # SIMULATION SUMMARY
     # ----------------------------------------------------
@@ -935,10 +938,11 @@ with col_main:
         """, unsafe_allow_html=True)
 
     st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
+
+
     # ----------------------------------------------------
     # TEAM-AWARE SPREAD EDGE INTERPRETATION
     # ----------------------------------------------------
-
     spread_pick_side = team_a if spread_edge > 0 else team_b
     total_pick_side = "Over" if total_edge > 0 else "Under"
 
@@ -956,11 +960,9 @@ with col_main:
     spread_edge_class = edge_color(spread_edge, strong_threshold=1.25)
     total_edge_class = edge_color(total_edge, strong_threshold=5.0, weak_threshold=2.5)
 
-    # Determine which team the spread edge favors
     spread_edge_team = favorite if spread_edge > 0 else underdog
-
-    # Total edge label
     total_edge_side = "Over" if total_edge > 0 else "Under"
+
 
     # ----------------------------------------------------
     # MODEL vs MARKET
@@ -989,25 +991,25 @@ with col_main:
         """, unsafe_allow_html=True)
 
     st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
-        # ----------------------------------------------------
+
+
+    # ----------------------------------------------------
     # RELIABILITY METER UI
     # ----------------------------------------------------
     st.markdown('<div class="tournament-header">MODEL RELIABILITY RATING</div>', unsafe_allow_html=True)
 
     rel_score = (1 - blend_factor) * 100
-    percent = max(0, min(rel_score, 100))  # clamp 0–100
+    percent = max(0, min(rel_score, 100))
 
-    # Color logic for ring + text
     if percent < 25:
-        rel_color = "#b30000"   # dark red
+        rel_color = "#b30000"
     elif percent < 51:
-        rel_color = "#ff4d4d"   # lighter red
+        rel_color = "#ff4d4d"
     elif percent < 66:
-        rel_color = "#7dffb0"   # light green
+        rel_color = "#7dffb0"
     else:
-        rel_color = "#4dff88"   # bright green
+        rel_color = "#4dff88"
 
-    # Circular gauge (left-to-right fill, glowing ring, matching text glow)
     st.markdown(
         f"""
         <div class="reliability-circle"
@@ -1034,12 +1036,14 @@ with col_main:
         unsafe_allow_html=True
     )
 
+
 # ----------------------------------------------------
 # RIGHT COLUMN (optional)
 # ----------------------------------------------------
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

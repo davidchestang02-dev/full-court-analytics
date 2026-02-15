@@ -863,7 +863,6 @@ prob_push_total = float(np.mean(np.isclose(sim_total, market_total, atol=0.5)))
 col_main, col_side = st.columns([2.2, 1.3])
 
 with col_main:
-    
     # ----------------------------------------------------
     # SCOREBOARD PROJECTIONS
     # ----------------------------------------------------
@@ -876,16 +875,16 @@ with col_main:
         st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-label">{team_a}</div>
-                <div class="metric-value">{proj_a:.1f}</div>
+                <div class="metric-value">{model_team_a:.1f}</div>
                 <div class="metric-sub">Projected Score</div>
             </div>
         """, unsafe_allow_html=True)
 
     with c2:
-        st.markdown(f"""
+        st.markmarkdown(f"""
             <div class="metric-card">
                 <div class="metric-label">{team_b}</div>
-                <div class="metric-value">{proj_b:.1f}</div>
+                <div class="metric-value">{model_team_b:.1f}</div>
                 <div class="metric-sub">Projected Score</div>
             </div>
         """, unsafe_allow_html=True)
@@ -894,14 +893,12 @@ with col_main:
         st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-label">Total</div>
-                <div class="metric-value">{proj_total:.1f}</div>
+                <div class="metric-value">{model_total:.1f}</div>
                 <div class="metric-sub">Projected Total</div>
             </div>
         """, unsafe_allow_html=True)
-        
-        st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
 
-
+    st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
     # ----------------------------------------------------
     # SIMULATION SUMMARY
     # ----------------------------------------------------
@@ -936,111 +933,107 @@ with col_main:
                 <div class="metric-sub">Spread push</div>
             </div>
         """, unsafe_allow_html=True)
-        
-        st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
 
-# ----------------------------------------------------
-# TEAM-AWARE SPREAD EDGE INTERPRETATION
-# ----------------------------------------------------
+    st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
+    # ----------------------------------------------------
+    # TEAM-AWARE SPREAD EDGE INTERPRETATION
+    # ----------------------------------------------------
 
-spread_pick_side = team_a if spread_edge > 0 else team_b
-total_pick_side = "Over" if total_edge > 0 else "Under"
+    spread_pick_side = team_a if spread_edge > 0 else team_b
+    total_pick_side = "Over" if total_edge > 0 else "Under"
 
-spread_edge_display = abs(spread_edge)
-total_edge_display = abs(total_edge)
+    spread_edge_display = abs(spread_edge)
+    total_edge_display = abs(total_edge)
 
-def edge_color(edge, strong_threshold, weak_threshold=0):
-    abs_edge = abs(edge)
-    if abs_edge >= strong_threshold:
-        return "edge-green"
-    if abs_edge >= weak_threshold:
-        return "edge-yellow"
-    return "edge-red"
+    def edge_color(edge, strong_threshold, weak_threshold=0):
+        abs_edge = abs(edge)
+        if abs_edge >= strong_threshold:
+            return "edge-green"
+        if abs_edge >= weak_threshold:
+            return "edge-yellow"
+        return "edge-red"
 
-spread_edge_class = edge_color(spread_edge, strong_threshold=1.25)
-total_edge_class = edge_color(total_edge, strong_threshold=5.0, weak_threshold=2.5)
+    spread_edge_class = edge_color(spread_edge, strong_threshold=1.25)
+    total_edge_class = edge_color(total_edge, strong_threshold=5.0, weak_threshold=2.5)
 
-# Determine which team the spread edge favors
-spread_edge_team = favorite if spread_edge > 0 else underdog
+    # Determine which team the spread edge favors
+    spread_edge_team = favorite if spread_edge > 0 else underdog
 
-# Display spread edge as positive number
-spread_edge_display = abs(spread_edge)
+    # Total edge label
+    total_edge_side = "Over" if total_edge > 0 else "Under"
 
-# Total edge label
-total_edge_side = "Over" if total_edge > 0 else "Under"
+    # ----------------------------------------------------
+    # MODEL vs MARKET
+    # ----------------------------------------------------
+    st.markdown("<div class='section-divider'></div>", unsafe_allow_html=True)
+    st.markdown('<div class="tournament-header">MODEL vs MARKET</div>', unsafe_allow_html=True)
 
-# ----------------------------------------------------
-# MODEL VS MARKET
-# ----------------------------------------------------
-st.markdown("<div class='section-divider'></div>", unsafe_allow_html=True)
-st.markdown('<div class="tournament-header">MODEL vs MARKET</div>', unsafe_allow_html=True)
+    mv1, mv2 = st.columns(2)
 
-mv1, mv2 = st.columns(2)
+    with mv1:
+        st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-label">Spread Edge</div>
+                <div class="metric-value {spread_edge_class}">+{spread_edge_display:.1f}</div>
+                <div class="metric-sub">Value on {spread_edge_team}</div>
+            </div>
+        """, unsafe_allow_html=True)
 
-with mv1:
-    st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">Spread Edge</div>
-            <div class="metric-value {spread_edge_class}">+{spread_edge_display:.1f}</div>
-            <div class="metric-sub">Value on {spread_edge_team}</div>
-        </div>
-    """, unsafe_allow_html=True)
+    with mv2:
+        st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-label">Total Edge</div>
+                <div class="metric-value {total_edge_class}">{total_edge:+.1f}</div>
+                <div class="metric-sub">{total_edge_side} value</div>
+            </div>
+        """, unsafe_allow_html=True)
 
-with mv2:
-    st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">Total Edge</div>
-            <div class="metric-value {total_edge_class}">{total_edge:+.1f}</div>
-            <div class="metric-sub">{total_edge_side} value</div>
-        </div>
-    """, unsafe_allow_html=True)
-    
-st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
+    # ----------------------------------------------------
+    # RELIABILITY METER UI
+    # ----------------------------------------------------
+    st.markdown('<div class="tournament-header">MODEL RELIABILITY RATING</div>', unsafe_allow_html=True)
 
-# ----------------------------------------------------
-# RELIABILITY METER UI
-# ----------------------------------------------------
-st.markdown('<div class="tournament-header">MODEL RELIABILITY RATING</div>', unsafe_allow_html=True)
+    rel_score = (1 - blend_factor) * 100
+    percent = max(0, min(rel_score, 100))  # clamp 0–100
 
-rel_score = (1 - blend_factor) * 100
-percent = max(0, min(rel_score, 100))  # clamp 0–100
+    # Color logic for ring + text
+    if percent < 25:
+        rel_color = "#b30000"   # dark red
+    elif percent < 51:
+        rel_color = "#ff4d4d"   # lighter red
+    elif percent < 66:
+        rel_color = "#7dffb0"   # light green
+    else:
+        rel_color = "#4dff88"   # bright green
 
-# Color logic for ring + text
-if percent < 25:
-    rel_color = "#b30000"   # dark red
-elif percent < 51:
-    rel_color = "#ff4d4d"   # lighter red
-elif percent < 66:
-    rel_color = "#7dffb0"   # light green
-else:
-    rel_color = "#4dff88"   # bright green
-
-# Circular gauge (left-to-right fill, glowing ring, matching text glow)
-st.markdown(
-    f"""
-    <div class="reliability-circle"
-         style="
-            background:
-                radial-gradient(circle, rgba(25,35,55,0.75) 60%, transparent 61%),
-                conic-gradient({rel_color} {percent}%, rgba(60,60,80,0.25) {percent}%);
-            box-shadow:
-                0 0 22px {rel_color},
-                0 0 44px {rel_color}88;
-         ">
-        <div class="reliability-inner" 
+    # Circular gauge (left-to-right fill, glowing ring, matching text glow)
+    st.markdown(
+        f"""
+        <div class="reliability-circle"
              style="
-                color:{rel_color};
-                text-shadow:
-                    0 0 12px {rel_color},
-                    0 0 24px {rel_color}aa,
-                    0 0 36px {rel_color}88;
+                background:
+                    radial-gradient(circle, rgba(25,35,55,0.75) 60%, transparent 61%),
+                    conic-gradient({rel_color} {percent}%, rgba(60,60,80,0.25) {percent}%);
+                box-shadow:
+                    0 0 22px {rel_color},
+                    0 0 44px {rel_color}88;
              ">
-            {percent:.1f}%
+            <div class="reliability-inner" 
+                 style="
+                    color:{rel_color};
+                    text-shadow:
+                        0 0 12px {rel_color},
+                        0 0 24px {rel_color}aa,
+                        0 0 36px {rel_color}88;
+                 ">
+                {percent:.1f}%
+            </div>
         </div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+        """,
+        unsafe_allow_html=True
+    )
+
 
 
 
@@ -1051,6 +1044,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

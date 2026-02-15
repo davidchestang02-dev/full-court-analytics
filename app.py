@@ -668,7 +668,7 @@ ft_pct_away = num(b.get("FTPct"))
 opp_ft_pct_home = num(a.get("OppFTPct"))
 opp_ft_pct_away = num(b.get("OppFTPct"))
 
-# Shooting/FT adjustments (kept for structure, not core driver)
+# Shooting/FT adjustments (kept for structure)
 adj_2p_home = two_p_pct_home * (1 - (opp_two_p_pct_away - two_p_pct_home))
 adj_3p_home = three_p_pct_home * (1 - (opp_three_p_pct_away - three_p_pct_home))
 adj_ft_rate_home = ft_rate_home * (1 - (opp_ft_pct_away - ft_rate_home))
@@ -710,15 +710,12 @@ proj_spread = proj_a - proj_b  # home - away
 EFF_WEIGHT = 0.55
 SCORE_WEIGHT = 0.45
 
-# "Scoring-only" expectation from OffEff × Pace
 exp_a = off_a * final_poss_rate
 exp_b = off_b * final_poss_rate
 
-# Efficiency-based scoring already captured in eff_scoring_* × final_poss_rate
 eff_a = eff_scoring_home * final_poss_rate
 eff_b = eff_scoring_away * final_poss_rate
 
-# Weighted scores (normal mode)
 norm_a = eff_a * EFF_WEIGHT + exp_a * SCORE_WEIGHT
 norm_b = eff_b * EFF_WEIGHT + exp_b * SCORE_WEIGHT
 
@@ -726,7 +723,7 @@ norm_total = norm_a + norm_b
 norm_spread = norm_a - norm_b  # home - away
 
 # ----------------------------------------------------
-# VEGAS-RESPECT ENGINE (OffEff × OppDefEff MULTIPLIER MODE)
+# VEGAS-RESPECT ENGINE
 # ----------------------------------------------------
 vegas_a = eff_scoring_home * final_poss_rate
 vegas_b = eff_scoring_away * final_poss_rate
@@ -737,10 +734,8 @@ vegas_spread = vegas_a - vegas_b  # home - away
 # ----------------------------------------------------
 # MARKET INTERPRETATION
 # ----------------------------------------------------
-# Market input: home team line (negative = favorite)
-true_market_spread = -market_spread  # -15.5 -> +15.5 (home - away)
+true_market_spread = -market_spread  # -15.5 -> +15.5 (home-away)
 
-# Favorite / underdog labels
 if market_spread < 0:
     favorite = team_a
     underdog = team_b
@@ -748,7 +743,6 @@ else:
     favorite = team_b
     underdog = team_a
 
-# Gaps vs market (for regime/blend logic)
 spread_gap_raw = abs(proj_spread - true_market_spread)
 spread_gap_norm = abs(norm_spread - true_market_spread)
 spread_gap_veg = abs(vegas_spread - true_market_spread)
@@ -758,7 +752,7 @@ total_gap_norm = abs(norm_total - market_total)
 total_gap_veg = abs(vegas_total - market_total)
 
 # ----------------------------------------------------
-# VEGAS SHADING DETECTION (HUMAN EDGE LOGIC)
+# VEGAS SHADING DETECTION
 # ----------------------------------------------------
 all_totals_above = (
     proj_total > market_total and
@@ -782,13 +776,11 @@ engine_mode = "weighted"
 blend_factor = 0.0
 
 if all_totals_above:
-    # Vegas shaded total down vs all model views -> UNDER bias
     model_total = market_total - 3.0
     model_spread = norm_spread
     engine_mode = "vegas_shaded_under"
 
 elif all_spreads_below:
-    # Vegas shaded spread up vs all model views -> FAVORITE bias
     model_spread = true_market_spread + 3.0
     model_total = norm_total
     engine_mode = "vegas_shaded_favorite"
@@ -810,7 +802,15 @@ model_team_a = (model_total + model_spread) / 2
 model_team_b = (model_total - model_spread) / 2
 
 # ----------------------------------------------------
-# EDGES VS MARKET (CORRECT SIGN + MAGNITUDE)
+# FORCE LEGACY PROJ_* TO MATCH FINAL MODEL
+# ----------------------------------------------------
+# If any UI still uses proj_a/proj_b/proj_total, they now show the final model.
+proj_a = model_team_a
+proj_b = model_team_b
+proj_total = model_total
+
+# ----------------------------------------------------
+# EDGES VS MARKET (FROM FINAL MODEL)
 # ----------------------------------------------------
 # If model says Michigan -16.9 vs market -15.5:
 #   true_market_spread = +15.5, model_spread = +16.9
@@ -823,7 +823,6 @@ total_edge_display = abs(total_edge)
 
 spread_edge_team = favorite if spread_edge > 0 else underdog
 total_edge_side = "Over" if total_edge > 0 else "Under"
-
 
 # ----------------------------------------------------
 # SIM DEFAULTS (before sliders overwrite them)
@@ -1051,6 +1050,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

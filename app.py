@@ -710,67 +710,18 @@ proj_a = eff_scoring_home * final_poss_rate
 proj_b = eff_scoring_away * final_poss_rate
 proj_total = proj_a + proj_b
 proj_spread = proj_a - proj_b
+# ----------------------------------------------------
+# CORE MODEL OUTPUTS (RESET TO DETERMINISTIC ENGINE)
+# ----------------------------------------------------
+model_team_a   = proj_a
+model_team_b   = proj_b
+model_total    = proj_total
+model_spread   = proj_spread
 
-# ----------------------------------------------------
-# CORRECT MARKET SPREAD INTERPRETATION (MUST COME FIRST)
-# ----------------------------------------------------
-true_market_spread = -market_spread
-
-# ----------------------------------------------------
-# RAW SCORING BASELINE (derived from OffEff × Pace)
-# ----------------------------------------------------
-raw_total = (off_a * pace_a) + (off_b * pace_b)
-
-# ----------------------------------------------------
-# RELIABILITY CALCULATIONS
-# ----------------------------------------------------
-diff_total = abs(proj_total - raw_total)
-reliability_total = 1 / (1 + (diff_total / 4)**2)
-
-diff_spread = abs(proj_spread - true_market_spread)
-reliability_spread = 1 / (1 + (diff_spread / 5)**2)
-
-# ----------------------------------------------------
-# BLENDED DETERMINISTIC PROJECTIONS
-# ----------------------------------------------------
-blended_total = reliability_total * proj_total + (1 - reliability_total) * market_total
-blended_spread = reliability_spread * proj_spread + (1 - reliability_spread) * true_market_spread
-
-# ----------------------------------------------------
-# SPREAD‑ANCHORED, TOTAL‑CONSISTENT, MARKET‑AWARE ENGINE
-# ----------------------------------------------------
-
-# 1. Raw model margin + total
-model_margin_raw = proj_spread
-model_total_raw  = proj_total
-
-# 2. Market comparison
-spread_error = model_margin_raw - true_market_spread
-total_error  = model_total_raw  - market_total
-
-# 3. Anchoring weights (tune these)
-SPREAD_ANCHOR = 0.50   # 0 = ignore market, 1 = fully match market
-TOTAL_ANCHOR  = 0.40
-
-# 4. Anchored margin + total
-anchored_margin = model_margin_raw - spread_error * SPREAD_ANCHOR
-anchored_total  = model_total_raw  - total_error  * TOTAL_ANCHOR
-
-# 5. Convert anchored margin + total into team scores
-anchored_a = (anchored_total + anchored_margin) / 2
-anchored_b = (anchored_total - anchored_margin) / 2
-
-# ----------------------------------------------------
-# FINAL CONSISTENT TEAM SCORES
-# ----------------------------------------------------
-final_a = (blended_total + blended_spread) / 2
-final_b = (blended_total - blended_spread) / 2
-
-# ----------------------------------------------------
-# RECONSTRUCT BLENDED TEAM SCORES
-# ----------------------------------------------------
-blended_a = (blended_total + blended_spread) / 2
-blended_b = (blended_total - blended_spread) / 2
+# Market is entered as: home team spread (negative = favorite)
+true_market_spread = -market_spread  # if you want home favorite negative
+spread_edge = proj_spread - true_market_spread
+total_edge  = proj_total - market_total
 
 # ----------------------------------------------------
 # SIM DEFAULTS (before sliders overwrite them)
@@ -912,24 +863,14 @@ total_edge = blended_total - market_total
 
 def edge_color(edge, strong_threshold, weak_threshold=0):
     abs_edge = abs(edge)
-
-    # Strong value play
     if abs_edge >= strong_threshold:
         return "edge-green"
-
-    # Weak / neutral zone (optional)
     if abs_edge >= weak_threshold:
         return "edge-yellow"
-
-    # No value
     return "edge-red"
 
-# Apply to totals
-total_edge_class = edge_color(total_edge, strong_threshold=5.0, weak_threshold=2.5)
-
-# Apply to spreads
 spread_edge_class = edge_color(spread_edge, strong_threshold=1.25)
-
+total_edge_class  = edge_color(total_edge, strong_threshold=5.0, weak_threshold=2.5)
 
 # Determine which team the spread edge favors
 spread_edge_team = favorite if spread_edge > 0 else underdog
@@ -1022,6 +963,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

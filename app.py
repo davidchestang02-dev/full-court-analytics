@@ -814,7 +814,7 @@ model_team_b = (model_total - model_spread) / 2
 # ----------------------------------------------------
 # EDGES VS MARKET
 # ----------------------------------------------------
-spread_edge = model_spread - true_market_spread
+spread_edge = true_market_spread - model_spread
 total_edge = model_total - market_total
 
 # ----------------------------------------------------
@@ -1043,6 +1043,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

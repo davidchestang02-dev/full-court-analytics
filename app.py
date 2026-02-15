@@ -668,7 +668,7 @@ ft_pct_away = num(b.get("FTPct"))
 opp_ft_pct_home = num(a.get("OppFTPct"))
 opp_ft_pct_away = num(b.get("OppFTPct"))
 
-# Shooting/FT adjustments (kept for structure, but core engine uses OffEff/Pace)
+# Shooting/FT adjustments (kept for structure, not core driver)
 adj_2p_home = two_p_pct_home * (1 - (opp_two_p_pct_away - two_p_pct_home))
 adj_3p_home = three_p_pct_home * (1 - (opp_three_p_pct_away - three_p_pct_home))
 adj_ft_rate_home = ft_rate_home * (1 - (opp_ft_pct_away - ft_rate_home))
@@ -707,7 +707,6 @@ proj_spread = proj_a - proj_b  # home - away
 # ----------------------------------------------------
 # WEIGHTED ENGINE (EFFICIENCY + SCORING BLEND)
 # ----------------------------------------------------
-# These mirror your Excel weights (tuned around Michigan/UCLA)
 EFF_WEIGHT = 0.55
 SCORE_WEIGHT = 0.45
 
@@ -729,7 +728,6 @@ norm_spread = norm_a - norm_b  # home - away
 # ----------------------------------------------------
 # VEGAS-RESPECT ENGINE (OffEff × OppDefEff MULTIPLIER MODE)
 # ----------------------------------------------------
-# Stronger emphasis on OffEff vs OppDefEff when market is far from model
 vegas_a = eff_scoring_home * final_poss_rate
 vegas_b = eff_scoring_away * final_poss_rate
 
@@ -739,8 +737,10 @@ vegas_spread = vegas_a - vegas_b  # home - away
 # ----------------------------------------------------
 # MARKET INTERPRETATION
 # ----------------------------------------------------
-true_market_spread = -market_spread
+# Market input: home team line (negative = favorite)
+true_market_spread = -market_spread  # -15.5 -> +15.5 (home - away)
 
+# Favorite / underdog labels
 if market_spread < 0:
     favorite = team_a
     underdog = team_b
@@ -748,6 +748,7 @@ else:
     favorite = team_b
     underdog = team_a
 
+# Gaps vs market (for regime/blend logic)
 spread_gap_raw = abs(proj_spread - true_market_spread)
 spread_gap_norm = abs(norm_spread - true_market_spread)
 spread_gap_veg = abs(vegas_spread - true_market_spread)
@@ -757,7 +758,7 @@ total_gap_norm = abs(norm_total - market_total)
 total_gap_veg = abs(vegas_total - market_total)
 
 # ----------------------------------------------------
-# VEGAS SHADING DETECTION (YOUR HUMAN EDGE LOGIC)
+# VEGAS SHADING DETECTION (HUMAN EDGE LOGIC)
 # ----------------------------------------------------
 all_totals_above = (
     proj_total > market_total and
@@ -774,28 +775,25 @@ all_spreads_below = (
 # ----------------------------------------------------
 # REGIME SWITCHING + BLENDING
 # ----------------------------------------------------
-SPREAD_TRIGGER = 5.0  # start caring when norm vs market spread off by 5+
-TOTAL_TRIGGER = 5.0   # start caring when norm vs market total off by 5+
+SPREAD_TRIGGER = 5.0
+TOTAL_TRIGGER = 5.0
 
-# Default: use weighted engine
 engine_mode = "weighted"
 blend_factor = 0.0
 
 if all_totals_above:
     # Vegas shaded total down vs all model views -> UNDER bias
-    # Pull model_total slightly below market to reflect that
     model_total = market_total - 3.0
-    # Use norm_spread as baseline for spread
     model_spread = norm_spread
     engine_mode = "vegas_shaded_under"
+
 elif all_spreads_below:
     # Vegas shaded spread up vs all model views -> FAVORITE bias
-    # Pull model_spread slightly beyond market to reflect that
-    model_spread = true_market_spread + 3.0  # more toward favorite
+    model_spread = true_market_spread + 3.0
     model_total = norm_total
     engine_mode = "vegas_shaded_favorite"
+
 else:
-    # Normal blending between weighted and vegas-respect engines
     spread_factor = min(1.0, max(0.0, (spread_gap_norm - SPREAD_TRIGGER) / 5.0))
     total_factor = min(1.0, max(0.0, (total_gap_norm - TOTAL_TRIGGER) / 5.0))
     blend_factor = max(spread_factor, total_factor)
@@ -812,10 +810,20 @@ model_team_a = (model_total + model_spread) / 2
 model_team_b = (model_total - model_spread) / 2
 
 # ----------------------------------------------------
-# EDGES VS MARKET
+# EDGES VS MARKET (CORRECT SIGN + MAGNITUDE)
 # ----------------------------------------------------
-spread_edge = true_market_spread - model_spread
+# If model says Michigan -16.9 vs market -15.5:
+#   true_market_spread = +15.5, model_spread = +16.9
+#   spread_edge = 16.9 - 15.5 = +1.4 (value on favorite)
+spread_edge = model_spread - true_market_spread
 total_edge = model_total - market_total
+
+spread_edge_display = abs(spread_edge)
+total_edge_display = abs(total_edge)
+
+spread_edge_team = favorite if spread_edge > 0 else underdog
+total_edge_side = "Over" if total_edge > 0 else "Under"
+
 
 # ----------------------------------------------------
 # SIM DEFAULTS (before sliders overwrite them)
@@ -1043,6 +1051,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

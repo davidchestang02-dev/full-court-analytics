@@ -989,7 +989,7 @@ with col_main:
         """, unsafe_allow_html=True)
 
     st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
-    # ----------------------------------------------------
+        # ----------------------------------------------------
     # RELIABILITY METER UI
     # ----------------------------------------------------
     st.markdown('<div class="tournament-header">MODEL RELIABILITY RATING</div>', unsafe_allow_html=True)
@@ -1034,16 +1034,13 @@ with col_main:
         unsafe_allow_html=True
     )
 
-
-
-
-
 # ----------------------------------------------------
 # RIGHT COLUMN (optional)
 # ----------------------------------------------------
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

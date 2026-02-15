@@ -709,11 +709,11 @@ proj_spread = proj_a - proj_b  # home - away
 EFF_WEIGHT = 0.55
 SCORE_WEIGHT = 0.45
 
-exp_a = off_a * final_poss_rate
-exp_b = off_b * final_poss_rate
+exp_a = off_a * avg_poss 
+exp_b = off_b * avg_poss
 
-eff_a = eff_scoring_home * final_poss_rate
-eff_b = eff_scoring_away * final_poss_rate
+eff_a = off_a * (def_b / 1.05) * final_poss_rate
+eff_b = off_b * (def_a / 1.05) * final_poss_rate
 
 norm_a = eff_a * EFF_WEIGHT + exp_a * SCORE_WEIGHT
 norm_b = eff_b * EFF_WEIGHT + exp_b * SCORE_WEIGHT
@@ -1032,6 +1032,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

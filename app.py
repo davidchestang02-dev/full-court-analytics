@@ -694,18 +694,17 @@ avg_extra_poss = (extra_poss_home + extra_poss_away) / 2
 adjusted_poss_rate = avg_poss + avg_extra_poss
 final_poss_rate = (adjusted_poss_rate + avg_poss) / 2
 
-# Raw efficiency vs opponent defense (per-possession scoring strength)
+# Raw efficiency vs opponent defense
 eff_scoring_home = off_a * (def_b / 1.05)
 eff_scoring_away = off_b * (def_a / 1.05)
 
-# RAW ENGINE: pure deterministic projection
 proj_a = eff_scoring_home * final_poss_rate
 proj_b = eff_scoring_away * final_poss_rate
 proj_total = proj_a + proj_b
 proj_spread = proj_a - proj_b  # home - away
 
 # ----------------------------------------------------
-# WEIGHTED ENGINE (EFFICIENCY + SCORING BLEND)
+# WEIGHTED ENGINE
 # ----------------------------------------------------
 EFF_WEIGHT = 0.55
 SCORE_WEIGHT = 0.45
@@ -720,7 +719,7 @@ norm_a = eff_a * EFF_WEIGHT + exp_a * SCORE_WEIGHT
 norm_b = eff_b * EFF_WEIGHT + exp_b * SCORE_WEIGHT
 
 norm_total = norm_a + norm_b
-norm_spread = norm_a - norm_b  # home - away
+norm_spread = norm_a - norm_b
 
 # ----------------------------------------------------
 # VEGAS-RESPECT ENGINE
@@ -729,12 +728,12 @@ vegas_a = eff_scoring_home * final_poss_rate
 vegas_b = eff_scoring_away * final_poss_rate
 
 vegas_total = vegas_a + vegas_b
-vegas_spread = vegas_a - vegas_b  # home - away
+vegas_spread = vegas_a - vegas_b
 
 # ----------------------------------------------------
 # MARKET INTERPRETATION
 # ----------------------------------------------------
-true_market_spread = -market_spread  # -15.5 -> +15.5 (home-away)
+true_market_spread = -market_spread  # -15.5 → +15.5
 
 if market_spread < 0:
     favorite = team_a
@@ -743,16 +742,11 @@ else:
     favorite = team_b
     underdog = team_a
 
-spread_gap_raw = abs(proj_spread - true_market_spread)
 spread_gap_norm = abs(norm_spread - true_market_spread)
-spread_gap_veg = abs(vegas_spread - true_market_spread)
-
-total_gap_raw = abs(proj_total - market_total)
 total_gap_norm = abs(norm_total - market_total)
-total_gap_veg = abs(vegas_total - market_total)
 
 # ----------------------------------------------------
-# VEGAS SHADING DETECTION
+# VEGAS SHADING FLAGS
 # ----------------------------------------------------
 all_totals_above = (
     proj_total > market_total and
@@ -772,49 +766,37 @@ all_spreads_below = (
 SPREAD_TRIGGER = 5.0
 TOTAL_TRIGGER = 5.0
 
-engine_mode = "weighted"
-blend_factor = 0.0
+spread_factor = min(1.0, max(0.0, (spread_gap_norm - SPREAD_TRIGGER) / 5.0))
+total_factor = min(1.0, max(0.0, (total_gap_norm - TOTAL_TRIGGER) / 5.0))
+blend_factor = max(spread_factor, total_factor)
 
 if all_totals_above:
     model_total = market_total - 3.0
     model_spread = norm_spread
-    engine_mode = "vegas_shaded_under"
-
 elif all_spreads_below:
     model_spread = true_market_spread + 3.0
     model_total = norm_total
-    engine_mode = "vegas_shaded_favorite"
-
 else:
-    spread_factor = min(1.0, max(0.0, (spread_gap_norm - SPREAD_TRIGGER) / 5.0))
-    total_factor = min(1.0, max(0.0, (total_gap_norm - TOTAL_TRIGGER) / 5.0))
-    blend_factor = max(spread_factor, total_factor)
-
     model_spread = (1 - blend_factor) * norm_spread + blend_factor * vegas_spread
     model_total = (1 - blend_factor) * norm_total + blend_factor * vegas_total
 
-    engine_mode = "blended" if blend_factor > 0 else "weighted"
-
 # ----------------------------------------------------
-# FINAL TEAM SCORES (CONSISTENT WITH MODEL SPREAD/TOTAL)
+# FINAL TEAM SCORES
 # ----------------------------------------------------
 model_team_a = (model_total + model_spread) / 2
 model_team_b = (model_total - model_spread) / 2
 
 # ----------------------------------------------------
-# FORCE LEGACY PROJ_* TO MATCH FINAL MODEL
+# FORCE ALL LEGACY VARIABLES TO MATCH FINAL MODEL
 # ----------------------------------------------------
-# If any UI still uses proj_a/proj_b/proj_total, they now show the final model.
 proj_a = model_team_a
 proj_b = model_team_b
 proj_total = model_total
+proj_spread = model_spread
 
 # ----------------------------------------------------
-# EDGES VS MARKET (FROM FINAL MODEL)
+# EDGES VS MARKET
 # ----------------------------------------------------
-# If model says Michigan -16.9 vs market -15.5:
-#   true_market_spread = +15.5, model_spread = +16.9
-#   spread_edge = 16.9 - 15.5 = +1.4 (value on favorite)
 spread_edge = model_spread - true_market_spread
 total_edge = model_total - market_total
 
@@ -1050,6 +1032,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

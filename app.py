@@ -739,9 +739,14 @@ vegas_spread = vegas_a - vegas_b  # home - away
 # ----------------------------------------------------
 # MARKET INTERPRETATION
 # ----------------------------------------------------
-# Convention: model spread = home - away
-# Market input: home team line, negative = favorite (e.g. -15.5)
 true_market_spread = -market_spread
+
+if market_spread < 0:
+    favorite = team_a
+    underdog = team_b
+else:
+    favorite = team_b
+    underdog = team_a
 
 spread_gap_raw = abs(proj_spread - true_market_spread)
 spread_gap_norm = abs(norm_spread - true_market_spread)
@@ -754,14 +759,12 @@ total_gap_veg = abs(vegas_total - market_total)
 # ----------------------------------------------------
 # VEGAS SHADING DETECTION (YOUR HUMAN EDGE LOGIC)
 # ----------------------------------------------------
-# If ALL engines say "over" vs market total, but Vegas is lower -> UNDER signal
 all_totals_above = (
     proj_total > market_total and
     norm_total > market_total and
     vegas_total > market_total
 )
 
-# If ALL engines say "favorite by less than market", but Vegas is higher -> FAVORITE signal
 all_spreads_below = (
     proj_spread > true_market_spread and
     norm_spread > true_market_spread and
@@ -854,9 +857,6 @@ prob_over = float(np.mean(sim_total > market_total))
 prob_under = float(np.mean(sim_total < market_total))
 prob_push_total = float(np.mean(np.isclose(sim_total, market_total, atol=0.5)))
 
-# ----------------------------------------------------
-# DASHBOARD LAYOUT
-# ----------------------------------------------------
 # ----------------------------------------------------
 # DASHBOARD LAYOUT
 # ----------------------------------------------------
@@ -1051,6 +1051,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

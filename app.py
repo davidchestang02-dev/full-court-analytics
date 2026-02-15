@@ -601,50 +601,40 @@ if team_stats is None or team_stats.empty:
 team_stats_dict = team_stats.set_index("Team").to_dict(orient="index")
 
 # ----------------------------------------------------
-# MATCHUP + MARKET
+# MATCHUP + MARKET (assumes team_a = home, team_b = away)
 # ----------------------------------------------------
 col_left, col_right = st.columns([2, 1])
 
 with col_left:
-    st.markdown('<div class="equal-height-col">', unsafe_allow_html=True)
-    st.markdown('<div class="tournament-header">MATCHUP</div>', unsafe_allow_html=True)
-    
-    st.markdown('<div class="tournament-subheader">HOME TEAM</div>', unsafe_allow_html=True)
-    team_a = st.selectbox("", list(team_stats_dict.keys()), key="team_a")
-
-    st.markdown('<div class="tournament-subheader">AWAY TEAM</div>', unsafe_allow_html=True)
-    team_b = st.selectbox("", list(team_stats_dict.keys()), key="team_b")
-    
-    st.markdown('</div>', unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>Matchup</div>", unsafe_allow_html=True)
+    team_a = st.selectbox("Home Team", list(team_stats_dict.keys()), key="team_a")
+    team_b = st.selectbox("Away Team", list(team_stats_dict.keys()), key="team_b")
 
 with col_right:
-    st.markdown('<div class="equal-height-col">', unsafe_allow_html=True)
-    
-    st.markdown('<div class="tournament-header">MARKET ODDS</div>', unsafe_allow_html=True)
+    st.markdown("<div class='section-header'>Market Odds</div>", unsafe_allow_html=True)
 
-    st.markdown("</div>", unsafe_allow_html=True)
     st.markdown("""
         <div class="metric-card">
-            <div class="tournament-subheader">Point Spread</div>
+            <div class="metric-label">Point Spread</div>
         </div>
     """, unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+    # Home team line, negative = favorite (e.g. -15.5)
     market_spread = st.number_input(" ", value=0.0, step=0.5, key="market_spread")
-    st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("""
         <div class="metric-card" style="margin-top: 1rem;">
-            <div class="tournament-subheader">Game Total</div>
+            <div class="metric-label">Game Total</div>
         </div>
     """, unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
     market_total = st.number_input("  ", value=145.5, step=0.5, key="market_total")
+
     st.markdown("</div>", unsafe_allow_html=True)
-    
+
 a = team_stats_dict[team_a]
 b = team_stats_dict[team_b]
+
 # ----------------------------------------------------
-# DETERMINISTIC ENGINE (OPTION B)
+# DETERMINISTIC ENGINE (RAW BASELINE)
 # ----------------------------------------------------
 off_a = num(a.get("OffEff"))
 off_b = num(b.get("OffEff"))
@@ -678,6 +668,7 @@ ft_pct_away = num(b.get("FTPct"))
 opp_ft_pct_home = num(a.get("OppFTPct"))
 opp_ft_pct_away = num(b.get("OppFTPct"))
 
+# Shooting/FT adjustments (kept for structure, but core engine uses OffEff/Pace)
 adj_2p_home = two_p_pct_home * (1 - (opp_two_p_pct_away - two_p_pct_home))
 adj_3p_home = three_p_pct_home * (1 - (opp_three_p_pct_away - three_p_pct_home))
 adj_ft_rate_home = ft_rate_home * (1 - (opp_ft_pct_away - ft_rate_home))
@@ -703,25 +694,157 @@ avg_extra_poss = (extra_poss_home + extra_poss_away) / 2
 adjusted_poss_rate = avg_poss + avg_extra_poss
 final_poss_rate = (adjusted_poss_rate + avg_poss) / 2
 
+# Raw efficiency vs opponent defense (per-possession scoring strength)
 eff_scoring_home = off_a * (def_b / 1.05)
 eff_scoring_away = off_b * (def_a / 1.05)
 
+# RAW ENGINE: pure deterministic projection
 proj_a = eff_scoring_home * final_poss_rate
 proj_b = eff_scoring_away * final_poss_rate
 proj_total = proj_a + proj_b
-proj_spread = proj_a - proj_b
-# ----------------------------------------------------
-# CORE MODEL OUTPUTS (RESET TO DETERMINISTIC ENGINE)
-# ----------------------------------------------------
-model_team_a   = proj_a
-model_team_b   = proj_b
-model_total    = proj_total
-model_spread   = proj_spread
+proj_spread = proj_a - proj_b  # home - away
 
-# Market is entered as: home team spread (negative = favorite)
-true_market_spread = -market_spread  # if you want home favorite negative
-spread_edge = proj_spread - true_market_spread
-total_edge  = proj_total - market_total
+# ----------------------------------------------------
+# WEIGHTED ENGINE (EFFICIENCY + SCORING BLEND)
+# ----------------------------------------------------
+# These mirror your Excel weights (tuned around Michigan/UCLA)
+EFF_WEIGHT = 0.55
+SCORE_WEIGHT = 0.45
+
+# "Scoring-only" expectation from OffEff × Pace
+exp_a = off_a * final_poss_rate
+exp_b = off_b * final_poss_rate
+
+# Efficiency-based scoring already captured in eff_scoring_* × final_poss_rate
+eff_a = eff_scoring_home * final_poss_rate
+eff_b = eff_scoring_away * final_poss_rate
+
+# Weighted scores (normal mode)
+norm_a = eff_a * EFF_WEIGHT + exp_a * SCORE_WEIGHT
+norm_b = eff_b * EFF_WEIGHT + exp_b * SCORE_WEIGHT
+
+norm_total = norm_a + norm_b
+norm_spread = norm_a - norm_b  # home - away
+
+# ----------------------------------------------------
+# VEGAS-RESPECT ENGINE (OffEff × OppDefEff MULTIPLIER MODE)
+# ----------------------------------------------------
+# Stronger emphasis on OffEff vs OppDefEff when market is far from model
+vegas_a = eff_scoring_home * final_poss_rate
+vegas_b = eff_scoring_away * final_poss_rate
+
+vegas_total = vegas_a + vegas_b
+vegas_spread = vegas_a - vegas_b  # home - away
+
+# ----------------------------------------------------
+# MARKET INTERPRETATION
+# ----------------------------------------------------
+# Convention: model spread = home - away
+# Market input: home team line, negative = favorite (e.g. -15.5)
+true_market_spread = -market_spread
+
+spread_gap_raw = abs(proj_spread - true_market_spread)
+spread_gap_norm = abs(norm_spread - true_market_spread)
+spread_gap_veg = abs(vegas_spread - true_market_spread)
+
+total_gap_raw = abs(proj_total - market_total)
+total_gap_norm = abs(norm_total - market_total)
+total_gap_veg = abs(vegas_total - market_total)
+
+# ----------------------------------------------------
+# VEGAS SHADING DETECTION (YOUR HUMAN EDGE LOGIC)
+# ----------------------------------------------------
+# If ALL engines say "over" vs market total, but Vegas is lower -> UNDER signal
+all_totals_above = (
+    proj_total > market_total and
+    norm_total > market_total and
+    vegas_total > market_total
+)
+
+# If ALL engines say "favorite by less than market", but Vegas is higher -> FAVORITE signal
+all_spreads_below = (
+    proj_spread > true_market_spread and
+    norm_spread > true_market_spread and
+    vegas_spread > true_market_spread
+)
+
+# ----------------------------------------------------
+# REGIME SWITCHING + BLENDING
+# ----------------------------------------------------
+SPREAD_TRIGGER = 5.0  # start caring when norm vs market spread off by 5+
+TOTAL_TRIGGER = 5.0   # start caring when norm vs market total off by 5+
+
+# Default: use weighted engine
+engine_mode = "weighted"
+blend_factor = 0.0
+
+if all_totals_above:
+    # Vegas shaded total down vs all model views -> UNDER bias
+    # Pull model_total slightly below market to reflect that
+    model_total = market_total - 3.0
+    # Use norm_spread as baseline for spread
+    model_spread = norm_spread
+    engine_mode = "vegas_shaded_under"
+elif all_spreads_below:
+    # Vegas shaded spread up vs all model views -> FAVORITE bias
+    # Pull model_spread slightly beyond market to reflect that
+    model_spread = true_market_spread + 3.0  # more toward favorite
+    model_total = norm_total
+    engine_mode = "vegas_shaded_favorite"
+else:
+    # Normal blending between weighted and vegas-respect engines
+    spread_factor = min(1.0, max(0.0, (spread_gap_norm - SPREAD_TRIGGER) / 5.0))
+    total_factor = min(1.0, max(0.0, (total_gap_norm - TOTAL_TRIGGER) / 5.0))
+    blend_factor = max(spread_factor, total_factor)
+
+    model_spread = (1 - blend_factor) * norm_spread + blend_factor * vegas_spread
+    model_total = (1 - blend_factor) * norm_total + blend_factor * vegas_total
+
+    engine_mode = "blended" if blend_factor > 0 else "weighted"
+
+# ----------------------------------------------------
+# FINAL TEAM SCORES (CONSISTENT WITH MODEL SPREAD/TOTAL)
+# ----------------------------------------------------
+model_team_a = (model_total + model_spread) / 2
+model_team_b = (model_total - model_spread) / 2
+
+# ----------------------------------------------------
+# EDGES VS MARKET
+# ----------------------------------------------------
+spread_edge = model_spread - true_market_spread
+total_edge = model_total - market_total
+
+# ----------------------------------------------------
+# PICKS (DIRECTION ONLY, YOU CAN STYLE THESE IN UI)
+# ----------------------------------------------------
+spread_pick_side = team_a if spread_edge > 0 else team_b
+total_pick_side = "Over" if total_edge > 0 else "Under"
+
+# If you want display-friendly values:
+spread_edge_display = abs(spread_edge)
+total_edge_display = abs(total_edge)
+
+# (Optional) edge color logic you already liked:
+def edge_color(edge, strong_threshold, weak_threshold=0):
+    abs_edge = abs(edge)
+    if abs_edge >= strong_threshold:
+        return "edge-green"
+    if abs_edge >= weak_threshold:
+        return "edge-yellow"
+    return "edge-red"
+
+spread_edge_class = edge_color(spread_edge, strong_threshold=1.25)
+total_edge_class = edge_color(total_edge, strong_threshold=5.0, weak_threshold=2.5)
+
+# You can now feed:
+# - model_team_a, model_team_b
+# - model_spread, model_total
+# - spread_edge, total_edge
+# - spread_pick_side, total_pick_side
+# - engine_mode, blend_factor
+# - spread_edge_class, total_edge_class
+# into your Streamlit UI.
+
 
 # ----------------------------------------------------
 # SIM DEFAULTS (before sliders overwrite them)
@@ -963,6 +1086,7 @@ st.markdown(
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

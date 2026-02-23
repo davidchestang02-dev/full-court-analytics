@@ -913,7 +913,16 @@ with col_main:
     # ----------------------------------------------------
     st.markdown('<div class="tournament-header">MODEL RELIABILITY RATING</div>', unsafe_allow_html=True)
 
-    rel_score = (1 - blend_factor) * 100
+    # ----------------------------------------------------
+    # RELIABILITY SCORE (NO WEIGHTS, PURE SIM CONFIDENCE)
+    # ----------------------------------------------------
+
+    spread_conf = max(prob_a_covers, prob_b_covers)
+    total_conf = max(prob_over, prob_under)
+
+    reliability = (spread_conf + total_conf) / 2
+    rel_score = reliability * 100  # <-- THIS WAS MISSING
+
     percent = max(0, min(rel_score, 100))
 
     if percent < 25:
@@ -927,29 +936,29 @@ with col_main:
 
     st.markdown(
         f"""
-        <div class="reliability-circle"
+         <div class="reliability-circle"
+         style="
+            background:
+                radial-gradient(circle, rgba(25,35,55,0.75) 60%, transparent 61%),
+                conic-gradient({rel_color} {percent}%, rgba(60,60,80,0.25) {percent}%);
+            box-shadow:
+                0 0 22px {rel_color},
+                0 0 44px {rel_color}88;
+         ">
+        <div class="reliability-inner" 
              style="
-                background:
-                    radial-gradient(circle, rgba(25,35,55,0.75) 60%, transparent 61%),
-                    conic-gradient({rel_color} {percent}%, rgba(60,60,80,0.25) {percent}%);
-                box-shadow:
-                    0 0 22px {rel_color},
-                    0 0 44px {rel_color}88;
+                color:{rel_color};
+                text-shadow:
+                    0 0 12px {rel_color},
+                    0 0 24px {rel_color}aa,
+                    0 0 36px {rel_color}88;
              ">
-            <div class="reliability-inner" 
-                 style="
-                    color:{rel_color};
-                    text-shadow:
-                        0 0 12px {rel_color},
-                        0 0 24px {rel_color}aa,
-                        0 0 36px {rel_color}88;
-                 ">
-                {percent:.1f}%
-            </div>
+            {percent:.1f}%
         </div>
-        """,
-        unsafe_allow_html=True
-    )
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
 
 # ----------------------------------------------------
@@ -958,6 +967,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

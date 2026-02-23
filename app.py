@@ -758,8 +758,8 @@ with st.expander("Simulation Controls", expanded=False):
 # MONTE CARLO ENGINE
 # ----------------------------------------------------
 np.random.seed(42)
-sim_a = np.random.normal(model_team_a, sigma, num_sims)
-sim_b = np.random.normal(model_team_b, sigma, num_sims)
+sim_a = np.random.normal(proj_a, sigma, num_sims)
+sim_b = np.random.normal(proj_b, sigma, num_sims)
 
 sim_spread = sim_a - sim_b
 sim_total = sim_a + sim_b
@@ -958,6 +958,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

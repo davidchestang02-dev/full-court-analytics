@@ -713,23 +713,24 @@ total_edge = proj_total - market_total
 
 spread_edge_display = abs(spread_edge)
 total_edge_display = abs(total_edge)
-
-spread_edge_team = favorite if spread_edge > 0 else underdog
-total_edge_side = "Over" if total_edge > 0 else "Under"
-
 # ----------------------------------------------------
-# FAVORITE / UNDERDOG FROM MARKET
+# IDENTIFY FAVORITE & UNDERDOG FROM MARKET SPREAD
 # ----------------------------------------------------
+# market_spread is the sportsbook line for the HOME team.
+# Negative = home favorite. Positive = home underdog.
+
 if market_spread < 0:
-    favorite = team_a      # home is favorite (e.g., -5.5)
+    favorite = team_a      # home team is favored
     underdog = team_b
 elif market_spread > 0:
-    favorite = team_b      # away is favorite (e.g., +5.5 means home +5.5, away -5.5)
+    favorite = team_b      # away team is favored
     underdog = team_a
 else:
     favorite = None        # pick'em
     underdog = None
 
+spread_edge_team = favorite if spread_edge > 0 else underdog
+total_edge_side = "Over" if total_edge > 0 else "Under"
 
 # ----------------------------------------------------
 # SIM DEFAULTS (before sliders overwrite them)
@@ -957,6 +958,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

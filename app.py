@@ -791,7 +791,7 @@ with col_main:
         st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-label">{team_a}</div>
-                <div class="metric-value">{model_team_a:.1f}</div>
+                <div class="metric-value">{proj_a:.1f}</div>
                 <div class="metric-sub">Projected Score</div>
             </div>
         """, unsafe_allow_html=True)
@@ -800,7 +800,7 @@ with col_main:
         st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-label">{team_b}</div>
-                <div class="metric-value">{model_team_b:.1f}</div>
+                <div class="metric-value">{proj_b:.1f}</div>
                 <div class="metric-sub">Projected Score</div>
             </div>
         """, unsafe_allow_html=True)
@@ -809,7 +809,7 @@ with col_main:
         st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-label">Total</div>
-                <div class="metric-value">{model_total:.1f}</div>
+                <div class="metric-value">{proj_total:.1f}</div>
                 <div class="metric-sub">Projected Total</div>
             </div>
         """, unsafe_allow_html=True)
@@ -958,6 +958,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

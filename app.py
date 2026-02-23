@@ -703,102 +703,7 @@ proj_b = eff_scoring_away * final_poss_rate
 proj_total = proj_a + proj_b
 proj_spread = proj_a - proj_b  # home - away
 
-# ----------------------------------------------------
-# WEIGHTED ENGINE
-# ----------------------------------------------------
-EFF_WEIGHT = 0.55
-SCORE_WEIGHT = 0.45
-
-# Scoring-only expectation (OffEff × raw pace)
-exp_a = off_a * avg_poss
-exp_b = off_b * avg_poss
-
-# Efficiency-based scoring (OffEff × OppDefEff × adjusted possessions)
-eff_a = off_a * (def_b / 100) * final_poss_rate
-eff_b = off_b * (def_a / 100) * final_poss_rate
-
-# Weighted blend (now meaningfully different)
-norm_a = eff_a * EFF_WEIGHT + exp_a * SCORE_WEIGHT
-norm_b = eff_b * EFF_WEIGHT + exp_b * SCORE_WEIGHT
-
-norm_total = norm_a + norm_b
-norm_spread = norm_a - norm_b
-
-
-# ----------------------------------------------------
-# VEGAS-RESPECT ENGINE
-# ----------------------------------------------------
-vegas_a = eff_scoring_home * final_poss_rate
-vegas_b = eff_scoring_away * final_poss_rate
-
-vegas_total = vegas_a + vegas_b
-vegas_spread = vegas_a - vegas_b
-
-# ----------------------------------------------------
-# MARKET INTERPRETATION
-# ----------------------------------------------------
-true_market_spread = -market_spread  # -15.5 → +15.5
-
-if market_spread < 0:
-    favorite = team_a
-    underdog = team_b
-else:
-    favorite = team_b
-    underdog = team_a
-
-spread_gap_norm = abs(norm_spread - true_market_spread)
-total_gap_norm = abs(norm_total - market_total)
-
-# ----------------------------------------------------
-# VEGAS SHADING FLAGS
-# ----------------------------------------------------
-all_totals_above = (
-    proj_total > market_total and
-    norm_total > market_total and
-    vegas_total > market_total
-)
-
-all_spreads_below = (
-    proj_spread > true_market_spread and
-    norm_spread > true_market_spread and
-    vegas_spread > true_market_spread
-)
-
-# ----------------------------------------------------
-# REGIME SWITCHING + BLENDING
-# ----------------------------------------------------
-SPREAD_TRIGGER = 5.0
-TOTAL_TRIGGER = 5.0
-
-spread_factor = min(1.0, max(0.0, (spread_gap_norm - SPREAD_TRIGGER) / 5.0))
-total_factor = min(1.0, max(0.0, (total_gap_norm - TOTAL_TRIGGER) / 5.0))
-blend_factor = max(spread_factor, total_factor)
-
-if all_totals_above:
-    model_total = market_total - 3.0
-    model_spread = norm_spread
-elif all_spreads_below:
-    model_spread = true_market_spread + 3.0
-    model_total = norm_total
-else:
-    model_spread = (1 - blend_factor) * norm_spread + blend_factor * vegas_spread
-    model_total = (1 - blend_factor) * norm_total + blend_factor * vegas_total
-
-# ----------------------------------------------------
-# FINAL TEAM SCORES
-# ----------------------------------------------------
-model_team_a = (model_total + model_spread) / 2
-model_team_b = (model_total - model_spread) / 2
-
-# ----------------------------------------------------
-# FORCE ALL LEGACY VARIABLES TO MATCH FINAL MODEL
-# ----------------------------------------------------
-proj_a = model_team_a
-proj_b = model_team_b
-proj_total = model_total
-proj_spread = model_spread
-
-# ----------------------------------------------------
+#-----------------------------------------------------
 # EDGES VS MARKET
 # ----------------------------------------------------
 spread_edge = model_spread - true_market_spread
@@ -1036,6 +941,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

@@ -706,8 +706,10 @@ proj_spread = proj_a - proj_b  # home - away
 #-----------------------------------------------------
 # EDGES VS MARKET
 # ----------------------------------------------------
-spread_edge = model_spread - true_market_spread
-total_edge = model_total - market_total
+true_market_spread = -market_spread
+spread_edge = proj_spread - true_market_spread
+total_edge = proj_total - market_total
+
 
 spread_edge_display = abs(spread_edge)
 total_edge_display = abs(total_edge)
@@ -941,6 +943,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

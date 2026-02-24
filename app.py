@@ -4,6 +4,8 @@ import numpy as np
 import requests
 import os
 
+st.write("Absolute path of this file:", __file__)
+
 st.write("CWD:", os.getcwd())
 st.write("Files:", os.listdir())
 st.write("ML folder:", os.listdir("ml"))
@@ -526,6 +528,7 @@ with col_side:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

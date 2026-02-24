@@ -1,3 +1,7 @@
+import os
+st.write("CWD:", os.getcwd())
+st.write("Files:", os.listdir())
+
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -515,6 +519,7 @@ with col_side:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

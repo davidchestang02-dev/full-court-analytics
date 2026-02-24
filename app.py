@@ -4,17 +4,6 @@ import numpy as np
 import requests
 import os
 
-st.write("Absolute path of this file:", __file__)
-
-st.write("CWD:", os.getcwd())
-st.write("Files:", os.listdir())
-st.write("ML folder:", os.listdir("ml"))
-st.write("Ingestion folder:", os.listdir("ingestion"))
-st.write("Utils folder:", os.listdir("utils"))
-
-st.write("CWD:", os.getcwd())
-st.write("Files:", os.listdir())
-
 from ingestion.odds_api import fetch_ncaab_odds
 from ingestion.stats_api import fetch_team_stats
 from ml_engine.feature_engineering import merge_odds_and_stats
@@ -528,6 +517,7 @@ with col_side:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

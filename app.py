@@ -3,6 +3,19 @@ import pandas as pd
 import numpy as np
 import requests
 from io import StringIO
+from ingestion.odds_api import fetch_ncaab_odds
+from ingestion.stats_api import fetch_team_stats
+from ml.feature_engineering import merge_odds_and_stats
+from ml.predict import predict_edges
+# ----------------------------------------------------
+# LOAD LIVE ODDS + TEAM STATS + ML EDGE
+# ----------------------------------------------------
+
+odds_df = fetch_ncaab_odds()
+stats_df = fetch_team_stats()
+
+merged_df = merge_odds_and_stats(odds_df, stats_df)
+final_df = predict_edges(merged_df)
 
 
 # ----------------------------------------------------
@@ -967,6 +980,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

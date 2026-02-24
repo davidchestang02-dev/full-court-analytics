@@ -15,8 +15,9 @@ st.write("Files:", os.listdir())
 
 from ingestion.odds_api import fetch_ncaab_odds
 from ingestion.stats_api import fetch_team_stats
-from ml.feature_engineering import merge_odds_and_stats
-from ml.predict import predict_edges
+from ml_engine.feature_engineering import merge_odds_and_stats
+from ml_engine.predict import predict_edges
+
 
 # ----------------------------------------------------
 # LOAD LIVE ODDS + TEAM STATS + ML EDGE
@@ -525,6 +526,7 @@ with col_side:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

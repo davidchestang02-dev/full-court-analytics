@@ -1,11 +1,11 @@
-import os
-st.write("CWD:", os.getcwd())
-st.write("Files:", os.listdir())
-
 import streamlit as st
 import pandas as pd
 import numpy as np
 import requests
+import os
+
+st.write("CWD:", os.getcwd())
+st.write("Files:", os.listdir())
 
 from ingestion.odds_api import fetch_ncaab_odds
 from ingestion.stats_api import fetch_team_stats
@@ -519,6 +519,7 @@ with col_side:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

@@ -75,4 +75,3 @@ def fetch_ncaab_odds() -> pd.DataFrame:
         )
 
     return pd.DataFrame(rows)
-)

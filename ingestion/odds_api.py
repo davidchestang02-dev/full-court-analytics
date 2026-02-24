@@ -1,15 +1,27 @@
 # ingestion/odds_api.py
+
 import requests
 import pandas as pd
 from utils.team_normalization import normalize_team_name
 
-ODDS_API_KEY = "c9b3a4bae45d5ee9d18bdd1f84fb3d4c"
+ODDS_API_URL = "https://api.the-odds-api.com/v4/sports/basketball_ncaab/odds"
+ODDS_API_KEY = "c9b3a4bae45d5ee9d18bdd1f84fb3d4c"   # Replace with your key or environment variable
 
-ODDS_API_URL = "https://api.the-odds-api.com/v4/sports/basketball_ncaab/odds/"
-        f"?apiKey={API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american"
-    )
 
 def fetch_ncaab_odds() -> pd.DataFrame:
+    """
+    Fetch live NCAAB odds and return a clean, normalized DataFrame.
+
+    Output columns:
+      - game_id
+      - home_team
+      - away_team
+      - spread_home
+      - spread_away
+      - total_points
+      - book
+    """
+
     params = {
         "apiKey": ODDS_API_KEY,
         "regions": "us",
@@ -63,3 +75,4 @@ def fetch_ncaab_odds() -> pd.DataFrame:
         )
 
     return pd.DataFrame(rows)
+)

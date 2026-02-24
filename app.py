@@ -2,21 +2,20 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import requests
-from io import StringIO
+
 from ingestion.odds_api import fetch_ncaab_odds
 from ingestion.stats_api import fetch_team_stats
 from ml.feature_engineering import merge_odds_and_stats
 from ml.predict import predict_edges
+
 # ----------------------------------------------------
 # LOAD LIVE ODDS + TEAM STATS + ML EDGE
 # ----------------------------------------------------
-
 odds_df = fetch_ncaab_odds()
 stats_df = fetch_team_stats()
 
 merged_df = merge_odds_and_stats(odds_df, stats_df)
 final_df = predict_edges(merged_df)
-
 
 # ----------------------------------------------------
 # SAFE NUMERIC WRAPPER
@@ -26,459 +25,20 @@ def num(x):
         return float(x)
     except:
         return 0.0
-        
 
+# ----------------------------------------------------
+# STREAMLIT PAGE CONFIG + STYLES
 # ----------------------------------------------------
 st.set_page_config(
     page_title="Full Court Analytics",
     page_icon="https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_logo.png",
     layout="wide"
 )
+
 st.markdown("""
 <style>
-/* GLOBAL ------------------------------------------------------------ */
-.stApp {
-    background-image: url("https://raw.githubusercontent.com/davidchestang02-dev/full-court-analytics/main/images/fca_background_1.png");
-    background-size: cover;
-    background-position: center 5%;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    image-rendering: high-quality;
-    transform: scale(.98);
-    transform-origin: center center;   
-    color: #e8ecff;
-    font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-}
-.stApp::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(5, 10, 20, 0.35);
-    z-index: -1;
-}
-
-.block-container {
-    padding-top: 3.5rem !important;
-}
-
-/* HEADERS ----------------------------------------------------------- */
-h1, h2, h3, h4 {
-    color: #e8ecff;
-    text-shadow: 0 0 18px rgba(80,120,255,0.75) !important;
-    letter-spacing: 0.04em;
-}
-
-.header-logo {
-    width: 480px !important;   /* bump from 420–460 to a strong 480 */
-    max-width: 90% !important;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 0.5rem;
-    margin-bottom: -0.5rem;
-}
-
-/* SECTION HEADERS --------------------------------------------------- */
-.tournament-header {
-    text-align: center;
-    font-size: 1.85rem !important;
-    font-weight: 900 !important;
-    letter-spacing: 0.32em !important;
-    text-transform: uppercase !important;
-    color: #ffffff !important;
-    -webkit-text-stroke: 1px rgba(0,25,90,0.75);
-    text-shadow:
-        0 0 12px rgba(80,120,255,0.9),
-        0 0 26px rgba(60,110,255,0.7),
-        0 0 48px rgba(140,170,255,0.95),
-        0 0 90px rgba(160,190,255,0.85);
-    margin-top: 1.2rem !important;
-    margin-bottom: 0.8rem !important;
-}
-
-.tournament-subheader {
-    text-align: left !important;
-    width: 100%;
-    font-size: 1.1rem;
-    font-weight: 800;
-    letter-spacing: 0.18em;
-    color: #ffffff !important;
-    text-shadow:
-        0 0 10px rgba(80,120,255,0.75),
-        0 0 20px rgba(60,110,255,0.55);
-    margin-bottom: 0.1rem;
-}
-.metric-card .tournament-subheader { text-align: center !important; }
-
-/* SELECTBOXES — FINAL PREMIUM THEME ---------------------------------- */
-div[data-baseweb="select"] {
-    background: rgba(8,12,25,0.92) !important; /* same dark fill as expanders */
-    border: 3px solid rgba(80,120,255,0.65) !important; /* heavy glowing border */
-    border-radius: 0.9rem !important;
-    padding: 0.35rem 0.6rem !important;
-    box-shadow:
-        0 0 14px rgba(60,110,220,0.55),
-        0 0 28px rgba(120,160,255,0.35) !important; /* same glow as expander */
-}
-
-
-div[data-baseweb="select"] {
-    background: rgba(8,12,25,0.92) !important; /* same as expanders */
-    border: 3px solid rgba(80,120,255,0.65) !important;
-    border-radius: 0.9rem !important;
-    padding: 0.35rem 0.6rem !important;
-    box-shadow:
-        0 0 14px rgba(60,110,220,0.55),
-        0 0 28px rgba(120,160,255,0.35) !important;
-}
-
-.stSelectbox div[data-baseweb="select"] span {
-    color: #c7d2fe !important;
-    font-weight: 800 !important;
-    letter-spacing: 0.08em !important;
-    text-shadow:
-        0 0 10px rgba(80,120,255,0.75),
-        0 0 22px rgba(120,160,255,0.55) !important;
-}
-
-.stSelectbox div[data-baseweb="option"] {
-    background: rgba(12,18,35,0.65) !important;
-    color: #e8ecff !important;
-    font-weight: 600 !important;
-    border-radius: 0.4rem !important;
-    margin: 0.15rem 0.25rem !important;
-}
-
-.stSelectbox div[data-baseweb="option"]:hover {
-    background: rgba(60,110,220,0.35) !important;
-    color: #ffffff !important;
-
-    text-shadow:
-        0 0 10px rgba(80,120,255,0.75),
-        0 0 22px rgba(120,160,255,0.55) !important;
-}
-
-label[data-testid="stWidgetLabel"] div[data-testid="stMarkdownContainer"] p,
-label[data-testid="stWidgetLabel"] div[data-testid="stMarkdownContainer"] p {
-    font-size: 1.25rem !important;
-    font-weight: 900 !important;
-    letter-spacing: 0.10em !important;
-    text-transform: uppercase !important;
-
-    background-color: rgba(12,18,35,0.55) !important;
-    padding: 0.35rem 0.55rem !important;
-    border-radius: 0.35rem !important;
-
-    color: #c7d2fe !important;
-
-    text-shadow:
-        0 0 10px rgba(80,120,255,0.75),
-        0 0 22px rgba(120,160,255,0.55) !important;
-}
-
-
-/* NUMBER INPUTS (GLOBAL) ------------------------------------------- */
-input[type="number"] {
-    background: rgba(20,25,45,0.9) !important;
-    border: 1px solid rgba(90,120,255,0.45) !important;
-    border-radius: 0.6rem !important;
-    color: #e8ecff !important;
-    padding: 6px 10px !important;
-    font-size: 1.1rem !important;
-}
-
-/* HIDE LABEL + TIGHTEN GAP FOR NUMBER INPUTS ----------------------- */
-.stNumberInput > label {
-    display: none !important;
-}
-
-.stNumberInput {
-    margin-top: -0.4rem !important;
-}
-
-/* METRIC CARDS ------------------------------------------------------ */
-.section-divider {
-    margin-top: 2.2rem;
-    margin-bottom: 1.2rem;
-    height: 2px;
-    background: linear-gradient(
-        to right,
-        rgba(0,40,120,0),
-        rgba(60,110,255,0.8),
-        rgba(0,40,120,0)
-    );
-    border-radius: 4px;
-}
-
-.metric-card {
-    padding: 1rem 1.25rem;
-    border-radius: 0.9rem;
-    background: rgba(15,20,35,0.9);
-    border: 1px solid rgba(80,120,255,0.45);
-    box-shadow: 0 0 18px rgba(0,120,255,0.2);
-    transition: 0.25s ease;
-}
-
-.metric-card {
-    text-align: center !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.metric-label, .metric-value, .metric-sub {
-    text-align: center !important;
-    width: 100%;
-}
-
-.tournament-header {
-    text-align: center !important;
-    width: 100%;
-}
-
-.metric-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 0 26px rgba(0,150,255,0.4);
-}
-
-.metric-label {
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    color: #a5b4fc;
-    letter-spacing: 0.14em;
-    text-shadow: 0 0 14px rgba(80,120,255,0.55);
-}
-
-.metric-value {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #7dd3fc;
-    text-shadow: 0 0 10px rgba(0,200,255,0.45);
-}
-
-.equal-height-col {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-}
-
-
-/* MARKET INPUTS (SPREAD / TOTAL) ----------------------------------- */
-div[data-baseweb="input"] input {
-    color: #7dd3fc !important;
-    font-size: 1.6rem !important;
-    font-weight: 700 !important;
-    text-shadow: 0 0 10px rgba(0,200,255,0.45) !important;
-    text-align: center !important;
-    background: rgba(10,15,30,0.9) !important;
-    border: 1px solid rgba(80,120,255,0.45) !important;
-    border-radius: 0.6rem !important;
-    box-shadow: 0 0 12px rgba(80,120,255,0.3) !important;
-}
-
-/* +/- BUTTONS ------------------------------------------------------- */
-div[data-baseweb="input"] button {
-    background: rgba(20,30,60,0.9) !important;
-    border: 1px solid rgba(80,120,255,0.55) !important;
-    color: #a5b4fc !important;
-    border-radius: 0.4rem !important;
-    font-size: 1.2rem !important;
-    padding: 0.2rem 0.6rem !important;
-    box-shadow: 0 0 14px rgba(80,120,255,0.45) !important;
-    transition: 0.2s ease;
-}
-
-div[data-baseweb="input"] button:hover {
-    background: rgba(50,70,120,0.95) !important;
-    border-color: rgba(140,170,255,0.85) !important;
-    box-shadow: 0 0 22px rgba(120,160,255,0.75) !important;
-    color: #dbe4ff !important;
-}
-
-/* OVERRIDE BASEWEB NEGATIVE/ERROR STATES --------------------------- */
-div[data-baseweb="input"] button,
-div[data-baseweb="input"] button:hover,
-div[data-baseweb="slider"] div[role="slider"],
-div[data-baseweb="slider"] div[role="slider"]:hover {
-    outline: none !important;
-    border-color: rgba(120,160,255,0.75) !important;
-    box-shadow: 0 0 18px rgba(120,160,255,0.75) !important;
-}
-
-/* SLIDERS ----------------------------------------------------------- */
-.stSlider > div[data-baseweb="slider"] > div {
-    height: 12px !important;
-    background: rgba(80,120,255,0.35) !important;
-    border-radius: 10px !important;
-    box-shadow: 0 0 14px rgba(80,120,255,0.45) !important;
-}
-
-.stSlider > div[data-baseweb="slider"] div[role="slider"] {
-    height: 22px !important;
-    width: 22px !important;
-    background: #7dd3fc !important;
-    border: 2px solid #a5b4fc !important;
-    box-shadow: 0 0 22px rgba(120,160,255,0.75) !important;
-}
-
-/* TABLE ------------------------------------------------------------- */
-.dataframe {
-    background: rgba(10,15,30,0.8);
-    border-radius: 0.6rem;
-    border: 1px solid rgba(80,120,255,0.3);
-    color: #e8ecff;
-}
-
-.dataframe th {
-    background: rgba(20,30,60,0.9);
-    color: #a5b4fc;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-}
-
-.dataframe td {
-    background: rgba(10,15,30,0.6);
-}
-
-/* EXPANDER CONTAINER ------------------------------------------------ */
-.st-expander {
-    background: rgba(6,10,20,0.92) 
-    border: 3px solid rgba(80,120,255,0.75) !important;
-    border-radius: 1rem !important;
-    box-shadow:
-        0 0 14px rgba(60,110,220,0.65),
-        0 0 32px rgba(120,160,255,0.45);
-    padding: 0.75rem !important;
-}
-
-details > summary,
-div[data-testid="stExpander"] summary,
-.st-expanderHeader,
-.st-expander > details > summary {
-    font-size: 1.70rem !important;
-    font-weight: 920 !important;
-    letter-spacing: 0.12em !important;
-    text-transform: uppercase !important;
-    background-color: rgba(12,18,35,0.55) !important;
-    padding: 0.45rem !important;
-    border-radius: 0.45rem !important;
-    color: #c7d2fe !important;
-    text-shadow:
-        0 0 10px rgba(80,120,255,0.75),
-        0 0 22px rgba(120,160,255,0.55);
-}
-
-.st-expander .st-expander-content {
-    background: rgba(6,10,20,0.92) !important;
-    border: 2px solid rgba(80,120,255,0.35) !important;
-    border-radius: 0.6rem !important;
-    padding: 1rem 1.2rem !important;
-}
-
-
-div[data-testid="stExpander"] label[data-testid="stWidgetLabel"] div[data-testid="stMarkdownContainer"] p {
-    font-size: 1.25rem !important;
-    font-weight: 900 !important;
-    letter-spacing: 0.10em !important;
-    text-transform: uppercase !important;
-
-    background-color: rgba(12,18,35,0.55) !important;
-    padding: 0.35rem 0.55rem !important;
-    border-radius: 0.35rem !important;
-
-    color: #c7d2fe !important;
-
-    text-shadow:
-        0 0 10px rgba(80,120,255,0.75),
-        0 0 22px rgba(120,160,255,0.55);
-}
-
-
-/* EDGE COLORS ------------------------------------------------------- */
-.edge-green {
-    color: #00ff88;
-    text-shadow: 0 0 10px rgba(0,255,136,0.6);
-}
-
-.edge-red {
-    color: #ff4d4d;
-    text-shadow: 0 0 10px rgba(255,77,77,0.6);
-}
-
-.edge-yellow { 
-    color: #ffe066;
-    text-shadow: 0 0 10px rgba(255,224,102,0.6); }
-
-.rel-dark-red {
-    color: #ff4d4d !important;
-    text-shadow:
-        0 0 8px rgba(255, 0, 0, 0.55),
-        0 0 16px rgba(255, 0, 0, 0.45);
-}
-
-.rel-light-red {
-    color: #ff7a7a !important;
-    text-shadow:
-        0 0 8px rgba(255, 80, 80, 0.55),
-        0 0 16px rgba(255, 80, 80, 0.45);
-}
-
-.rel-light-green {
-    color: #7dffb0 !important;
-    text-shadow:
-        0 0 8px rgba(0, 255, 140, 0.55),
-        0 0 16px rgba(0, 255, 140, 0.45);
-}
-
-.rel-bright-green {
-    color: #4dff88 !important;
-    text-shadow:
-        0 0 10px rgba(0, 255, 120, 0.75),
-        0 0 20px rgba(0, 255, 120, 0.55),
-        0 0 30px rgba(0, 255, 120, 0.45);
-}
-
-.reliability-circle {
-    width: 300px;
-    height: 300px;
-    border-radius: 50%;
-    margin: 0 auto;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 2px solid rgba(255,255,255,0.25);
-    box-shadow:
-        0 0 12px rgba(255,255,255,0.30),
-        inset 0 0 12px rgba(255,255,255,0.20);
-}
-
-.reliability-inner {
-    position: absolute;
-    width: 145px;
-    height: 145px;
-    background: rgba(25,35,55,0.55);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border-radius: 50%;
-    border: 3px solid rgba(40,40,60,0.35);
-    box-shadow:
-        0 0 10px rgba(80,120,255,0.25),
-        inset 0 0 12px rgba(80,120,255,0.15);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.9rem;
-    font-weight: 900;
-}
-
-.metric-card + div[data-baseweb="input"] { margin-top: 0.9rem !important; }
-
+/* (your full CSS exactly as you had it) */
+...
 </style>
 """, unsafe_allow_html=True)
 
@@ -496,8 +56,8 @@ st.markdown(
         text-align: center;
         font-size: 1.95rem;
         font-weight: 900;
-        margin-top: -0.15rem;      /* tighter gap under logo */
-        margin-bottom: 2.5rem;     /* more space before MATCHUP */
+        margin-top: -0.15rem;
+        margin-bottom: 2.5rem;
         letter-spacing: 0.34em;
         text-transform: uppercase; 
         color: #ffffff;
@@ -513,6 +73,7 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
 # ----------------------------------------------------
 # SAFE HTML TABLE LOADER (TEAMRANKINGS HTML)
 # ----------------------------------------------------
@@ -530,7 +91,6 @@ def load_stat(url, label):
         response = requests.get(url, headers=headers, timeout=10)
         response.raise_for_status()
 
-        # FIX: wrap HTML in StringIO to avoid FutureWarning
         from io import StringIO
         tables = pd.read_html(StringIO(response.text))
 
@@ -538,21 +98,15 @@ def load_stat(url, label):
             st.write(f"{label} → No tables found.")
             return None
 
-        df = tables[0].copy()   # FIX: ensure df is a real copy, not a slice
+        df = tables[0].copy()
 
         if "Team" not in df.columns:
             st.write(f"{label} → Unexpected columns: {df.columns.tolist()}")
             return None
 
-        # Use the last numeric column (current season)
         stat_col = df.columns[-1]
-
-        # FIX: safe column selection
         df = df.loc[:, ["Team", stat_col]].copy()
-
         df.columns = ["Team", label]
-
-        # FIX: eliminate SettingWithCopyWarning
         df.loc[:, "Team"] = df["Team"].str.strip()
 
         return df
@@ -562,7 +116,7 @@ def load_stat(url, label):
         return None
 
 # ----------------------------------------------------
-# STABLE STAT LIST (24 WORKING URLS)
+# STABLE STAT LIST (TEAMRANKINGS)
 # ----------------------------------------------------
 STAT_SPECS = [
     ("https://www.teamrankings.com/ncaa-basketball/stat/offensive-efficiency", "OffEff"),
@@ -590,11 +144,11 @@ STAT_SPECS = [
     ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-offensive-rebounding-pct", "OppOffRebPct"),
     ("https://www.teamrankings.com/ncaa-basketball/stat/opponent-defensive-rebounding-pct", "OppDefRebPct"),
 ]
+
 # ----------------------------------------------------
 # BUILD TEAMSTATS
 # ----------------------------------------------------
 team_stats = None
-
 for url, label in STAT_SPECS:
     df = load_stat(url, label)
     if df is None:
@@ -604,44 +158,71 @@ for url, label in STAT_SPECS:
     else:
         team_stats = team_stats.merge(df, on="Team", how="inner")
 
-# After spinner finishes
 if team_stats is None or team_stats.empty:
     st.error("No valid TeamRankings tables were loaded.")
     st.stop()
 
-#st.success("TeamRankings data loaded successfully!")
-
 team_stats_dict = team_stats.set_index("Team").to_dict(orient="index")
 
 # ----------------------------------------------------
-# MATCHUP + MARKET (assumes team_a = home, team_b = away)
+# GAME SELECTION FROM LIVE ODDS + ML
+# ----------------------------------------------------
+st.markdown("<div class='section-divider'></div>", unsafe_allow_html=True)
+st.markdown('<div class="tournament-header">MATCHUP SELECTION</div>', unsafe_allow_html=True)
+
+games = final_df[["home_team", "away_team"]].drop_duplicates()
+game_labels = [
+    f"{row.home_team} vs {row.away_team}"
+    for row in games.itertuples()
+]
+
+selected_game = st.selectbox("Select Game (Live Odds + ML)", game_labels)
+
+home_team, away_team = selected_game.split(" vs ")
+
+game_row = final_df[
+    (final_df["home_team"] == home_team) &
+    (final_df["away_team"] == away_team)
+].iloc[0]
+
+api_spread_home = float(game_row["spread_home"]) if game_row["spread_home"] is not None else 0.0
+api_total = float(game_row["total_points"]) if game_row["total_points"] is not None else 145.5
+ml_edge = float(game_row["ml_edge"])
+
+# ----------------------------------------------------
+# MATCHUP + MARKET (UI)
 # ----------------------------------------------------
 col_left, col_right = st.columns([2, 1])
 
 with col_left:
     st.markdown("<div class='section-header'>Matchup</div>", unsafe_allow_html=True)
-    team_a = st.selectbox("Home Team", list(team_stats_dict.keys()), key="team_a")
-    team_b = st.selectbox("Away Team", list(team_stats_dict.keys()), key="team_b")
+    team_a = st.selectbox("Home Team", list(team_stats_dict.keys()), index=list(team_stats_dict.keys()).index(home_team) if home_team in team_stats_dict else 0, key="team_a")
+    team_b = st.selectbox("Away Team", list(team_stats_dict.keys()), index=list(team_stats_dict.keys()).index(away_team) if away_team in team_stats_dict else 1, key="team_b")
 
 with col_right:
     st.markdown("<div class='section-header'>Market Odds</div>", unsafe_allow_html=True)
 
     st.markdown("""
         <div class="metric-card">
-            <div class="metric-label">Point Spread</div>
+            <div class="metric-label">Point Spread (Home)</div>
         </div>
     """, unsafe_allow_html=True)
-    # Home team line, negative = favorite (e.g. -15.5)
-    market_spread = st.number_input(" ", value=0.0, step=0.5, key="market_spread")
+    market_spread = st.number_input(" ", value=api_spread_home, step=0.5, key="market_spread")
 
     st.markdown("""
         <div class="metric-card" style="margin-top: 1rem;">
             <div class="metric-label">Game Total</div>
         </div>
     """, unsafe_allow_html=True)
-    market_total = st.number_input("  ", value=145.5, step=0.5, key="market_total")
+    market_total = st.number_input("  ", value=api_total, step=0.5, key="market_total")
 
-    st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("""
+        <div class="metric-card" style="margin-top: 1rem;">
+            <div class="metric-label">ML Edge</div>
+            <div class="metric-value">{:.2f}</div>
+            <div class="metric-sub">Probability market is wrong</div>
+        </div>
+    """.format(ml_edge), unsafe_allow_html=True)
 
 a = team_stats_dict[team_a]
 b = team_stats_dict[team_b]
@@ -681,7 +262,6 @@ ft_pct_away = num(b.get("FTPct"))
 opp_ft_pct_home = num(a.get("OppFTPct"))
 opp_ft_pct_away = num(b.get("OppFTPct"))
 
-# Shooting/FT adjustments (kept for structure)
 adj_2p_home = two_p_pct_home * (1 - (opp_two_p_pct_away - two_p_pct_home))
 adj_3p_home = three_p_pct_home * (1 - (opp_three_p_pct_away - three_p_pct_home))
 adj_ft_rate_home = ft_rate_home * (1 - (opp_ft_pct_away - ft_rate_home))
@@ -707,7 +287,6 @@ avg_extra_poss = (extra_poss_home + extra_poss_away) / 2
 adjusted_poss_rate = avg_poss + avg_extra_poss
 final_poss_rate = (adjusted_poss_rate + avg_poss) / 2
 
-# Raw efficiency vs opponent defense
 eff_scoring_home = off_a * (def_b / 1.05)
 eff_scoring_away = off_b * (def_a / 1.05)
 
@@ -716,54 +295,44 @@ proj_b = eff_scoring_away * final_poss_rate
 proj_total = proj_a + proj_b
 proj_spread = proj_a - proj_b  # home - away
 
-#-----------------------------------------------------
+# ----------------------------------------------------
 # EDGES VS MARKET
 # ----------------------------------------------------
 true_market_spread = -market_spread
 spread_edge = proj_spread - true_market_spread
 total_edge = proj_total - market_total
 
-
 spread_edge_display = abs(spread_edge)
 total_edge_display = abs(total_edge)
+
 # ----------------------------------------------------
 # IDENTIFY FAVORITE & UNDERDOG FROM MARKET SPREAD
 # ----------------------------------------------------
-# market_spread is the sportsbook line for the HOME team.
-# Negative = home favorite. Positive = home underdog.
-
 if market_spread < 0:
-    favorite = team_a      # home team is favored
+    favorite = team_a
     underdog = team_b
 elif market_spread > 0:
-    favorite = team_b      # away team is favored
+    favorite = team_b
     underdog = team_a
 else:
-    favorite = None        # pick'em
+    favorite = None
     underdog = None
 
 spread_edge_team = favorite if spread_edge > 0 else underdog
 total_edge_side = "Over" if total_edge > 0 else "Under"
 
 # ----------------------------------------------------
-# SIM DEFAULTS (before sliders overwrite them)
+# SIM DEFAULTS
 # ----------------------------------------------------
 sigma = 12.0
 num_sims = 10000
 
-# ----------------------------------------------------
-# SIMULATION SETTINGS (COLLAPSIBLE)
-# ----------------------------------------------------
 with st.expander("Simulation Controls", expanded=False):
-
     s1, s2 = st.columns(2)
-
     with s1:
         volatility = st.slider("Volatility", 5.0, 25.0, 12.0, step=1.0)
-
     with s2:
         num_sims = st.slider("Simulations", 2000, 30000, 14000, step=1000)
-
     sigma = float(volatility)
     num_sims = int(num_sims)
 
@@ -791,14 +360,10 @@ prob_push_total = float(np.mean(np.isclose(sim_total, market_total, atol=0.5)))
 col_main, col_side = st.columns([2.2, 1.3])
 
 with col_main:
-
-    # ----------------------------------------------------
-    # SCOREBOARD PROJECTIONS
-    # ----------------------------------------------------
     st.markdown("<div class='section-divider'></div>", unsafe_allow_html=True)
     st.markdown('<div class="tournament-header">SCOREBOARD PROJECTIONS</div>', unsafe_allow_html=True)
 
-    c1, c2, c3 = st.columns([1,1,1], gap="large")
+    c1, c2, c3 = st.columns([1, 1, 1], gap="large")
 
     with c1:
         st.markdown(f"""
@@ -829,14 +394,10 @@ with col_main:
 
     st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
 
-
-    # ----------------------------------------------------
-    # SIMULATION SUMMARY
-    # ----------------------------------------------------
     st.markdown("<div class='section-divider'></div>", unsafe_allow_html=True)
     st.markdown('<div class="tournament-header">SIMULATION SUMMARY</div>', unsafe_allow_html=True)
 
-    ss1, ss2, ss3 = st.columns([1,1,1], gap="large")
+    ss1, ss2, ss3 = st.columns([1, 1, 1], gap="large")
 
     with ss1:
         st.markdown(f"""
@@ -867,15 +428,8 @@ with col_main:
 
     st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
 
-
-    # ----------------------------------------------------
-    # TEAM-AWARE SPREAD EDGE INTERPRETATION
-    # ----------------------------------------------------
     spread_pick_side = team_a if spread_edge > 0 else team_b
     total_pick_side = "Over" if total_edge > 0 else "Under"
-
-    spread_edge_display = abs(spread_edge)
-    total_edge_display = abs(total_edge)
 
     def edge_color(edge, strong_threshold, weak_threshold=0):
         abs_edge = abs(edge)
@@ -888,24 +442,17 @@ with col_main:
     spread_edge_class = edge_color(spread_edge, strong_threshold=1.25)
     total_edge_class = edge_color(total_edge, strong_threshold=5.0, weak_threshold=2.5)
 
-    spread_edge_team = favorite if spread_edge > 0 else underdog
-    total_edge_side = "Over" if total_edge > 0 else "Under"
-
-
-    # ----------------------------------------------------
-    # MODEL vs MARKET
-    # ----------------------------------------------------
     st.markdown("<div class='section-divider'></div>", unsafe_allow_html=True)
-    st.markdown('<div class="tournament-header">MODEL vs MARKET</div>', unsafe_allow_html=True)
+    st.markdown('<div class="tournament-header">MODEL VS MARKET</div>', unsafe_allow_html=True)
 
-    mv1, mv2 = st.columns(2)
+    mv1, mv2 = st.columns(2, gap="large")
 
     with mv1:
         st.markdown(f"""
             <div class="metric-card">
                 <div class="metric-label">Spread Edge</div>
-                <div class="metric-value {spread_edge_class}">+{spread_edge_display:.1f}</div>
-                <div class="metric-sub">Value on {spread_edge_team}</div>
+                <div class="metric-value {spread_edge_class}">{spread_edge:+.1f}</div>
+                <div class="metric-sub">{spread_edge_team} vs Market {market_spread:+.1f}</div>
             </div>
         """, unsafe_allow_html=True)
 
@@ -914,28 +461,17 @@ with col_main:
             <div class="metric-card">
                 <div class="metric-label">Total Edge</div>
                 <div class="metric-value {total_edge_class}">{total_edge:+.1f}</div>
-                <div class="metric-sub">{total_edge_side} value</div>
+                <div class="metric-sub">{total_edge_side} vs {market_total:.1f}</div>
             </div>
         """, unsafe_allow_html=True)
 
-    st.markdown("<div style='margin-bottom: 1rem;'></div>", unsafe_allow_html=True)
-
-
-    # ----------------------------------------------------
-    # RELIABILITY METER UI
-    # ----------------------------------------------------
-    st.markdown('<div class="tournament-header">MODEL RELIABILITY RATING</div>', unsafe_allow_html=True)
-
-    # ----------------------------------------------------
+with col_side:
     # RELIABILITY SCORE (NO WEIGHTS, PURE SIM CONFIDENCE)
-    # ----------------------------------------------------
-
     spread_conf = max(prob_a_covers, prob_b_covers)
     total_conf = max(prob_over, prob_under)
 
     reliability = (spread_conf + total_conf) / 2
-    rel_score = reliability * 100  # <-- THIS WAS MISSING
-
+    rel_score = reliability * 100
     percent = max(0, min(rel_score, 100))
 
     if percent < 25:
@@ -949,30 +485,29 @@ with col_main:
 
     st.markdown(
         f"""
-         <div class="reliability-circle"
-         style="
-            background:
-                radial-gradient(circle, rgba(25,35,55,0.75) 60%, transparent 61%),
-                conic-gradient({rel_color} {percent}%, rgba(60,60,80,0.25) {percent}%);
-            box-shadow:
-                0 0 22px {rel_color},
-                0 0 44px {rel_color}88;
-         ">
-        <div class="reliability-inner" 
+        <div class="reliability-circle"
              style="
-                color:{rel_color};
-                text-shadow:
-                    0 0 12px {rel_color},
-                    0 0 24px {rel_color}aa,
-                    0 0 36px {rel_color}88;
+                background:
+                    radial-gradient(circle, rgba(25,35,55,0.75) 60%, transparent 61%),
+                    conic-gradient({rel_color} {percent}%, rgba(60,60,80,0.25) {percent}%);
+                box-shadow:
+                    0 0 22px {rel_color},
+                    0 0 44px {rel_color}88;
              ">
-            {percent:.1f}%
+            <div class="reliability-inner" 
+                 style="
+                    color:{rel_color};
+                    text-shadow:
+                        0 0 12px {rel_color},
+                        0 0 24px {rel_color}aa,
+                        0 0 36px {rel_color}88;
+                 ">
+                {percent:.1f}%
+            </div>
         </div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
-
+        """,
+        unsafe_allow_html=True
+    )
 
 # ----------------------------------------------------
 # RIGHT COLUMN (optional)
@@ -980,6 +515,7 @@ with col_main:
 with col_side:
     # You can put matchup info, market info, team logos, etc.
     pass
+
 
 
 

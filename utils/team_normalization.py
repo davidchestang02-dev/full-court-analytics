@@ -1,10 +1,10 @@
-# normalize_map.py
+# utils/team_normalization.py
 
 from __future__ import annotations
 from difflib import SequenceMatcher
 import string
 
-__all__ = ["NORMALIZE", "TEAM_MAP_OVERRIDES", "normalize_team_name"]
+__all__ = ["normalize_team_name"]
 
 # -----------------------------------------------------------------------------
 # TEAM_MAP_OVERRIDES

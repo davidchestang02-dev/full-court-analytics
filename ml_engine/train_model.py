@@ -1,7 +1,7 @@
 import joblib
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import GradientBoostingClassifier
-from ml.feature_engineering import build_features
+from ml_engine.feature_engineering import build_features
 
 def train_model(df):
     df = build_features(df)

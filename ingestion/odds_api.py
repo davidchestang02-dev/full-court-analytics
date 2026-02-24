@@ -4,11 +4,11 @@ import requests
 import pandas as pd
 from utils.team_normalization import normalize_team_name
 
+ODDS_API_KEY = "c9b3a4bae45d5ee9d18bdd1f84fb3d4c"
+
 ODDS_API_URL = "https://api.the-odds-api.com/v4/sports/basketball_ncaab/odds/"
         f"?apiKey={API_KEY}&regions=us&markets=h2h,spreads,totals&oddsFormat=american"
     )
-ODDS_API_KEY = "c9b3a4bae45d5ee9d18bdd1f84fb3d4c"
-
 
 def fetch_ncaab_odds() -> pd.DataFrame:
     params = {

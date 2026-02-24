@@ -7,3 +7,4 @@ def predict_edges(df):
     df = build_features(df)
     df["ml_edge"] = model.predict_proba(df)[:, 1]
     return df
+

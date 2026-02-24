@@ -1,5 +1,5 @@
 import joblib
-from ml.feature_engineering import build_features
+from ml_engine.feature_engineering import build_features
 
 model = joblib.load("ml/model.pkl")
 

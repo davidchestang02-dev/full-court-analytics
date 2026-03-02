@@ -8,6 +8,7 @@ from ingestion.odds_api import fetch_ncaab_odds
 from ingestion.stats_api import fetch_team_stats
 from ml_engine.feature_engineering import merge_odds_and_stats
 from ml_engine.predict import predict_edges
+from ml_engine.projection_engine import run_five_layer_projection
 
 
 # ----------------------------------------------------
@@ -230,82 +231,26 @@ a = team_stats_dict[team_a]
 b = team_stats_dict[team_b]
 
 # ----------------------------------------------------
-# DETERMINISTIC ENGINE (RAW BASELINE)
+# 5-LAYER PROJECTION ENGINE
 # ----------------------------------------------------
-off_a = num(a.get("OffEff"))
-off_b = num(b.get("OffEff"))
-def_a = num(a.get("DefEff"))
-def_b = num(b.get("DefEff"))
-pace_a = num(a.get("Pace"))
-pace_b = num(b.get("Pace"))
+projection = run_five_layer_projection(
+    home_team=team_a,
+    away_team=team_b,
+    home_stats=a,
+    away_stats=b,
+    market_spread=market_spread,
+    market_total=market_total,
+    ml_edge=ml_edge,
+)
 
-avg_poss = (pace_a + pace_b) / 2
+proj_a = projection.home_score
+proj_b = projection.away_score
+proj_total = projection.total
+proj_spread = projection.spread_home
 
-two_p_rate_home = num(a.get("TwoPRate"))
-three_p_rate_home = num(a.get("ThreePRate"))
-ft_rate_home = num(a.get("FTRate"))
-
-two_p_rate_away = num(b.get("TwoPRate"))
-three_p_rate_away = num(b.get("ThreePRate"))
-ft_rate_away = num(b.get("FTRate"))
-
-two_p_pct_home = num(a.get("TwoPPct"))
-two_p_pct_away = num(b.get("TwoPPct"))
-opp_two_p_pct_home = num(a.get("OppTwoPPct"))
-opp_two_p_pct_away = num(b.get("OppTwoPPct"))
-
-three_p_pct_home = num(a.get("ThreePPct"))
-three_p_pct_away = num(b.get("ThreePPct"))
-opp_three_p_pct_home = num(a.get("OppThreePPct"))
-opp_three_p_pct_away = num(b.get("OppThreePPct"))
-
-ft_pct_home = num(a.get("FTPct"))
-ft_pct_away = num(b.get("FTPct"))
-opp_ft_pct_home = num(a.get("OppFTPct"))
-opp_ft_pct_away = num(b.get("OppFTPct"))
-
-adj_2p_home = two_p_pct_home * (1 - (opp_two_p_pct_away - two_p_pct_home))
-adj_3p_home = three_p_pct_home * (1 - (opp_three_p_pct_away - three_p_pct_home))
-adj_ft_rate_home = ft_rate_home * (1 - (opp_ft_pct_away - ft_rate_home))
-
-adj_2p_away = two_p_pct_away * (1 - (opp_two_p_pct_home - two_p_pct_away))
-adj_3p_away = three_p_pct_away * (1 - (opp_three_p_pct_home - three_p_pct_away))
-adj_ft_rate_away = ft_rate_away * (1 - (opp_ft_pct_home - ft_rate_away))
-
-tov_home = num(a.get("TOVPct"))
-tov_away = num(b.get("TOVPct"))
-
-adj_poss_home = avg_poss * (1 - tov_home)
-adj_poss_away = avg_poss * (1 - tov_away)
-avg_adj_poss = (adj_poss_home + adj_poss_away) / 2
-
-off_reb_home = num(a.get("OffRebPct"))
-off_reb_away = num(b.get("OffRebPct"))
-
-extra_poss_home = avg_poss * off_reb_home
-extra_poss_away = avg_poss * off_reb_away
-avg_extra_poss = (extra_poss_home + extra_poss_away) / 2
-
-adjusted_poss_rate = avg_poss + avg_extra_poss
-final_poss_rate = (adjusted_poss_rate + avg_poss) / 2
-
-eff_scoring_home = off_a * (def_b / 1.05)
-eff_scoring_away = off_b * (def_a / 1.05)
-
-proj_a = eff_scoring_home * final_poss_rate
-proj_b = eff_scoring_away * final_poss_rate
-proj_total = proj_a + proj_b
-proj_spread = proj_a - proj_b  # home - away
-
-# ----------------------------------------------------
-# EDGES VS MARKET
-# ----------------------------------------------------
 true_market_spread = -market_spread
-spread_edge = proj_spread - true_market_spread
-total_edge = proj_total - market_total
-
-spread_edge_display = abs(spread_edge)
-total_edge_display = abs(total_edge)
+spread_edge = projection.spread_edge
+total_edge = projection.total_edge
 
 # ----------------------------------------------------
 # IDENTIFY FAVORITE & UNDERDOG FROM MARKET SPREAD
@@ -339,22 +284,32 @@ with st.expander("Simulation Controls", expanded=False):
     num_sims = int(num_sims)
 
 # ----------------------------------------------------
-# MONTE CARLO ENGINE
+# MONTE CARLO ENGINE (re-run with user controls)
 # ----------------------------------------------------
-np.random.seed(42)
-sim_a = np.random.normal(proj_a, sigma, num_sims)
-sim_b = np.random.normal(proj_b, sigma, num_sims)
+projection = run_five_layer_projection(
+    home_team=team_a,
+    away_team=team_b,
+    home_stats=a,
+    away_stats=b,
+    market_spread=market_spread,
+    market_total=market_total,
+    ml_edge=ml_edge,
+    sims=num_sims,
+    sigma=sigma,
+)
 
-sim_spread = sim_a - sim_b
-sim_total = sim_a + sim_b
-
-prob_a_covers = float(np.mean(sim_spread > true_market_spread))
-prob_b_covers = float(np.mean(sim_spread < true_market_spread))
-prob_push_spread = float(np.mean(np.isclose(sim_spread, true_market_spread, atol=0.5)))
-
-prob_over = float(np.mean(sim_total > market_total))
-prob_under = float(np.mean(sim_total < market_total))
-prob_push_total = float(np.mean(np.isclose(sim_total, market_total, atol=0.5)))
+proj_a = projection.home_score
+proj_b = projection.away_score
+proj_total = projection.total
+proj_spread = projection.spread_home
+spread_edge = projection.spread_edge
+total_edge = projection.total_edge
+prob_a_covers = projection.cover_prob_home
+prob_b_covers = projection.cover_prob_away
+prob_over = projection.over_prob
+prob_under = projection.under_prob
+prob_push_spread = max(0.0, 1.0 - (prob_a_covers + prob_b_covers))
+prob_push_total = max(0.0, 1.0 - (prob_over + prob_under))
 
 # ----------------------------------------------------
 # DASHBOARD LAYOUT

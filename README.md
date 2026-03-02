@@ -36,3 +36,8 @@ streamlit run app.py
 ## Important note on performance target
 
 A 75% long-term hit rate against efficient betting markets is extremely difficult and should be treated as aspirational. Use robust backtesting, proper bankroll/risk controls, and periodic model recalibration before any live capital deployment.
+
+
+## Data providers
+
+See `docs/data_sources.md` for recommended APIs and ingestion architecture for sportsbook markets and NCAA team statistics.
